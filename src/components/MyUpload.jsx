@@ -28,7 +28,7 @@ import {
 
 export const MyUpload = ({ dragover }) => {
   // 파일 리스트
-  const [fileList, setFileList] = useState < any > [];
+  const [fileList, setFileList] = useState  [];
   // 로딩인지
   const [isLoading, setIsLoading] = useState(false);
   // input Ref
