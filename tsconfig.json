@@ -1,0 +1,28 @@
+{
+  "extends": "./tsconfig.paths.json",
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noImplicitAny": true,
+    // "noImplicitAny": false,
+    "strictNullChecks": true,
+
+    "typeRoots": ["./types", "./node_modules/@types"], // 보통 types 폴더를 만들어 타입 정의
+    "declaration": true, // lib 만들 때 .d.ts 파일을 자동으로
+    "declarationDir": "./types" // 이 폴더에 만들어주는 옵션
+  },
+  "include": ["src", "craco.config.js"]
+}

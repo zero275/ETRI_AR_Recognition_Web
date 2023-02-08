@@ -1,0 +1,141 @@
+{
+  "Subjects": "ch01",
+  "Actions": "002_staggering",
+  "Video_cameras": [
+    {
+      "camera_id": 0,
+      "t": [[0.0], [0.0], [0.0]],
+      "R": [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0]
+      ],
+      "video_width": 2704,
+      "video_height": 1520,
+      "framerate": 59.94,
+      "intrinsic_parameters": {
+        "fx": 0.0,
+        "fy": 0.0,
+        "cx": 0.0,
+        "cy": 0.0,
+        "distortion_coef": [0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "camera_id": 1,
+      "t": [[0.0], [0.0], [0.0]],
+      "R": [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0]
+      ],
+      "video_width": 2704,
+      "video_height": 1520,
+      "framerate": 59.94,
+      "intrinsic_parameters": {
+        "fx": 0.0,
+        "fy": 0.0,
+        "cx": 0.0,
+        "cy": 0.0,
+        "distortion_coef": [0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "camera_id": 2,
+      "t": [[0.0], [0.0], [0.0]],
+      "R": [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0]
+      ],
+      "video_width": 2704,
+      "video_height": 1520,
+      "framerate": 59.94,
+      "intrinsic_parameters": {
+        "fx": 0.0,
+        "fy": 0.0,
+        "cx": 0.0,
+        "cy": 0.0,
+        "distortion_coef": [0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "camera_id": 3,
+      "t": [[0.0], [0.0], [0.0]],
+      "R": [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0]
+      ],
+      "video_width": 2704,
+      "video_height": 1520,
+      "framerate": 59.94,
+      "intrinsic_parameters": {
+        "fx": 0.0,
+        "fy": 0.0,
+        "cx": 0.0,
+        "cy": 0.0,
+        "distortion_coef": [0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "camera_id": 4,
+      "t": [[0.0], [0.0], [0.0]],
+      "R": [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0]
+      ],
+      "video_width": 2704,
+      "video_height": 1520,
+      "framerate": 59.94,
+      "intrinsic_parameters": {
+        "fx": 0.0,
+        "fy": 0.0,
+        "cx": 0.0,
+        "cy": 0.0,
+        "distortion_coef": [0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    },
+    {
+      "camera_id": 5,
+      "t": [[0.0], [0.0], [0.0]],
+      "R": [
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0],
+        [0.0, 0.0, 0.0]
+      ],
+      "video_width": 2704,
+      "video_height": 1520,
+      "framerate": 59.94,
+      "intrinsic_parameters": {
+        "fx": 0.0,
+        "fy": 0.0,
+        "cx": 0.0,
+        "cy": 0.0,
+        "distortion_coef": [0.0, 0.0, 0.0, 0.0, 0.0]
+      }
+    }
+  ],
+  "Sessions": [
+    {
+      "Meta_data": {
+        "session_id": 1,
+        "subject_ids": 1,
+        "action_ids": 2
+      },
+      "Data_Files": {
+        "motionDataFile": "\\ch01\\002_staggering\\tk_01\\ch01_002_staggering_1_f.bvh",
+        "annotationFile": "\\ch01\\002_staggering\\tk_01\\ch01_002_staggering_1_f.csv",
+        "video_files": [
+          "\\ch01\\002_staggering\\tk_01\\cam_01.mp4",
+          "\\ch01\\002_staggering\\tk_01\\cam_02.mp4",
+          "\\ch01\\002_staggering\\tk_01\\cam_03.mp4",
+          "\\ch01\\002_staggering\\tk_01\\cam_04.mp4",
+          "\\ch01\\002_staggering\\tk_01\\cam_05.mp4",
+          "\\ch01\\002_staggering\\tk_01\\cam_06.mp4"
+        ]
+      }
+    }
+  ]
+}

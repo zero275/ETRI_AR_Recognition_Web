@@ -1,0 +1,138 @@
+/* main */
+.mainContainer {
+  padding: 1.5em;
+}
+
+/* Container의 wrapper */
+.containers {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
+}
+
+/* Container */
+.basicContainerWithBtns,
+.basicContainer2nd,
+.basicContainer {
+  position: relative;
+  background: #232228;
+  border-radius: 1em;
+  padding: 2em;
+  width: fit-content;
+  overflow: auto;
+}
+
+.basicContainerWithBtns {
+  padding-bottom: 6em;
+}
+
+.basicContainer2nd {
+  margin-left: 1em;
+}
+
+/* 데이터세트 상세정보 */
+.detailContent {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 1em;
+  /* white-space: nowrap; */
+}
+
+.detailContent span:first-child {
+  color: darkgray !important;
+  margin-right: 2em;
+}
+
+.detailContent span:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* flex */
+.flex7 {
+  flex: 7;
+}
+.flex6 {
+  flex: 6;
+}
+.flex5 {
+  flex: 5;
+}
+.flex4 {
+  flex: 4;
+}
+.flex3 {
+  flex: 3;
+}
+
+/* 마진 */
+.ml1em {
+  margin-left: 1em;
+}
+
+/* 잡 */
+.overflow-visible {
+  overflow: visible;
+}
+
+.display-none {
+  display: none !important;
+}
+
+@media (max-width: 1010px) {
+  .containers {
+    display: block;
+    margin-bottom: 0em;
+  }
+
+  .basicContainerWithBtns,
+  .basicContainer,
+  .basicContainer2nd {
+    width: 100%;
+    margin-left: 0em;
+    margin-bottom: 1em;
+  }
+
+  .detailContent {
+    white-space: nowrap;
+  }
+
+  .header_title {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    width: 100% !important;
+    font-size: 0.6em !important;
+  }
+
+  .header_title {
+    margin-bottom: 2em;
+  }
+
+  .main-header {
+    display: flex !important;
+    flex-direction: column !important;
+    height: fit-content !important ;
+  }
+  .ag-btn-container {
+    display: block;
+    position: relative;
+    bottom: 0;
+    height: auto;
+  }
+
+  .btn-type1 {
+    margin-top: 1em;
+  }
+
+  .title {
+    font-size: 40px !important;
+  }
+
+  .dashboard {
+    padding: 15em 2em !important;
+  }
+}
