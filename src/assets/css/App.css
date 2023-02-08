@@ -47,6 +47,7 @@ body {
   background-clip: padding-box;
   border: 2px solid transparent;
 }
+
 *::-webkit-scrollbar-track {
   background-color: black;
   border-radius: 10px;
@@ -71,15 +72,18 @@ body {
   justify-content: center;
   align-items: center;
 }
+
 /*  */
 
 .main_dashboard {
+  width: 70vw;
   height: 100vh;
   margin-top: -80px;
   background: #fff;
   z-index: -5;
   position: relative;
 }
+
 .main_dashboard::before {
   display: block;
   content: "";
@@ -94,6 +98,7 @@ body {
   background-position: 0px, 80% 50%;
   z-index: -6;
 }
+
 .main-header {
   font-family: "Pretendard";
   position: fixed;
@@ -452,17 +457,17 @@ option {
   display: none;
 }
 
-#switch + label {
+#switch+label {
   position: relative;
   margin: 1em;
 }
 
-#switch:checked + label {
+#switch:checked+label {
   background: var(--theme-btn-color-primary);
   position: relative;
 }
 
-#switch + label::before {
+#switch+label::before {
   display: block;
   content: "";
   position: absolute;
@@ -478,13 +483,14 @@ option {
   transition: 400ms;
 }
 
-#switch:checked + label::before {
+#switch:checked+label::before {
   top: 50%;
   /* left: inherit;
   right: 3px; */
   left: calc(100% - 0.4em - 3px);
   transform: translate(-50%, -50%);
 }
+
 .container {
   display: flex;
   align-items: center;

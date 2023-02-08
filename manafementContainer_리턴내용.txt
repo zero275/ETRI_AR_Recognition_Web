@@ -1,0 +1,51 @@
+<div className="containers">
+        <Container title="수집 작업 목록" addedCls="flex5 overflow-visible">
+          {/* <MyInputType1 payload={payload} setPayload={setPayload} /> */}
+          <MyDropdown payload={dropDown} setPayload={setDropDown} />
+        </Container>
+        <Container
+          title="현재 작업 위치 변경"
+          addedCls="flex5"
+          cls="basicContainer2nd"
+        ></Container>
+      </div>
+      {/* 학습 데이터세트 */}
+      <div className="containers">
+        <Container title="학습 데이터세트 목록" addedCls="flex7">
+          <AgGrid
+            setGridApi={setGridApi}
+            gridApi={gridApi}
+            onClickRow={onClickRow}
+            data={datasetRowData}
+            setData={setDatasetRowData}
+            column={column1}
+            idx="1"
+          />
+          <div className="ag-btn-container">
+            <MyButton title="Post Processing" onClickBtn={onClickBtn} />
+            <MyButton title="Delete" onClickBtn={onClickBtn} />
+          </div>
+        </Container>
+      </div>
+      {/* 훛리된 데이터세트 */}
+      <div className="containers">
+        <Container title="후처리된 데이터세트" addedCls="flex7">
+          <AgGrid
+            setGridApi={setGridApi}
+            gridApi={gridApi}
+            onClickRow={onClickRow}
+            data={datasetRowData}
+            setData={setDatasetRowData}
+            column={column1}
+            idx="1"
+          />
+          <div className="ag-btn-container">
+            <MyButton title="Create Training Dataset" onClickBtn={onClickBtn} />
+            <MyButton
+              title="Delete PPT_training Dataset"
+              onClickBtn={onClickBtn}
+            />
+            <MyButton title="Post Processing Status" onClickBtn={onClickBtn} />
+          </div>
+        </Container>
+      </div>
