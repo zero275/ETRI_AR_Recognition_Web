@@ -28,13 +28,13 @@ import {
 
 export const MyUpload = ({ dragover }) => {
   // 파일 리스트
-  const [fileList, setFileList] = useState  [];
+  const [fileList, setFileList] = useState([]);
   // 로딩인지
   const [isLoading, setIsLoading] = useState(false);
   // input Ref
-  const refUploadInput = useRef < HTMLInputElement > null;
+  const refUploadInput = useRef(null);
   // container Ref
-  const refUploadContainer = useRef < HTMLDivElement > null;
+  const refUploadContainer = useRef(null);
 
   const animation = useAnimation();
 
@@ -270,10 +270,7 @@ const StyledUploadListContainer = styled(motion.div)`
   margin-bottom: 1em;
 `;
 
-const StyledUploadContainer =
-  styled.div <
-  Dragover >
-  `
+const StyledUploadContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
