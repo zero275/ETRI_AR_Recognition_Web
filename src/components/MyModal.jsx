@@ -114,10 +114,7 @@ export const MyModalInfo = ({ title, children }) => {
   );
 };
 
-const ModalContainer =
-  styled(motion.ul) <
-  any >
-  `
+const ModalContainer = styled(motion.ul)`
   position: fixed;
   display: flex;
   justify-content: center;

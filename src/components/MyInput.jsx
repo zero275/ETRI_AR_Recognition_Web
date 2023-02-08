@@ -31,10 +31,7 @@ const FlexDiv = styled.div`
   align-items: center;
 `;
 
-const StyledInput =
-  styled.input <
-  any >
-  `
+const StyledInput = styled.input`
   width: 100%;
   height: 2em;
   border: none;
@@ -45,18 +42,12 @@ const StyledInput =
   color: white;
 `;
 
-const StyledLabel =
-  styled.label <
-  any >
-  `
+const StyledLabel = styled.label`
   font-size: 1em;
   font-weight: 600;
 `;
 
-const InputContainer =
-  styled.div <
-  any >
-  `
+const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
