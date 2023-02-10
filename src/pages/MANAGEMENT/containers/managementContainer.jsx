@@ -124,6 +124,8 @@ const ManagementContainer = () => {
   const [processedDetails, setProcessedDetails] = useState({});
   const [gridApi, setGridApi] = useState({});
   const [infoToggle, setInfoToggle] = useState(false);
+  const [fileListToggle, setFileListToggle] = useState(false);
+
   const [payload, setPayload] = useState([
     {
       name: "location",
@@ -159,7 +161,7 @@ const ManagementContainer = () => {
   const onClickRow = (e, idx) => {
     const rowData = e.data;
     console.log("rowData", rowData);
-    console.log("상세데이터", datasetDetails);
+    console.log("datasetDetails", datasetDetails);
 
     setInfoToggle(true);
     const dataInput = () => {

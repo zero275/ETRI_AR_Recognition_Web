@@ -5,13 +5,14 @@ import { MyButton } from "@/components/MyButton";
 export default function Management_detail_info({
   setInfoToggle,
   datasetDetails,
+  setFileListToggle,
 }) {
   return (
     <Container title="데이터 상세정보" addedCls="flex3" cls="basicContainer2nd">
       <DetailInfo className="Detail-info">
         <div className="detailContent">
           <span>이름</span>
-          <span>{datasetDetails?.siteId}</span>
+          <span>{datasetDetails?.scenarioName}</span>
         </div>
         <div className="detailContent">
           <span>실험기간</span>
@@ -50,7 +51,13 @@ export default function Management_detail_info({
           <span></span>
         </div>
       </DetailInfo>
-      <MyButton title="파일목록 확인하기" />
+      <MyButton
+        title="파일목록 확인하기"
+        className="file_list_btn"
+        onClick={() => {
+          setFileListToggle(true);
+        }}
+      />
       <div
         className="close_btn"
         onClick={() => {

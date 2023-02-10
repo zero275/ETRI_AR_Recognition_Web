@@ -788,5 +788,9 @@ option {
 
 .Detail-info {
   padding-top: 20px;
-  line-height: 25px;
+  line-height: 26px;
+}
+
+.Detail-info div:nth-child(10) {
+  margin-bottom: 80px;
 }
