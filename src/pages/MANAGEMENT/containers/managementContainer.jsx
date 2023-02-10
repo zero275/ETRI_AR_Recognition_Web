@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ManagementCardView from "@/pages/MANAGEMENT/views/managementCardView";
 import ManagementBoxView from "@/pages/MANAGEMENT/views/managementBoxView";
 import Container from "@/components/container";
@@ -6,11 +6,40 @@ import { AgGrid } from "@/components/agGrid";
 import { MyButton } from "@/components/MyButton";
 import { MyInputType1 } from "@/components/MyInput";
 import { MyDropdown } from "@/components/MyDropdown";
+import Table from "react-bootstrap/Table";
+import ManagementTable from "@/components/ManagementTable";
+import Management_detail_info from "@/components/Management_detail_info";
 
+const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
+
+const search1 = [{ name: "ETRI" }];
+const search2 = [
+  { building: "대덕비즈센터 A동" },
+  { building: "대덕비즈센터 B동" },
+  { building: "대덕비즈센터 C동" },
+];
+
+const search3 = [
+  {
+    floor: "1층",
+  },
+  {
+    floor: "2층",
+  },
+  {
+    floor: "3층",
+  },
+  {
+    floor: "4층",
+  },
+  {
+    floor: "5층",
+  },
+];
 const column1 = [
   {
     headerName: "ID",
-    field: "idx",
+    field: "id",
     headerCheckboxSelection: true, // 헤더에도 checkbox 추가
     checkboxSelection: true, // check box 추가
     cellStyle: { fontFamily: "Pretendard" },
@@ -50,7 +79,7 @@ const column1 = [
 const column2 = [
   {
     headerName: "ID",
-    field: "idx",
+    field: "id",
     headerCheckboxSelection: true, // 헤더에도 checkbox 추가
     checkboxSelection: true, // check box 추가
     cellStyle: { fontFamily: "Pretendard" },
@@ -87,12 +116,14 @@ const column2 = [
   },
 ];
 
-const FAKE_JSON_DATA = require("@/assets/json/fake.json");
-
 const ManagementContainer = () => {
   // 데이터세트 목록
   const [datasetRowData, setDatasetRowData] = useState([]);
-  const [gridApi, setGridApi] = useState < {} > {};
+  const [datasetDetails, setDatasetDetails] = useState({});
+  const [processedRowData, setProcessedRowData] = useState([]);
+  const [processedDetails, setProcessedDetails] = useState({});
+  const [gridApi, setGridApi] = useState({});
+  const [infoToggle, setInfoToggle] = useState(false);
   const [payload, setPayload] = useState([
     {
       name: "location",
@@ -118,27 +149,60 @@ const ManagementContainer = () => {
       isFocus: false,
     },
   ]);
-  const onClickRow = (e, idx) => {};
+  useEffect(() => {
+    setDatasetRowData(FAKE_JSON_DATA);
+  }, []);
 
   const onClickBtn = (e) => {
     console.log(gridApi.getSelectedRows());
   };
+  const onClickRow = (e, idx) => {
+    const rowData = e.data;
+    console.log("rowData", rowData);
+    console.log("상세데이터", datasetDetails);
+
+    setInfoToggle(true);
+    const dataInput = () => {
+      if (idx === "1") {
+        setDatasetDetails({ ...rowData });
+      } else if (idx === "2") {
+        setProcessedDetails({ ...rowData });
+      }
+    };
+    dataInput();
+  };
+
   return (
     <main className="mainContainer">
-      <div className="containers">
-        <Container title="수집 작업 목록" addedCls="flex5 overflow-visible">
-          {/* <MyInputType1 payload={payload} setPayload={setPayload} /> */}
-          <MyDropdown payload={dropDown} setPayload={setDropDown} />
-        </Container>
-        <Container
-          title="현재 작업 위치 변경"
-          addedCls="flex5"
-          cls="basicContainer2nd"
-        ></Container>
-      </div>
       {/* 학습 데이터세트 */}
       <div className="containers">
         <Container title="학습 데이터세트 목록" addedCls="flex7">
+          <span className="learning-title01">검색조건</span>
+          <select className="learning-select" name="회사명" id="1">
+            <option value="업체명">업체명</option>
+            <option value="ETRI">{search1[0].name}</option>
+          </select>
+          <select className="learning-select" name="건물명" id="2">
+            <option value="건물명">건물명</option>
+            {search2.map((item, idx) => {
+              return (
+                <option key={idx} value="ETRI">
+                  {search2[idx]?.building}
+                </option>
+              );
+            })}
+          </select>
+          <select className="learning-select" name="층수" id="3">
+            <option value="층수">층수</option>
+            {search3.map((item, idx) => {
+              return (
+                <option key={idx} value="ETRI">
+                  {search3[idx]?.floor}
+                </option>
+              );
+            })}
+          </select>
+          {/* <div className="select-line" /> */}
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
@@ -148,12 +212,20 @@ const ManagementContainer = () => {
             column={column1}
             idx="1"
           />
+          {/* <ManagementTable column2={column2} /> */}
           <div className="ag-btn-container">
             <MyButton title="Post Processing" onClickBtn={onClickBtn} />
             <MyButton title="Delete" onClickBtn={onClickBtn} />
           </div>
         </Container>
+        {infoToggle === true ? (
+          <Management_detail_info
+            setInfoToggle={setInfoToggle}
+            processedDetails={datasetDetails}
+          />
+        ) : null}
       </div>
+
       {/* 훛리된 데이터세트 */}
       <div className="containers">
         <Container title="후처리된 데이터세트" addedCls="flex7">

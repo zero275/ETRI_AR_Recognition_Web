@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const Container = ({ children, title, cls = "basicContainer", addedCls }) => {
-  const sectionRef = useRef < HTMLElement > null;
+  const sectionRef = useRef(null);
 
   /**
    * framer-motion 이해하고싶다면

@@ -82,3 +82,7 @@ export const TabContainer = styled.section `
   height: fit-content;
   overflow: auto;
 `;
+
+export const DetailInfo = styled.div `
+  width: 100%;
+`;

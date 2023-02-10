@@ -3,6 +3,10 @@
   padding: 1.5em;
 }
 
+.main_logo {
+  cursor: pointer;
+}
+
 /* Container의 wrapper */
 .containers {
   display: flex;
@@ -55,18 +59,47 @@
 .flex7 {
   flex: 7;
 }
+
 .flex6 {
   flex: 6;
 }
+
 .flex5 {
   flex: 5;
 }
+
 .flex4 {
   flex: 4;
 }
+
 .flex3 {
   flex: 3;
 }
+
+/* 닫기버튼 */
+.close_btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  background-color: none;
+  text-align: center;
+  font-size: 15px;
+  padding: 3px 0px;
+  border: 2px solid white;
+  line-height: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.close_btn:hover {
+  color: #20bfa9;
+  border: 2px solid #20bfa9;
+  transition: all 0.7s;
+}
+
+.close_btn {}
 
 /* 마진 */
 .ml1em {
@@ -81,6 +114,31 @@
 .display-none {
   display: none !important;
 }
+
+/* 학습데이터세트 목록의 셀렉트 */
+.learning-select {
+  margin: 0px 30px 20px 0px;
+  height: 30px;
+  padding-left: 5px;
+  letter-spacing: 2px;
+}
+
+.learning-select option {
+  letter-spacing: 2px;
+  margin: 5px 0px 5px 5px;
+}
+
+.learning-title01 {
+  margin-right: 20px;
+}
+
+/* select 와 table 구분선 */
+.select-line {
+  width: 100%;
+  border-bottom: 0.3px solid rgba(255, 255, 255, 0.5);
+  margin-bottom: 10px;
+}
+
 
 @media (max-width: 1010px) {
   .containers {
@@ -115,8 +173,9 @@
   .main-header {
     display: flex !important;
     flex-direction: column !important;
-    height: fit-content !important ;
+    height: fit-content !important;
   }
+
   .ag-btn-container {
     display: block;
     position: relative;

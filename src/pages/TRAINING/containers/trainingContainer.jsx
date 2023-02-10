@@ -78,7 +78,7 @@ const TrainingContainer = () => {
 
   const onClickRow = (e, idx) => {
     const rowData = e.data;
-
+    console.log("rowData", rowData);
     if (JSON.stringify(rowData) === JSON.stringify(datasetDetails)) {
       setDatasetDetails({});
       return;
@@ -128,7 +128,7 @@ const TrainingContainer = () => {
             gridApi={gridApi2}
             onClickRow={onClickRow}
             data={datasetRowData}
-            setData={setDatasetRowData}
+            settData={setDatasetRowData}
             column={column1}
             idx="2"
           />

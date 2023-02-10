@@ -76,12 +76,46 @@ body {
 /*  */
 
 .main_dashboard {
-  width: 70vw;
+  width: 100vw;
   height: 100vh;
   margin-top: -80px;
-  background: #fff;
-  z-index: -5;
   position: relative;
+  display: flex;
+  flex-direction: row;
+}
+
+.login_part {
+  width: 30vw;
+  height: 100vh;
+  background-color: #1e1e1e;
+}
+
+.inner_login_all {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: inherit;
+  height: inherit;
+}
+
+.inner_login {
+  width: auto;
+  height: auto;
+  transform: translateY(400px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.inner_login>img {
+  width: 30px;
+  margin-right: 10px;
+}
+
+.login_title {
+  color: white;
+  font-size: 40px;
 }
 
 .main_dashboard::before {
@@ -90,13 +124,87 @@ body {
   position: absolute;
   width: 100%;
   height: 100%;
+
+}
+
+.dashboard {
+  height: 100%;
+  width: 100%;
+  padding: 15em 10em;
   background-image: url(/src/assets/imgs/overlay.svg),
     url(/src/assets/imgs/hero.png);
 
   background-size: cover, 40%;
   background-repeat: no-repeat;
   background-position: 0px, 80% 50%;
-  z-index: -6;
+
+}
+
+.inner_input {
+  position: absolute;
+  top: 480px;
+  left: 50%;
+  margin-left: -150px;
+  z-index: 10;
+}
+
+.inner_input input {
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0);
+  margin-bottom: 20px;
+  font-size: 15px;
+  border: none;
+  border-bottom: 1px solid #959595;
+  outline: none;
+  padding: 3px 3px;
+  color: #959595;
+  transition: all 0.5s;
+}
+
+.inner_input input:hover {
+  border-bottom: 1px solid #20bfa9;
+  transition: border-bottom 0.5s;
+}
+
+.inner_input input:focus {
+  border-bottom: 1px solid #20bfa9;
+  transition: border-bottom 0.5s;
+}
+
+
+.login_Btn {
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  margin-left: -65px;
+}
+
+.my_Btn {
+  background-color: #9898a0;
+  font-size: 1em;
+  font-weight: 600;
+  color: white;
+  padding: 7px 50px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+
+}
+
+.login_footer {
+  position: absolute;
+  top: 69%;
+  left: 50%;
+  margin-left: -100px;
+  color: white;
+  font-size: 12px;
+
+}
+
+.my_Btn:hover {
+  transition: all 300ms ease;
+  background-color: #20bfa9;
+  transition: background-color 0.5s;
 }
 
 .main-header {
@@ -213,11 +321,7 @@ main .flex-row .card {
   /* margin: 0.5em 1em; */
 }
 
-.dashboard {
-  height: 100%;
-  width: 100%;
-  padding: 15em 10em;
-}
+
 
 main .title {
   font-size: var(--font-size-verylarge);
@@ -678,4 +782,11 @@ option {
 
 #videos video {
   width: 200px;
+}
+
+/* 측위자권관리 Management_detail_info */
+
+.Detail-info {
+  padding-top: 20px;
+  line-height: 25px;
 }
