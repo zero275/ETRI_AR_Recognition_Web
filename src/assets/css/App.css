@@ -90,9 +90,21 @@ body {
   background-color: #1e1e1e;
 }
 
+.login_bye {
+  display: none;
+  background-color: #000;
+}
+
+.loginName {
+  position: absolute;
+  top: 112px;
+  right: 450px;
+}
+
 .inner_login_all {
   position: relative;
   display: flex;
+  align-items: center;
   flex-direction: column;
   width: inherit;
   height: inherit;
@@ -148,6 +160,14 @@ body {
   z-index: 10;
 }
 
+.user_info {
+  width: 200px;
+  position: absolute;
+  top: -370px;
+  right: 300px;
+}
+
+
 .inner_input input {
   width: 300px;
   background-color: rgba(255, 255, 255, 0);
@@ -173,29 +193,40 @@ body {
 
 
 .login_Btn {
-  position: absolute;
+  /* position: absolute;
   top: 62%;
-  left: 50%;
+  left: 50%; */
+  width: 430px;
+  display: flex;
+  justify-content: center;
   margin-left: -65px;
 }
 
-.my_Btn {
+
+.login_Btn input {
+  width: 150px;
+  height: 30px;
   background-color: #9898a0;
   font-size: 1em;
   font-weight: 600;
   color: white;
-  padding: 7px 50px;
+  padding: 7px 0px;
   border: none;
   cursor: pointer;
   border-radius: 10px;
 
 }
 
+
+
 .login_footer {
-  position: absolute;
-  top: 69%;
-  left: 50%;
-  margin-left: -100px;
+  /* position: absolute;
+  top: 80%;
+  left: 50%; */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-left: -40px;
   color: white;
   font-size: 12px;
 
@@ -347,7 +378,8 @@ main .subtitle {
 .multi-box {
   height: 6em;
   margin: 1em;
-  background-color: var(--theme-color2);
+  /* background-color: var(--theme-color2); */
+  background-color: #232228;
   border-radius: 1em;
 }
 
@@ -392,7 +424,8 @@ option {
 .card {
   height: 40em;
   margin: 1em;
-  background-color: var(--theme-color2);
+  /* background-color: var(--theme-color2); */
+  background-color: #232228;
   border-radius: 1em;
 
   padding: 2em;
@@ -497,7 +530,8 @@ option {
 .card__dataset {
   flex: 5;
   line-height: 2;
-  color: var(--theme-btn-color-primary);
+  /* color: var(--theme-btn-color-primary); */
+  color: white;
   overflow-y: auto;
 }
 
@@ -794,3 +828,53 @@ option {
 .Detail-info div:nth-child(10) {
   margin-bottom: 80px;
 }
+
+/* 측위자권관리 Management_file_list */
+
+.file_list_on {
+  position: absolute;
+  bottom: 35px;
+  right: 20px;
+  background-color: #9898a0;
+  font-size: 1em;
+  font-weight: 600;
+  color: white;
+  padding: 0.7em 1em;
+  margin-right: 1em;
+  border: none;
+  border-radius: 10px;
+
+}
+
+.file_list_on:hover {
+  transition: all 300ms ease;
+  background-color: #20bfa9;
+}
+
+.file_list_table {
+  width: 100%;
+  text-align: center;
+  transform: translateY(20px);
+}
+
+.file_list_table th {
+  padding: 10px 0px;
+}
+
+.file_list_table td {
+  padding: 20px 0px;
+}
+
+.file_list_table th {
+  margin-right: 5px;
+  border-top: 1px solid #9898a0;
+  border-bottom: 1px solid #9898a0;
+
+}
+
+.file_list_table tr:hover {
+  /* background-color: rgba(32, 192, 169, 0.2); */
+
+}
+
+.file_list_table th:nth-child(1) {}

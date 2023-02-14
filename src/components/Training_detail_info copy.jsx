@@ -2,7 +2,7 @@ import Container from "@/components/container";
 import { DetailInfo } from "@assets/css/styledComponent";
 import { MyButton } from "@/components/MyButton";
 
-export default function Management_detail_info({
+export default function Training_detail_info({
   setInfoToggle,
   datasetDetails,
   setFileListToggle,
@@ -17,30 +17,30 @@ export default function Management_detail_info({
       >
         <DetailInfo className="Detail-info">
           <div className="detailContent">
-            <span>user</span>
+            <span>ID Number</span>
             <span>{datasetDetails?.id}</span>
           </div>
           <div className="detailContent">
-            <span>route file</span>
+            <span>시나리오 네임</span>
             <span>{datasetDetails?.scenarioName}</span>
           </div>
           <div className="detailContent">
-            <span>backpack</span>
+            <span>지역명</span>
             <span>{datasetDetails?.siteId}</span>
           </div>
           <div className="detailContent">
-            <span>phonemodel</span>
+            <span>촬영일</span>
             <span>{datasetDetails?.date}</span>
           </div>
           <div className="detailContent">
-            <span>length</span>
-            <span>1:25</span>
+            <span>액터 수</span>
+            <span></span>
           </div>
           <div className="detailContent">
-            <span>dataset filepath</span>
+            <span>장소</span>
             <span>{datasetDetails?.siteId}</span>
           </div>
-          {/* <div className="detailContent">
+          <div className="detailContent">
             <span>장소 크기</span>
             <span>{datasetDetails?.floor}</span>
           </div>
@@ -55,7 +55,7 @@ export default function Management_detail_info({
           <div className="detailContent">
             <span>총 프레임 수</span>
             <span></span>
-          </div> */}
+          </div>
         </DetailInfo>
         <button
           className="file_list_on"

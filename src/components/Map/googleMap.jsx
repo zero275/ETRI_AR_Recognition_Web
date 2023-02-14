@@ -5,8 +5,10 @@ import {
   Polyline,
   useJsApiLoader,
 } from "@react-google-maps/api";
+const config = process.env.GOOGLE_MAP_API_KEY;
 
-const MAP_IMAGE = require("@/assets/imgs/blueprint.png");
+// const MAP_IMAGE = require("@/assets/imgs/blueprint.png");
+const MAP_IMAGE = require("@/assets/imgs/3004_1F.PNG");
 
 const containerStyle = {
   width: "100%",
@@ -50,7 +52,7 @@ const optionsTraj = {
 function GoogleMapApi() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: `${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`,
+    googleMapsApiKey: `${process.env.GOOGLE_MAP_API_KEY}`,
   });
 
   const [map, setMap] = React.useState(null);

@@ -5,8 +5,33 @@ import TrainingCardInfoView from "@/pages/TRAINING/views/trainingCardInfoView";
 import Container from "@/components/container";
 import { AgGrid } from "@/components/agGrid";
 import { MyButton } from "@/components/MyButton";
+import Training_detail_info from "@/components/Training_detail_info copy";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
+const search1 = [{ name: "ETRI" }];
+const search2 = [
+  { building: "대덕비즈센터 A동" },
+  { building: "대덕비즈센터 B동" },
+  { building: "대덕비즈센터 C동" },
+];
+
+const search3 = [
+  {
+    floor: "1층",
+  },
+  {
+    floor: "2층",
+  },
+  {
+    floor: "3층",
+  },
+  {
+    floor: "4층",
+  },
+  {
+    floor: "5층",
+  },
+];
 
 const column1 = [
   {
@@ -55,6 +80,9 @@ const TrainingContainer = () => {
   const [processedDetails, setProcessedDetails] = useState({});
   const [gridApi, setGridApi] = useState({});
   const [gridApi2, setGridApi2] = useState({});
+  const [infoToggle, setInfoToggle] = useState(false);
+  const [fileListToggle, setFileListToggle] = useState(false);
+
   // const btnList: string[] = ["Run Training", "Delete Dataset"];
   // const btnList2: string[] = ["Cancel Training", "Delete Dataset"];
   // const fileList: Array<FileListInterface> = [
@@ -91,6 +119,7 @@ const TrainingContainer = () => {
 
     if (idx === "1") {
       setDatasetDetails({ ...rowData });
+      setInfoToggle(true);
     } else if (idx === "2") {
       setProcessedDetails({ ...rowData });
     }
@@ -105,6 +134,31 @@ const TrainingContainer = () => {
       {/* 학습 데이터세트 */}
       <div className="containers">
         <Container title="학습 데이터세트 목록" addedCls="flex7">
+          <span className="learning-title01">검색조건</span>
+          <select className="learning-select" name="회사명" id="1">
+            {/* <option value="업체명">업체명</option> */}
+            <option value="ETRI">{search1[0].name}</option>
+          </select>
+          <select className="learning-select" name="건물명" id="2">
+            <option value="건물명">건물명</option>
+            {search2.map((item, idx) => {
+              return (
+                <option key={idx} value="ETRI">
+                  {search2[idx]?.building}
+                </option>
+              );
+            })}
+          </select>
+          <select className="learning-select" name="층수" id="3">
+            <option value="층수">층수</option>
+            {search3.map((item, idx) => {
+              return (
+                <option key={idx} value="ETRI">
+                  {search3[idx]?.floor}
+                </option>
+              );
+            })}
+          </select>
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
@@ -119,10 +173,18 @@ const TrainingContainer = () => {
             <MyButton title="Delete" onClickBtn={onClickBtn} />
           </div>
         </Container>
+        {infoToggle === true ? (
+          <Training_detail_info
+            setInfoToggle={setInfoToggle}
+            datasetDetails={datasetDetails}
+            setFileListToggle={setFileListToggle}
+            fileListToggle={fileListToggle}
+          />
+        ) : null}
       </div>
       {/* 훛리된 데이터세트 */}
       <div className="containers">
-        <Container title="후처리된 데이터세트" addedCls="flex7">
+        <Container title="학습 모델 목록" addedCls="flex7">
           <AgGrid
             setGridApi={setGridApi2}
             gridApi={gridApi2}

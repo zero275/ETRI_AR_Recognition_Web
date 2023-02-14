@@ -9,6 +9,8 @@ import { MyDropdown } from "@/components/MyDropdown";
 import Table from "react-bootstrap/Table";
 import ManagementTable from "@/components/ManagementTable";
 import Management_detail_info from "@/components/Management_detail_info";
+import Management_file_list from "@/components/Management_file_list";
+import axios from "axios";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -41,7 +43,8 @@ const column1 = [
     headerName: "ID",
     field: "id",
     headerCheckboxSelection: true, // 헤더에도 checkbox 추가
-    checkboxSelection: true, // check box 추가
+    checkboxSelection: true,
+    showDisabledCheckboxes: true, // check box 추가
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
@@ -125,6 +128,35 @@ const ManagementContainer = () => {
   const [gridApi, setGridApi] = useState({});
   const [infoToggle, setInfoToggle] = useState(false);
   const [fileListToggle, setFileListToggle] = useState(false);
+  const [] = useState();
+  const url = "http://192.168.219.111:8094/";
+  // const url2 = "";
+  useEffect(() => {
+    axios({
+      url: `${url}/api/collect/get-data-all`,
+      method: "post",
+      // data: { data:""},
+    })
+      .then((res) => {
+        console.log("1212121====", res.data.data_list);
+      })
+      .catch((e) => {
+        console.log("실패", e);
+      });
+  }, []);
+
+  // useEffect(() => {
+  //   axios
+  //     .post("http://192.168.219.111:8094", {
+  //       site_id: "",
+  //     })
+  //     .then(function (response) {
+  //       console.log("wwwww---", response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // }, []);
 
   const [payload, setPayload] = useState([
     {
@@ -163,10 +195,10 @@ const ManagementContainer = () => {
     console.log("rowData", rowData);
     console.log("datasetDetails", datasetDetails);
 
-    setInfoToggle(true);
     const dataInput = () => {
       if (idx === "1") {
         setDatasetDetails({ ...rowData });
+        setInfoToggle(true);
       } else if (idx === "2") {
         setProcessedDetails({ ...rowData });
       }
@@ -181,7 +213,7 @@ const ManagementContainer = () => {
         <Container title="학습 데이터세트 목록" addedCls="flex7">
           <span className="learning-title01">검색조건</span>
           <select className="learning-select" name="회사명" id="1">
-            <option value="업체명">업체명</option>
+            {/* <option value="업체명">업체명</option> */}
             <option value="ETRI">{search1[0].name}</option>
           </select>
           <select className="learning-select" name="건물명" id="2">
@@ -220,17 +252,28 @@ const ManagementContainer = () => {
             <MyButton title="Delete" onClickBtn={onClickBtn} />
           </div>
         </Container>
+        {/* 데이터 상세정보 */}
         {infoToggle === true ? (
           <Management_detail_info
             setInfoToggle={setInfoToggle}
-            processedDetails={datasetDetails}
+            datasetDetails={datasetDetails}
+            setFileListToggle={setFileListToggle}
+            fileListToggle={fileListToggle}
+          />
+        ) : null}
+        {fileListToggle === true ? (
+          <Management_file_list
+            setInfoToggle={setInfoToggle}
+            datasetDetails={datasetDetails}
+            setFileListToggle={setFileListToggle}
+            fileListToggle={fileListToggle}
           />
         ) : null}
       </div>
 
-      {/* 훛리된 데이터세트 */}
+      {/* 1차 후처리된 데이터세트 */}
       <div className="containers">
-        <Container title="후처리된 데이터세트" addedCls="flex7">
+        <Container title="후처리 데이터세트" addedCls="flex7">
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
@@ -238,7 +281,7 @@ const ManagementContainer = () => {
             data={datasetRowData}
             setData={setDatasetRowData}
             column={column1}
-            idx="1"
+            idx="2"
           />
           <div className="ag-btn-container">
             <MyButton title="Create Training Dataset" onClickBtn={onClickBtn} />

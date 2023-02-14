@@ -62,11 +62,12 @@ export const AgGrid = ({
         }}
         onGridReady={onGridReady}
         // enableRangeSelection={true}
-        suppressRowClickSelection={true}
+        // suppressRowClickSelection={true}
         pagination={true}
         paginationAutoPageSize={true}
         groupSelectsChildren={true}
         onSelectionChanged={onSelectionChanged}
+        enableFilter={true}
       ></AgGridReact>
     </div>
   );
