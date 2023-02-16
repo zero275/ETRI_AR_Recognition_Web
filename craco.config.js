@@ -15,7 +15,7 @@ module.exports = {
   //   },
   // },
   devServer: {
-    port: 3003,
+    port: 5003,
   },
   plugins: [{
     plugin: CracoAlias,

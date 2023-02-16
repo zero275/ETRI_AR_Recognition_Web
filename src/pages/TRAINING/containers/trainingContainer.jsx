@@ -63,7 +63,7 @@ const column1 = [
   },
   {
     headerName: "Route_wp",
-    field: "route_wp",
+    field: "Route_wp",
     cellStyle: { fontFamily: "Pretendard" },
   },
   {

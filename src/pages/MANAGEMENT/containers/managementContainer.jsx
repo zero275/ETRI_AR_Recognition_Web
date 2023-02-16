@@ -41,7 +41,7 @@ const search3 = [
 const column1 = [
   {
     headerName: "ID",
-    field: "id",
+    field: "idx",
     headerCheckboxSelection: true, // 헤더에도 checkbox 추가
     checkboxSelection: true,
     showDisabledCheckboxes: true, // check box 추가
@@ -49,32 +49,27 @@ const column1 = [
   },
   {
     headerName: "시나리오 이름",
-    field: "scenarioName",
+    field: "scenario_name",
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
     headerName: "사이트 ID",
-    field: "siteId",
+    field: "site_id",
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
     headerName: "건물 ID",
-    field: "buildingId",
+    field: "building_id",
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
-    headerName: "층",
+    headerName: "층(floor)",
     field: "floor",
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
-    headerName: "Route_wp",
-    field: "route_wp",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
     headerName: "날짜",
-    field: "date",
+    field: "dt_start",
     cellStyle: { fontFamily: "Pretendard" },
   },
 ];
@@ -103,13 +98,8 @@ const column2 = [
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
-    headerName: "층",
+    headerName: "층(floor)",
     field: "floor",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "Route_wp",
-    field: "route_wp",
     cellStyle: { fontFamily: "Pretendard" },
   },
   {
@@ -129,21 +119,48 @@ const ManagementContainer = () => {
   const [infoToggle, setInfoToggle] = useState(false);
   const [fileListToggle, setFileListToggle] = useState(false);
   const [] = useState();
-  const url = "http://192.168.219.111:8094/";
+
   // const url2 = "";
+  // useEffect(() => {
+  //   const url = "http://192.168.219.111:8094/";
+  //   axios
+  //     .all({
+  //       url: `${url}/api/collect/get-data-all`,
+  //       method: "post",
+  //       // data: { data:""},
+  //     })
+  //     .then((res) => {
+  //       console.log("1212121====", res);
+  //       setDatasetRowData(res.data.data_list);
+  //     })
+  //     .catch((e) => {
+  //       console.log("실패", e);
+  //     });
+  // }, []);
+
+  // -----------------------------================
+
   useEffect(() => {
-    axios({
-      url: `${url}/api/collect/get-data-all`,
-      method: "post",
-      // data: { data:""},
-    })
-      .then((res) => {
-        console.log("1212121====", res.data.data_list);
-      })
+    const url = "http://192.168.219.111:8094/";
+    axios
+      .all([
+        axios.post(`${url}/api/collect/get-data-all`),
+        { data: "CollectAll" },
+        axios.post(`${url}/api/collect/get-dataset-details`),
+        { data2: "" },
+      ])
+      .then(
+        axios.spread((res1, res2) => {
+          console.log(res1);
+          console.log(res2);
+        })
+      )
       .catch((e) => {
         console.log("실패", e);
       });
   }, []);
+
+  // =======================================
 
   // useEffect(() => {
   //   axios
@@ -183,9 +200,7 @@ const ManagementContainer = () => {
       isFocus: false,
     },
   ]);
-  useEffect(() => {
-    setDatasetRowData(FAKE_JSON_DATA);
-  }, []);
+  useEffect(() => {}, []);
 
   const onClickBtn = (e) => {
     console.log(gridApi.getSelectedRows());

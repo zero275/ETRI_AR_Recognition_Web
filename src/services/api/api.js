@@ -5,7 +5,7 @@ import axios, {
 // axios 기본 설정
 export const api = axios.create({
   // baseURL: "http://112.145.7.170:48093",
-  baseURL: "http://192.168.219.111:8094",
+  baseURL: "http://192.168.219.111:8094/",
   timeout: 5000,
   headers: {
     Accept: "application/json",

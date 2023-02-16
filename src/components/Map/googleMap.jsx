@@ -5,6 +5,7 @@ import {
   Polyline,
   useJsApiLoader,
 } from "@react-google-maps/api";
+
 const config = process.env.GOOGLE_MAP_API_KEY;
 
 // const MAP_IMAGE = require("@/assets/imgs/blueprint.png");
@@ -15,9 +16,13 @@ const containerStyle = {
   height: "100%",
 };
 
+const OPTIONS = {
+  minZoom: 17,
+  maxZomm: 20,
+};
 const center = {
-  lat: 36.3798125202,
-  lng: 127.367211561,
+  lat: 36.38013731,
+  lng: 127.3677711,
 };
 
 const optionsRoute = {
@@ -52,22 +57,22 @@ const optionsTraj = {
 function GoogleMapApi() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: `${process.env.GOOGLE_MAP_API_KEY}`,
+    googleMapsApiKey: "AIzaSyCfuNDOwcWP6kCq3PKMEz2IZP3QI3EUfdw",
   });
 
-  const [map, setMap] = React.useState(null);
+  // const [map, setMap] = React.useState(null);
 
-  const onLoad = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds(center);
-    console.log(bounds);
+  // const onLoad = React.useCallback(function callback(map) {
+  //   const bounds = new window.google.maps.LatLngBounds(center);
+  //   console.log(bounds);
 
-    map.fitBounds(bounds);
-    setMap(map);
-  }, []);
+  //   map.fitBounds(bounds);
+  //   setMap(map);
+  // }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null);
+  // }, []);
 
   return (
     <>
@@ -75,20 +80,21 @@ function GoogleMapApi() {
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
-          zoom={10}
-          onLoad={onLoad}
-          onUnmount={onUnmount}
+          zoom={19.3}
+          // onLoad={onLoad}
+          // onUnmount={onUnmount}
+          options={OPTIONS}
         >
           <GroundOverlay
             url={MAP_IMAGE}
             bounds={{
-              east: 127.368210944,
-              north: 36.3803034266,
+              east: 127.3682090067,
+              north: 36.3806205649,
               south: 36.3798125202,
-              west: 127.367211561,
+              west: 127.3672123939,
             }}
           />
-          <Polyline
+          {/* <Polyline
             path={[
               { lat: 36.3800722718335, lng: 127.36793118691 },
               { lat: 36.3800725974993, lng: 127.367547509083 },
@@ -142,7 +148,7 @@ function GoogleMapApi() {
               { lat: 36.380076271833545, lng: 127.36753118690987 },
             ]}
             options={optionsTraj}
-          />
+          /> */}
         </GoogleMap>
       )}
     </>
