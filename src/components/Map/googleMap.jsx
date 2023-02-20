@@ -9,7 +9,7 @@ import {
 const config = process.env.GOOGLE_MAP_API_KEY;
 
 // const MAP_IMAGE = require("@/assets/imgs/blueprint.png");
-const MAP_IMAGE = require("@/assets/imgs/3004_1F.PNG");
+const MAP_IMAGE = require("@/assets/imgs/3004_3F.PNG");
 
 const containerStyle = {
   width: "100%",
@@ -93,6 +93,7 @@ function GoogleMapApi() {
               south: 36.3798125202,
               west: 127.3672123939,
             }}
+            border={0}
           />
           {/* <Polyline
             path={[

@@ -98,7 +98,7 @@ body {
 .loginName {
   position: absolute;
   top: 112px;
-  right: 450px;
+  right: 550px;
 }
 
 .inner_login_all {
@@ -165,6 +165,7 @@ body {
   position: absolute;
   top: -370px;
   right: 300px;
+  z-index: 10;
 }
 
 
@@ -829,6 +830,10 @@ option {
   margin-bottom: 80px;
 }
 
+.select_title {
+  margin-right: 10px;
+}
+
 /* 측위자권관리 Management_file_list */
 
 .file_list_on {
@@ -878,3 +883,66 @@ option {
 }
 
 .file_list_table th:nth-child(1) {}
+
+
+/* 수집데이터셋 dataset page  */
+
+.inner_dataset {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.dataset_group {
+  width: 500px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.dataset_group p {
+  margin-right: 20px;
+}
+
+.dataset_group select {
+  width: 170px;
+  height: 30px;
+  padding-left: 5px;
+  letter-spacing: 2px;
+}
+
+.upload-name {
+  display: inline-block;
+  height: 30px;
+  padding: 0 10px;
+  vertical-align: middle;
+  border: 1px solid #dddddd;
+  background-color: var(--theme-color2);
+  width: 78%;
+  color: #999999;
+  border-radius: 10px;
+}
+
+.dataset_group label {
+  width: 110px;
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  vertical-align: middle;
+  background-color: var(--theme-selet-border-color1);
+  cursor: pointer;
+  height: 40px;
+  margin-left: 10px;
+  border-radius: 10px;
+}
+
+.dataset_group input[type="file"] {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+
+}

@@ -116,22 +116,27 @@ const ManagementContainer = () => {
   const [processedRowData, setProcessedRowData] = useState([]);
   const [processedDetails, setProcessedDetails] = useState({});
   const [gridApi, setGridApi] = useState({});
-  const [infoToggle, setInfoToggle] = useState(false);
-  const [fileListToggle, setFileListToggle] = useState(false);
-  const [] = useState();
+  const [infoToggle, setInfoToggle] = useState("false");
+  const [fileListToggle, setFileListToggle] = useState("false");
+  const [filter01, setFilter01] = useState([]);
+  const [companyValue, setCompanyValue] = useState("");
+  const [buildingValue, setBuildingValue] = useState("");
 
-  // const url2 = "";
+  let url = "http://192.168.219.204:8095";
   // useEffect(() => {
-  //   const url = "http://192.168.219.111:8094/";
-  //   axios
-  //     .all({
-  //       url: `${url}/api/collect/get-data-all`,
-  //       method: "post",
-  //       // data: { data:""},
-  //     })
+  //   axios({
+  //     method: "post",
+  //     headers: {
+  //       "Content-Type": "application/json charset=utf-8",
+  //     },
+  //     url: `${url}/api/collect/get-data-all/`,
+  //     dataset_list: "",
+  //   })
   //     .then((res) => {
   //       console.log("1212121====", res);
-  //       setDatasetRowData(res.data.data_list);
+  //       setFilter01(res.data.building_list);
+  //       console.log("filter01", filter01);
+  //       // setDatasetRowData(res.data.data_list);
   //     })
   //     .catch((e) => {
   //       console.log("실패", e);
@@ -141,18 +146,20 @@ const ManagementContainer = () => {
   // -----------------------------================
 
   useEffect(() => {
-    const url = "http://192.168.219.111:8094/";
+    const url = "http://192.168.219.204:8095/";
     axios
       .all([
         axios.post(`${url}/api/collect/get-data-all`),
-        { data: "CollectAll" },
-        axios.post(`${url}/api/collect/get-dataset-details`),
-        { data2: "" },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        },
+        { data: "" },
       ])
       .then(
         axios.spread((res1, res2) => {
-          console.log(res1);
-          console.log(res2);
+          console.log("222aada", res1);
         })
       )
       .catch((e) => {
@@ -163,9 +170,10 @@ const ManagementContainer = () => {
   // =======================================
 
   // useEffect(() => {
+  //   const url = "http://192.168.219.204:8095/";
   //   axios
-  //     .post("http://192.168.219.111:8094", {
-  //       site_id: "",
+  //     .post(`${url}/api/collect/get-data-all`, {
+  //       data: "",
   //     })
   //     .then(function (response) {
   //       console.log("wwwww---", response);
@@ -181,14 +189,14 @@ const ManagementContainer = () => {
       label: "장소",
       value: "",
       placeholder: "입력해주세요",
-      isFocus: false,
+      isFocus: "false",
     },
     {
       name: "sizeoflocation",
       label: "장소크기",
       value: "",
       placeholder: "입력해주세요",
-      isFocus: false,
+      isFocus: "false",
     },
   ]);
   const [dropDown, setDropDown] = useState([
@@ -197,10 +205,9 @@ const ManagementContainer = () => {
       label: "장소",
       value: "",
       placeholder: "입력해주세요",
-      isFocus: false,
+      isFocus: "false",
     },
   ]);
-  useEffect(() => {}, []);
 
   const onClickBtn = (e) => {
     console.log(gridApi.getSelectedRows());
@@ -227,30 +234,77 @@ const ManagementContainer = () => {
       <div className="containers">
         <Container title="학습 데이터세트 목록" addedCls="flex7">
           <span className="learning-title01">검색조건</span>
-          <select className="learning-select" name="회사명" id="1">
+
+          <span className="select_title">회사명</span>
+          <select
+            className="learning-select"
+            name="회사명"
+            id="1"
+            onChange={(e) => {
+              setCompanyValue(e.target.value);
+            }}
+          >
             {/* <option value="업체명">업체명</option> */}
-            <option value="ETRI">{search1[0].name}</option>
+            <option value="ETRI">ETRI</option>
           </select>
-          <select className="learning-select" name="건물명" id="2">
-            <option value="건물명">건물명</option>
-            {search2.map((item, idx) => {
+          <span className="select_title">건물명</span>
+          <select
+            className="learning-select"
+            name="건물명"
+            id="2"
+            onChange={(e) => {
+              setBuildingValue(e.target.value);
+              console.log(buildingValue);
+              axios({
+                method: "post",
+                headers: {
+                  "Content-Type": "application/json charset=utf-8",
+                },
+                url: `${url}/api/collect/get-dataset-filter`,
+                data: {
+                  building_id: buildingValue,
+                },
+              })
+                .then((res) => {
+                  console.log("999999888---", res);
+                  setFilter01(res);
+                  console.log("filter01", filter01);
+                  // setDatasetRowData(res.data.data_list);
+                })
+                .catch((e) => {
+                  console.log("실패", e);
+                });
+            }}
+          >
+            {filter01.map((item, idx) => {
               return (
-                <option key={idx} value="ETRI">
-                  {search2[idx]?.building}
+                <option key={idx} value={filter01[idx]}>
+                  {filter01[idx]}
                 </option>
               );
             })}
           </select>
-          <select className="learning-select" name="층수" id="3">
-            <option value="층수">층수</option>
-            {search3.map((item, idx) => {
-              return (
-                <option key={idx} value="ETRI">
-                  {search3[idx]?.floor}
-                </option>
-              );
-            })}
-          </select>
+          {buildingValue !== "" ? (
+            <>
+              <span className="select_title">층수</span>
+              <select
+                className="learning-select"
+                name="층수"
+                id="3"
+                onChange={(e) => {}}
+              >
+                {search3.map((item, idx) => {
+                  return (
+                    <option key={idx} value="ETRI">
+                      {search3[idx]?.floor}
+                    </option>
+                  );
+                })}
+              </select>
+              <button>검색</button>
+            </>
+          ) : null}
+
           {/* <div className="select-line" /> */}
           <AgGrid
             setGridApi={setGridApi}

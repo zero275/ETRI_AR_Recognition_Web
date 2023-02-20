@@ -6,6 +6,7 @@ import RequireAuth from "@/routes/RequireAuth";
 // lazy 추가 221005
 const Home = React.lazy(() => import("@pages/DASHBOARD/home"));
 const Tranining = React.lazy(() => import("@/pages/TRAINING/tranining"));
+const Dataset = React.lazy(() => import("@/pages/DATASET/dataset"));
 const Monitoring = React.lazy(() => import("@/pages/MONITORING/monitoring"));
 const Management = React.lazy(() => import("@/pages/MANAGEMENT/management"));
 const ErrorPage = React.lazy(() => import("@pages/ETC/ErrorPage"));
@@ -28,6 +29,10 @@ const MyRoutes = () => {
 
         <Route element={<RequireAuth />}>
           <Route path="/Training" element={<Tranining />} />
+        </Route>
+
+        <Route element={<RequireAuth />}>
+          <Route path="/Dataset" element={<Dataset />} />
         </Route>
 
         <Route element={<RequireAuth />}>

@@ -8,6 +8,7 @@ import { MyButton } from "@/components/MyButton";
 import Training_detail_info from "@/components/Training_detail_info copy";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
+
 const search1 = [{ name: "ETRI" }];
 const search2 = [
   { building: "대덕비즈센터 A동" },

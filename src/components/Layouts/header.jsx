@@ -63,6 +63,13 @@ const Header = () => {
         <NavLink
           onClick={(e) => onSelectMenu(e)}
           className={({ isActive }) => (isActive ? "link active" : "link")}
+          to={"/Dataset"}
+        >
+          수집 데이터셋
+        </NavLink>
+        <NavLink
+          onClick={(e) => onSelectMenu(e)}
+          className={({ isActive }) => (isActive ? "link active" : "link")}
           to={"/Monitoring"}
         >
           수집모니터링
