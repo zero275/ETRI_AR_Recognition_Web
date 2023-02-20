@@ -33,7 +33,23 @@ const search3 = [
     floor: "5층",
   },
 ];
-
+const search4 = [
+  {
+    site_id: "Brazil",
+  },
+  {
+    site_id: "Russia",
+  },
+  {
+    site_id: "China",
+  },
+  {
+    site_id: "Canada",
+  },
+  {
+    site_id: "Norway",
+  },
+];
 const column1 = [
   {
     headerName: "ID",
@@ -76,6 +92,7 @@ const column1 = [
 
 const TrainingContainer = () => {
   const [datasetRowData, setDatasetRowData] = useState([]);
+  const [filterRowData, setFilterRowData] = useState([]);
   const [datasetDetails, setDatasetDetails] = useState({});
   const [processedRowData, setProcessedRowData] = useState([]);
   const [processedDetails, setProcessedDetails] = useState({});
@@ -83,6 +100,10 @@ const TrainingContainer = () => {
   const [gridApi2, setGridApi2] = useState({});
   const [infoToggle, setInfoToggle] = useState(false);
   const [fileListToggle, setFileListToggle] = useState(false);
+  const [filter000, setFilter000] = useState("");
+  const [filterDataArr, setFilterDataArr] = useState([]);
+  const [siteId, setSiteId] = useState();
+  const [handleData, setHandleData] = useState();
 
   // const btnList: string[] = ["Run Training", "Delete Dataset"];
   // const btnList2: string[] = ["Cancel Training", "Delete Dataset"];
@@ -128,6 +149,7 @@ const TrainingContainer = () => {
 
   useEffect(() => {
     setDatasetRowData(FAKE_JSON_DATA);
+    setHandleData(false);
   }, []);
 
   return (
@@ -160,11 +182,37 @@ const TrainingContainer = () => {
               );
             })}
           </select>
+          {/* 필터링 예제용 셀렉트 */}
+          <select
+            className="learning-select"
+            id="3"
+            onChange={(e) => {
+              let site_id = e.target.value;
+              setSiteId(site_id);
+              console.log("필터링 네임", site_id);
+              console.log("가로전체데이터", datasetRowData);
+              let date_filter_set = datasetRowData.filter(
+                (item) => item.siteId === site_id
+              );
+              console.log("필터링되고 나온데이터", date_filter_set);
+              setFilterRowData(date_filter_set);
+              setHandleData(true);
+            }}
+          >
+            {/* <option value="site_id">site_id</option> */}
+            {search4.map((item, idx) => {
+              return (
+                <option key={idx} value={item.site_id}>
+                  {search4[idx]?.site_id}
+                </option>
+              );
+            })}
+          </select>
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={datasetRowData}
+            data={handleData === false ? datasetRowData : filterRowData}
             setData={setDatasetRowData}
             column={column1}
             idx="1"
@@ -183,7 +231,7 @@ const TrainingContainer = () => {
           />
         ) : null}
       </div>
-      {/* 훛리된 데이터세트 */}
+      {/* 후처리리된 데이터세트 */}
       <div className="containers">
         <Container title="학습 모델 목록" addedCls="flex7">
           <AgGrid

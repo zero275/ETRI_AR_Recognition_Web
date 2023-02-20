@@ -116,8 +116,8 @@ const ManagementContainer = () => {
   const [processedRowData, setProcessedRowData] = useState([]);
   const [processedDetails, setProcessedDetails] = useState({});
   const [gridApi, setGridApi] = useState({});
-  const [infoToggle, setInfoToggle] = useState("false");
-  const [fileListToggle, setFileListToggle] = useState("false");
+  const [infoToggle, setInfoToggle] = useState(false);
+  const [fileListToggle, setFileListToggle] = useState(false);
   const [filter01, setFilter01] = useState([]);
   const [companyValue, setCompanyValue] = useState("");
   const [buildingValue, setBuildingValue] = useState("");
@@ -189,14 +189,14 @@ const ManagementContainer = () => {
       label: "장소",
       value: "",
       placeholder: "입력해주세요",
-      isFocus: "false",
+      isFocus: false,
     },
     {
       name: "sizeoflocation",
       label: "장소크기",
       value: "",
       placeholder: "입력해주세요",
-      isFocus: "false",
+      isFocus: false,
     },
   ]);
   const [dropDown, setDropDown] = useState([
@@ -205,7 +205,7 @@ const ManagementContainer = () => {
       label: "장소",
       value: "",
       placeholder: "입력해주세요",
-      isFocus: "false",
+      isFocus: false,
     },
   ]);
 
