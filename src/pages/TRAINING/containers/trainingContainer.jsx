@@ -78,11 +78,11 @@ const column1 = [
     field: "floor",
     cellStyle: { fontFamily: "Pretendard" },
   },
-  {
-    headerName: "Route_wp",
-    field: "Route_wp",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
+  // {
+  //   headerName: "Route_wp",
+  //   field: "Route_wp",
+  //   cellStyle: { fontFamily: "Pretendard" },
+  // },
   {
     headerName: "날짜",
     field: "date",
@@ -100,9 +100,6 @@ const TrainingContainer = () => {
   const [gridApi2, setGridApi2] = useState({});
   const [infoToggle, setInfoToggle] = useState(false);
   const [fileListToggle, setFileListToggle] = useState(false);
-  const [filter000, setFilter000] = useState("");
-  const [filterDataArr, setFilterDataArr] = useState([]);
-  const [siteId, setSiteId] = useState();
   const [handleData, setHandleData] = useState();
 
   // const btnList: string[] = ["Run Training", "Delete Dataset"];
@@ -157,13 +154,19 @@ const TrainingContainer = () => {
       {/* 학습 데이터세트 */}
       <div className="containers">
         <Container title="학습 데이터세트 목록" addedCls="flex7">
-          <span className="learning-title01">검색조건</span>
-          <select className="learning-select" name="회사명" id="1">
+          <span className="learning-title01">검색조건 :</span>
+          <span className="select_title">회사명</span>
+          <select
+            className="learning-select"
+            name="회사명"
+            id="1"
+            disabled={true}
+          >
             {/* <option value="업체명">업체명</option> */}
             <option value="ETRI">{search1[0].name}</option>
           </select>
+          <span className="select_title">건물명</span>
           <select className="learning-select" name="건물명" id="2">
-            <option value="건물명">건물명</option>
             {search2.map((item, idx) => {
               return (
                 <option key={idx} value="ETRI">
@@ -172,8 +175,8 @@ const TrainingContainer = () => {
               );
             })}
           </select>
+          <span className="select_title">층수</span>
           <select className="learning-select" name="층수" id="3">
-            <option value="층수">층수</option>
             {search3.map((item, idx) => {
               return (
                 <option key={idx} value="ETRI">
@@ -186,9 +189,9 @@ const TrainingContainer = () => {
           <select
             className="learning-select"
             id="3"
+            placeholder="사이트ID"
             onChange={(e) => {
               let site_id = e.target.value;
-              setSiteId(site_id);
               console.log("필터링 네임", site_id);
               console.log("가로전체데이터", datasetRowData);
               let date_filter_set = datasetRowData.filter(
@@ -208,6 +211,7 @@ const TrainingContainer = () => {
               );
             })}
           </select>
+          {/* <MyButton title="검색" onClickBtn={() => {}} /> */}
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}

@@ -6,7 +6,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 
-const config = process.env.GOOGLE_MAP_API_KEY;
+const config = process.env.REACT_APP_API_KEY;
 
 // const MAP_IMAGE = require("@/assets/imgs/blueprint.png");
 const MAP_IMAGE = require("@/assets/imgs/3004_3F.PNG");
@@ -57,7 +57,7 @@ const optionsTraj = {
 function GoogleMapApi() {
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: "AIzaSyCfuNDOwcWP6kCq3PKMEz2IZP3QI3EUfdw",
+    googleMapsApiKey: config,
   });
 
   // const [map, setMap] = React.useState(null);

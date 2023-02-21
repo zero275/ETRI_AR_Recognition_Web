@@ -23,19 +23,19 @@ const search2 = [
 
 const search3 = [
   {
-    floor: "1층",
+    floor: "1F",
   },
   {
-    floor: "2층",
+    floor: "2F",
   },
   {
-    floor: "3층",
+    floor: "3F",
   },
   {
-    floor: "4층",
+    floor: "4F",
   },
   {
-    floor: "5층",
+    floor: "5F",
   },
 ];
 const column1 = [
@@ -112,6 +112,7 @@ const column2 = [
 const ManagementContainer = () => {
   // 데이터세트 목록
   const [datasetRowData, setDatasetRowData] = useState([]);
+  const [filterRowData, setFilterRowData] = useState([]);
   const [datasetDetails, setDatasetDetails] = useState({});
   const [processedRowData, setProcessedRowData] = useState([]);
   const [processedDetails, setProcessedDetails] = useState({});
@@ -120,8 +121,15 @@ const ManagementContainer = () => {
   const [fileListToggle, setFileListToggle] = useState(false);
   const [filter01, setFilter01] = useState([]);
   const [companyValue, setCompanyValue] = useState("");
-  const [buildingValue, setBuildingValue] = useState("");
-
+  const [filterValue001, setFilterValue001] = useState([]);
+  const [filterValue002, setFilterValue002] = useState([]);
+  const [filterValue003, setFilterValue003] = useState([]);
+  const [siteOptionValue, setSiteOptionValue] = useState();
+  const [floorOptionValue, setFloorOptionValue] = useState();
+  const [buildingFilterValue, setBuildingFilterValue] = useState();
+  const [floorFilterValue, setFloorFilterValue] = useState();
+  const [handleData001, setHandleData001] = useState();
+  const [handleData002, setHandleData002] = useState();
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -150,21 +158,32 @@ const ManagementContainer = () => {
     axios
       .all([
         axios.post(`${url}/api/collect/get-data-all`),
+        axios.post(`${url}/api/collect/get-dataset-filter`),
+        // axios.post(`${url}/api/collect/get-dataset-details`),
         {
           headers: {
             "Content-Type": "application/json; charset=utf-8",
           },
         },
-        { data: "" },
+        // { site_id: "", building_id: "", floor: "" },
       ])
       .then(
-        axios.spread((res1, res2) => {
+        axios.spread((res1, res2, res3) => {
           console.log("222aada", res1);
+          console.log("222aada===", res2);
+          // console.log("vvvvvvvvvvvvv", res3);
+          setDatasetRowData(res1.data.data_list);
+          setFilterValue001(res2.data.data_site);
+          setFilterValue002(res2.data.data_building);
+          setFilterValue003(res2.data.data_floor);
+          console.log("표시데이터222", datasetRowData);
+          console.log("필터내용데이터", res2.data);
         })
       )
       .catch((e) => {
         console.log("실패", e);
       });
+    setHandleData001(false);
   }, []);
 
   // =======================================
@@ -233,8 +252,7 @@ const ManagementContainer = () => {
       {/* 학습 데이터세트 */}
       <div className="containers">
         <Container title="학습 데이터세트 목록" addedCls="flex7">
-          <span className="learning-title01">검색조건</span>
-
+          <span className="learning-title01">검색조건 : </span>
           <span className="select_title">회사명</span>
           <select
             className="learning-select"
@@ -243,9 +261,16 @@ const ManagementContainer = () => {
             onChange={(e) => {
               setCompanyValue(e.target.value);
             }}
+            disabled={true}
           >
             {/* <option value="업체명">업체명</option> */}
-            <option value="ETRI">ETRI</option>
+            {filterValue001.map((item, idx) => {
+              return (
+                <option key={idx} value={item.site_id}>
+                  {filterValue001[1].site_id}
+                </option>
+              );
+            })}
           </select>
           <span className="select_title">건물명</span>
           <select
@@ -253,64 +278,68 @@ const ManagementContainer = () => {
             name="건물명"
             id="2"
             onChange={(e) => {
-              setBuildingValue(e.target.value);
-              console.log(buildingValue);
-              axios({
-                method: "post",
-                headers: {
-                  "Content-Type": "application/json charset=utf-8",
-                },
-                url: `${url}/api/collect/get-dataset-filter`,
-                data: {
-                  building_id: buildingValue,
-                },
-              })
-                .then((res) => {
-                  console.log("999999888---", res);
-                  setFilter01(res);
-                  console.log("filter01", filter01);
-                  // setDatasetRowData(res.data.data_list);
-                })
-                .catch((e) => {
-                  console.log("실패", e);
-                });
+              let buliding_id = e.target.value;
+              console.log("필터링 네임(건물)", buliding_id);
+              let buliding_filter_set =
+                floorFilterValue === undefined
+                  ? datasetRowData.filter(
+                      (item) => item.building_id === buliding_id
+                    )
+                  : floorFilterValue.filter(
+                      (item) => item.building_id === buliding_id
+                    );
+              console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
+              setBuildingFilterValue(buliding_filter_set);
+              setHandleData001(true);
             }}
           >
-            {filter01.map((item, idx) => {
+            {filterValue002.map((item, idx) => {
               return (
-                <option key={idx} value={filter01[idx]}>
-                  {filter01[idx]}
+                <option key={idx} value={item.building_id}>
+                  {filterValue002[idx].building_id}
                 </option>
               );
             })}
           </select>
-          {buildingValue !== "" ? (
-            <>
-              <span className="select_title">층수</span>
-              <select
-                className="learning-select"
-                name="층수"
-                id="3"
-                onChange={(e) => {}}
-              >
-                {search3.map((item, idx) => {
-                  return (
-                    <option key={idx} value="ETRI">
-                      {search3[idx]?.floor}
-                    </option>
-                  );
-                })}
-              </select>
-              <button>검색</button>
-            </>
-          ) : null}
+          <span className="select_title">층수</span>
+          <select
+            className="learning-select"
+            name="층수"
+            id="3"
+            onChange={(e) => {
+              let floor_id = e.target.value;
+              console.log("필터링 네임(층)", floor_id);
+              let floor_filter_set =
+                buildingFilterValue === undefined
+                  ? datasetRowData.filter((item) => item.floor === floor_id)
+                  : buildingFilterValue.filter(
+                      (item) => item.floor === floor_id
+                    );
+              // {
+              //   floor_filter_set == null &&
+              //     console.log("표시할 데이터가 없습니다");
+              // }
+              console.log("필터링되고 나온데이터(층)", floor_filter_set);
+              setFloorFilterValue(floor_filter_set);
+            }}
+          >
+            {filterValue003.map((item, idx) => {
+              return (
+                <option key={idx} value={item.floor}>
+                  {filterValue003[idx]?.floor}
+                </option>
+              );
+            })}
+          </select>
 
           {/* <div className="select-line" /> */}
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={datasetRowData}
+            data={
+              handleData001 === false ? datasetRowData : buildingFilterValue
+            }
             setData={setDatasetRowData}
             column={column1}
             idx="1"

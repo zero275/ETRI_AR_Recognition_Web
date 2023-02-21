@@ -927,7 +927,7 @@ option {
 .dataset_group label {
   width: 110px;
   display: inline-block;
-  padding: 10px 20px;
+  padding: 12px 20px 10px 23px;
   color: #fff;
   vertical-align: middle;
   background-color: var(--theme-selet-border-color1);
@@ -935,6 +935,12 @@ option {
   height: 40px;
   margin-left: 10px;
   border-radius: 10px;
+  transition: background-color 0.5s;
+}
+
+.dataset_group label:hover {
+  background-color: var(--theme-btn-color-primary);
+
 }
 
 .dataset_group input[type="file"] {
@@ -944,5 +950,4 @@ option {
   padding: 0;
   overflow: hidden;
   border: 0;
-
 }
