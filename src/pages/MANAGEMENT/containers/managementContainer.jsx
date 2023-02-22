@@ -119,17 +119,14 @@ const ManagementContainer = () => {
   const [gridApi, setGridApi] = useState({});
   const [infoToggle, setInfoToggle] = useState(false);
   const [fileListToggle, setFileListToggle] = useState(false);
-  const [filter01, setFilter01] = useState([]);
   const [companyValue, setCompanyValue] = useState("");
   const [filterValue001, setFilterValue001] = useState([]);
   const [filterValue002, setFilterValue002] = useState([]);
   const [filterValue003, setFilterValue003] = useState([]);
-  const [siteOptionValue, setSiteOptionValue] = useState();
+  const [buildingOptionValue, setBuildingOptionValue] = useState();
   const [floorOptionValue, setFloorOptionValue] = useState();
-  const [buildingFilterValue, setBuildingFilterValue] = useState();
-  const [floorFilterValue, setFloorFilterValue] = useState();
-  const [handleData001, setHandleData001] = useState();
-  const [handleData002, setHandleData002] = useState();
+  const [rowDataIdx, setRowDataIdx] = useState();
+
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -154,7 +151,6 @@ const ManagementContainer = () => {
   // -----------------------------================
 
   useEffect(() => {
-    const url = "http://192.168.219.204:8095/";
     axios
       .all([
         axios.post(`${url}/api/collect/get-data-all`),
@@ -183,7 +179,6 @@ const ManagementContainer = () => {
       .catch((e) => {
         console.log("실패", e);
       });
-    setHandleData001(false);
   }, []);
 
   // =======================================
@@ -233,7 +228,8 @@ const ManagementContainer = () => {
   };
   const onClickRow = (e, idx) => {
     const rowData = e.data;
-    console.log("rowData", rowData);
+    const rowDataIdx = e.data.idx;
+    console.log("rowData", rowData.idx);
     console.log("datasetDetails", datasetDetails);
 
     const dataInput = () => {
@@ -246,7 +242,49 @@ const ManagementContainer = () => {
     };
     dataInput();
   };
-
+  const BuildingFilter = (e) => {
+    let buliding_id = e.target.value;
+    console.log("필터링 네임(건물)", buliding_id);
+    setBuildingOptionValue(buliding_id);
+    let buliding_filter_set =
+      filterRowData === undefined ||
+      filterRowData === null ||
+      floorOptionValue === undefined ||
+      floorOptionValue === null
+        ? datasetRowData.filter((item) => item.building_id === buliding_id)
+        : datasetRowData.filter(
+            (item) =>
+              item.building_id === buliding_id &&
+              item.floor === floorOptionValue
+          );
+    console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
+    setFilterRowData(buliding_filter_set);
+  };
+  const FloorFilter = (e) => {
+    let floor_id = e.target.value;
+    console.log("필터링 네임(층)", floor_id);
+    setFloorOptionValue(floor_id);
+    let floor_filter_set =
+      filterRowData === undefined ||
+      filterRowData === null ||
+      buildingOptionValue === undefined ||
+      buildingOptionValue === null
+        ? datasetRowData.filter((item) => item.floor === floor_id)
+        : datasetRowData.filter(
+            (item) =>
+              item.floor === floor_id &&
+              item.building_id === buildingOptionValue
+          );
+    // {
+    //   floor_filter_set == null &&
+    //     console.log("표시할 데이터가 없습니다");
+    // }
+    console.log("필터링되고 나온데이터(층)", floor_filter_set);
+    setFilterRowData(floor_filter_set);
+    return;
+  };
+  console.log("필터링 스테이트네임(건물)", buildingOptionValue);
+  console.log("필터링 스테이트네임", filterRowData);
   return (
     <main className="mainContainer">
       {/* 학습 데이터세트 */}
@@ -278,19 +316,7 @@ const ManagementContainer = () => {
             name="건물명"
             id="2"
             onChange={(e) => {
-              let buliding_id = e.target.value;
-              console.log("필터링 네임(건물)", buliding_id);
-              let buliding_filter_set =
-                floorFilterValue === undefined
-                  ? datasetRowData.filter(
-                      (item) => item.building_id === buliding_id
-                    )
-                  : floorFilterValue.filter(
-                      (item) => item.building_id === buliding_id
-                    );
-              console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
-              setBuildingFilterValue(buliding_filter_set);
-              setHandleData001(true);
+              BuildingFilter(e);
             }}
           >
             {filterValue002.map((item, idx) => {
@@ -307,20 +333,7 @@ const ManagementContainer = () => {
             name="층수"
             id="3"
             onChange={(e) => {
-              let floor_id = e.target.value;
-              console.log("필터링 네임(층)", floor_id);
-              let floor_filter_set =
-                buildingFilterValue === undefined
-                  ? datasetRowData.filter((item) => item.floor === floor_id)
-                  : buildingFilterValue.filter(
-                      (item) => item.floor === floor_id
-                    );
-              // {
-              //   floor_filter_set == null &&
-              //     console.log("표시할 데이터가 없습니다");
-              // }
-              console.log("필터링되고 나온데이터(층)", floor_filter_set);
-              setFloorFilterValue(floor_filter_set);
+              FloorFilter(e);
             }}
           >
             {filterValue003.map((item, idx) => {
@@ -331,6 +344,11 @@ const ManagementContainer = () => {
               );
             })}
           </select>
+          {filterRowData.length !== 0 || filterRowData === undefined ? null : (
+            <span className="notFoundData">
+              ※ 조건에 해당하는 데이터가 없습니다
+            </span>
+          )}
 
           {/* <div className="select-line" /> */}
           <AgGrid
@@ -338,7 +356,14 @@ const ManagementContainer = () => {
             gridApi={gridApi}
             onClickRow={onClickRow}
             data={
-              handleData001 === false ? datasetRowData : buildingFilterValue
+              floorOptionValue === null ||
+              floorOptionValue === undefined ||
+              buildingOptionValue === null ||
+              buildingOptionValue === undefined
+                ? datasetRowData
+                : filterRowData !== null || filterRowData !== undefined
+                ? filterRowData
+                : null
             }
             setData={setDatasetRowData}
             column={column1}

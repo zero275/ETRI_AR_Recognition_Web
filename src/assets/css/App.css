@@ -834,7 +834,7 @@ option {
   margin-right: 10px;
 }
 
-/* 측위자권관리 Management_file_list */
+/* 측위자원관리 Management_file_list */
 
 .file_list_on {
   position: absolute;
@@ -883,6 +883,23 @@ option {
 }
 
 .file_list_table th:nth-child(1) {}
+
+.notFoundData {
+  color: rgba(255, 0, 0, 0.7);
+  animation: notData 0.2s 0s ease-in-out;
+}
+
+@keyframes notData {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
 
 
 /* 수집데이터셋 dataset page  */
