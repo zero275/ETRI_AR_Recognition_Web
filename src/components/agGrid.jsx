@@ -12,7 +12,7 @@ export const AgGrid = ({
   data,
   column,
   idx = "0", // default = '0"
-  type = "single", //default = "single"
+  type = "multiple", //default = "single"
 }) => {
   const gridRef = useRef();
 

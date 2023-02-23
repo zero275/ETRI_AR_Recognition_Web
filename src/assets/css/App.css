@@ -867,7 +867,7 @@ option {
 }
 
 .file_list_table td {
-  padding: 20px 0px;
+  padding: 15px 0px;
 }
 
 .file_list_table th {
@@ -899,6 +899,13 @@ option {
     opacity: 1;
     transform: translateX(0px);
   }
+}
+
+.noFileMsg {
+  width: inherit;
+  display: flex;
+  justify-content: center;
+  transform: translate(20px, 200px);
 }
 
 

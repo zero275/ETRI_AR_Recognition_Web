@@ -12,35 +12,38 @@ export default function Management_detail_info({
     <>
       <Container
         title="데이터 상세정보"
-        addedCls="flex3"
+        addedCls="flex2"
         cls="basicContainer2nd"
       >
-        <DetailInfo className="Detail-info">
-          <div className="detailContent">
-            <span>user</span>
-            <span>{datasetDetails?.id}</span>
-          </div>
-          <div className="detailContent">
-            <span>route file</span>
-            <span>{datasetDetails?.scenarioName}</span>
-          </div>
-          <div className="detailContent">
-            <span>backpack</span>
-            <span>{datasetDetails?.siteId}</span>
-          </div>
-          <div className="detailContent">
-            <span>phonemodel</span>
-            <span>{datasetDetails?.date}</span>
-          </div>
-          <div className="detailContent">
-            <span>length</span>
-            <span>1:25</span>
-          </div>
-          <div className="detailContent">
-            <span>dataset filepath</span>
-            <span>{datasetDetails?.siteId}</span>
-          </div>
-          {/* <div className="detailContent">
+        {datasetDetails !== 0 ||
+        datasetDetails !== undefined ||
+        datasetDetails !== null ? (
+          <DetailInfo className="Detail-info">
+            <div className="detailContent">
+              <span>user</span>
+              <span>{datasetDetails?.id}</span>
+            </div>
+            <div className="detailContent">
+              <span>route file</span>
+              <span>{datasetDetails?.scenarioName}</span>
+            </div>
+            <div className="detailContent">
+              <span>backpack</span>
+              <span>{datasetDetails?.siteId}</span>
+            </div>
+            <div className="detailContent">
+              <span>phonemodel</span>
+              <span>{datasetDetails?.date}</span>
+            </div>
+            <div className="detailContent">
+              <span>length</span>
+              <span>1:25</span>
+            </div>
+            <div className="detailContent">
+              <span>dataset filepath</span>
+              <span>{datasetDetails?.siteId}</span>
+            </div>
+            {/* <div className="detailContent">
             <span>장소 크기</span>
             <span>{datasetDetails?.floor}</span>
           </div>
@@ -56,7 +59,9 @@ export default function Management_detail_info({
             <span>총 프레임 수</span>
             <span></span>
           </div> */}
-        </DetailInfo>
+          </DetailInfo>
+        ) : null}
+
         <button
           className="file_list_on"
           onClick={() => {

@@ -45,7 +45,7 @@ const column1 = [
     headerCheckboxSelection: true, // 헤더에도 checkbox 추가
     checkboxSelection: true,
     showDisabledCheckboxes: true, // check box 추가
-    cellStyle: { fontFamily: "Pretendard" },
+    // cellStyle: { fontFamily: "Pretendard" },
   },
   {
     headerName: "시나리오 이름",
@@ -126,7 +126,9 @@ const ManagementContainer = () => {
   const [buildingOptionValue, setBuildingOptionValue] = useState();
   const [floorOptionValue, setFloorOptionValue] = useState();
   const [rowDataIdx, setRowDataIdx] = useState();
-
+  const [fileList, setFileList] = useState();
+  const [rowDataDetail, setRowDataDetail] = useState();
+  const [rowDataFileList, setRowDAtaFileList] = useState();
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -155,7 +157,7 @@ const ManagementContainer = () => {
       .all([
         axios.post(`${url}/api/collect/get-data-all`),
         axios.post(`${url}/api/collect/get-dataset-filter`),
-        // axios.post(`${url}/api/collect/get-dataset-details`),
+        // axios.post(`${url}/api/collect/get-dataset-details`, rowDataIdx),
         {
           headers: {
             "Content-Type": "application/json; charset=utf-8",
@@ -165,9 +167,9 @@ const ManagementContainer = () => {
       ])
       .then(
         axios.spread((res1, res2, res3) => {
-          console.log("222aada", res1);
-          console.log("222aada===", res2);
-          // console.log("vvvvvvvvvvvvv", res3);
+          console.log("전체데이터", res1);
+          console.log("필터링데이터", res2);
+          // console.log("상세정보데이터", res3);
           setDatasetRowData(res1.data.data_list);
           setFilterValue001(res2.data.data_site);
           setFilterValue002(res2.data.data_building);
@@ -229,8 +231,31 @@ const ManagementContainer = () => {
   const onClickRow = (e, idx) => {
     const rowData = e.data;
     const rowDataIdx = e.data.idx;
+    setRowDataIdx(rowDataIdx);
     console.log("rowData", rowData.idx);
     console.log("datasetDetails", datasetDetails);
+    console.log("인덱스의 타입은 뭘까요", rowDataIdx);
+
+    axios
+      .post(
+        `${url}/api/collect/get-dataset-details`,
+        { idx: rowDataIdx },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("상세정보 데이터", response);
+        setFileList(response);
+        console.log("파일리스트", fileList);
+        setRowDataDetail(response.data.details);
+        setRowDAtaFileList(response.data.file_list);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
     const dataInput = () => {
       if (idx === "1") {
@@ -285,11 +310,15 @@ const ManagementContainer = () => {
   };
   console.log("필터링 스테이트네임(건물)", buildingOptionValue);
   console.log("필터링 스테이트네임", filterRowData);
+  console.log("선택된 내용의 세부정보", rowDataDetail);
+  console.log("선택된 내용의 파일목록", rowDataFileList);
+  console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
+
   return (
     <main className="mainContainer">
       {/* 학습 데이터세트 */}
       <div className="containers">
-        <Container title="학습 데이터세트 목록" addedCls="flex7">
+        <Container title="수집 데이터세트 목록" addedCls="flex7">
           <span className="learning-title01">검색조건 : </span>
           <span className="select_title">회사명</span>
           <select
@@ -344,8 +373,8 @@ const ManagementContainer = () => {
               );
             })}
           </select>
-          {filterRowData.length !== 0 || filterRowData === undefined ? null : (
-            <span className="notFoundData">
+          {filterRowData.length !== 0 ? null : (
+            <span className="notFoundData ">
               ※ 조건에 해당하는 데이터가 없습니다
             </span>
           )}
@@ -355,23 +384,16 @@ const ManagementContainer = () => {
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={
-              floorOptionValue === null ||
-              floorOptionValue === undefined ||
-              buildingOptionValue === null ||
-              buildingOptionValue === undefined
-                ? datasetRowData
-                : filterRowData !== null || filterRowData !== undefined
-                ? filterRowData
-                : null
-            }
+            data={filterRowData.length === 0 ? datasetRowData : filterRowData}
             setData={setDatasetRowData}
             column={column1}
+            rowSelection={"multiple"}
             idx="1"
+            type="single"
           />
           {/* <ManagementTable column2={column2} /> */}
           <div className="ag-btn-container">
-            <MyButton title="Post Processing" onClickBtn={onClickBtn} />
+            <MyButton title="Pre Processing" onClickBtn={onClickBtn} />
             <MyButton title="Delete" onClickBtn={onClickBtn} />
           </div>
         </Container>
@@ -384,12 +406,17 @@ const ManagementContainer = () => {
             fileListToggle={fileListToggle}
           />
         ) : null}
+        {/* 파일목록 */}
         {fileListToggle === true ? (
           <Management_file_list
             setInfoToggle={setInfoToggle}
             datasetDetails={datasetDetails}
             setFileListToggle={setFileListToggle}
             fileListToggle={fileListToggle}
+            rowDataDetail={rowDataDetail}
+            setRowDataDetail={setRowDataDetail}
+            rowDataFileList={rowDataFileList}
+            setRowDAtaFileList={setRowDAtaFileList}
           />
         ) : null}
       </div>
@@ -405,6 +432,7 @@ const ManagementContainer = () => {
             setData={setDatasetRowData}
             column={column1}
             idx="2"
+            type="multiple"
           />
           <div className="ag-btn-container">
             <MyButton title="Create Training Dataset" onClickBtn={onClickBtn} />

@@ -6,14 +6,19 @@ export default function Management_file_list({
   datasetDetails,
   setFileListToggle,
   fileListToggle,
+  rowDataDetail,
+  setRowDataDetail,
+  rowDataFileList,
+  setRowDAtaFileList,
 }) {
-  const file_ojt = [
-    { idx: "0", name: "recording.mp4", size: "50MB" },
-    { idx: "1", name: "collection.json", size: "0.5KB" },
-    { idx: "2", name: "pose.csv", size: "54KB" },
-    { idx: "3", name: "mark.csv", size: "22.6KB" },
-    { idx: "4", name: "gyro.csv", size: "22.4KB" },
-  ];
+  // const file_ojt = [
+  //   { idx: "0", name: "recording.mp4", size: "50MB" },
+  //   { idx: "1", name: "collection.json", size: "0.5KB" },
+  //   { idx: "2", name: "pose.csv", size: "54KB" },
+  //   { idx: "3", name: "mark.csv", size: "22.6KB" },
+  //   { idx: "4", name: "gyro.csv", size: "22.4KB" },
+  // ];
+  console.log("넘겨받은 파일목록", rowDataFileList);
   return (
     <Container title="파일 목록" addedCls="flex2" cls="basicContainer2nd">
       <table className="file_list_table">
@@ -22,14 +27,18 @@ export default function Management_file_list({
           <th>size</th>
         </thead>
         <tbody>
-          {file_ojt.map((item, idx) => {
-            return (
-              <tr>
-                <td>{file_ojt[idx].name}</td>
-                <td>{file_ojt[idx].size}</td>
-              </tr>
-            );
-          })}
+          {rowDataFileList != undefined || rowDataFileList != null ? (
+            rowDataFileList.map((item, idx) => {
+              return (
+                <tr>
+                  <td>{rowDataFileList[idx]?.name}</td>
+                  <td>{rowDataFileList[idx]?.size}</td>
+                </tr>
+              );
+            })
+          ) : (
+            <div className="noFileMsg">해당하는 파일이 없습니다</div>
+          )}
         </tbody>
       </table>
       <div
