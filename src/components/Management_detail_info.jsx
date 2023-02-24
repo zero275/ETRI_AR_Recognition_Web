@@ -7,6 +7,7 @@ export default function Management_detail_info({
   datasetDetails,
   setFileListToggle,
   fileListToggle,
+  rowDataDetail,
 }) {
   return (
     <>
@@ -15,52 +16,55 @@ export default function Management_detail_info({
         addedCls="flex2"
         cls="basicContainer2nd"
       >
-        {datasetDetails !== 0 ||
-        datasetDetails !== undefined ||
-        datasetDetails !== null ? (
+        {rowDataDetail.length !== 0 ||
+        rowDataDetail !== undefined ||
+        rowDataDetail !== null ? (
           <DetailInfo className="Detail-info">
             <div className="detailContent">
-              <span>user</span>
-              <span>{datasetDetails?.id}</span>
+              <span>Building</span>
+              <span>{rowDataDetail[0].Building}</span>
             </div>
             <div className="detailContent">
-              <span>route file</span>
-              <span>{datasetDetails?.scenarioName}</span>
+              <span>End time</span>
+              <span>{rowDataDetail[0].End_time}</span>
             </div>
             <div className="detailContent">
-              <span>backpack</span>
-              <span>{datasetDetails?.siteId}</span>
+              <span>Floor</span>
+              <span>{rowDataDetail[0].Floor}</span>
             </div>
             <div className="detailContent">
-              <span>phonemodel</span>
-              <span>{datasetDetails?.date}</span>
+              <span>Ground Truth</span>
+              <span>{rowDataDetail[0].Ground_Truth}</span>
             </div>
             <div className="detailContent">
-              <span>length</span>
-              <span>1:25</span>
+              <span>Phone Model</span>
+              <span>{rowDataDetail[0].Phone_Model}</span>
             </div>
             <div className="detailContent">
-              <span>dataset filepath</span>
-              <span>{datasetDetails?.siteId}</span>
+              <span>Route_waypoints</span>
+              <span>{rowDataDetail[0].Route_waypoints}</span>
             </div>
-            {/* <div className="detailContent">
-            <span>장소 크기</span>
-            <span>{datasetDetails?.floor}</span>
-          </div>
-          <div className="detailContent">
-            <span>총 RGB 영상 규모</span>
-            <span></span>
-          </div>
-          <div className="detailContent">
-            <span>총 Skeleton 규모</span>
-            <span></span>
-          </div>
-          <div className="detailContent">
-            <span>총 프레임 수</span>
-            <span></span>
-          </div> */}
+            <div className="detailContent">
+              <span>Scenario</span>
+              <span>{rowDataDetail[0].Scenario}</span>
+            </div>
+            <div className="detailContent">
+              <span>Site</span>
+              <span>{rowDataDetail[0].Site}</span>
+            </div>
+            <div className="detailContent">
+              <span>Start time</span>
+              <span>{rowDataDetail[0].Start_time}</span>
+            </div>
+            <div className="detailContent">
+              <span>User</span>
+              <span>{rowDataDetail[0].User}</span>
+            </div>
           </DetailInfo>
-        ) : null}
+        ) : (
+          <div className="noFileMsg">해당하는 데이터가 없습니다.</div>
+        )}
+        {console.log("데이터가 잘 넘어왔나요요요요", rowDataDetail)}
 
         <button
           className="file_list_on"

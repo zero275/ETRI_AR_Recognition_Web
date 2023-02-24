@@ -129,6 +129,7 @@ const ManagementContainer = () => {
   const [fileList, setFileList] = useState();
   const [rowDataDetail, setRowDataDetail] = useState();
   const [rowDataFileList, setRowDAtaFileList] = useState();
+  const [preProcessingIdx, setPreProcessingIdx] = useState();
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -167,15 +168,15 @@ const ManagementContainer = () => {
       ])
       .then(
         axios.spread((res1, res2, res3) => {
-          console.log("전체데이터", res1);
-          console.log("필터링데이터", res2);
+          // console.log("전체데이터", res1);
+          // console.log("필터링데이터", res2);
           // console.log("상세정보데이터", res3);
           setDatasetRowData(res1.data.data_list);
           setFilterValue001(res2.data.data_site);
           setFilterValue002(res2.data.data_building);
           setFilterValue003(res2.data.data_floor);
-          console.log("표시데이터222", datasetRowData);
-          console.log("필터내용데이터", res2.data);
+          // console.log("전체데이터", datasetRowData);
+          // console.log("필터내용데이터", res2.data);
         })
       )
       .catch((e) => {
@@ -232,9 +233,9 @@ const ManagementContainer = () => {
     const rowData = e.data;
     const rowDataIdx = e.data.idx;
     setRowDataIdx(rowDataIdx);
-    console.log("rowData", rowData.idx);
-    console.log("datasetDetails", datasetDetails);
-    console.log("인덱스의 타입은 뭘까요", rowDataIdx);
+    // console.log("rowData", rowData.idx);
+    // console.log("datasetDetails", datasetDetails);
+    // console.log("인덱스의 타입은 뭘까요", rowDataIdx);
 
     axios
       .post(
@@ -252,6 +253,7 @@ const ManagementContainer = () => {
         console.log("파일리스트", fileList);
         setRowDataDetail(response.data.details);
         setRowDAtaFileList(response.data.file_list);
+        setInfoToggle(true);
       })
       .catch(function (error) {
         console.log(error);
@@ -260,7 +262,6 @@ const ManagementContainer = () => {
     const dataInput = () => {
       if (idx === "1") {
         setDatasetDetails({ ...rowData });
-        setInfoToggle(true);
       } else if (idx === "2") {
         setProcessedDetails({ ...rowData });
       }
@@ -304,15 +305,18 @@ const ManagementContainer = () => {
     //   floor_filter_set == null &&
     //     console.log("표시할 데이터가 없습니다");
     // }
-    console.log("필터링되고 나온데이터(층)", floor_filter_set);
     setFilterRowData(floor_filter_set);
+    let preFilterData = filterRowData.filter((e) => e.idx == e.idx);
+    setPreProcessingIdx(preFilterData);
     return;
   };
-  console.log("필터링 스테이트네임(건물)", buildingOptionValue);
-  console.log("필터링 스테이트네임", filterRowData);
-  console.log("선택된 내용의 세부정보", rowDataDetail);
-  console.log("선택된 내용의 파일목록", rowDataFileList);
-  console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
+  // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
+  console.log("필터링되고 나온 데이터", filterRowData);
+  // console.log("선택된 내용의 세부정보", rowDataDetail);
+  // console.log("선택된 내용의 파일목록", rowDataFileList);
+  // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
+  console.log("보여줄게 완전히 달라진나~~", rowDataDetail);
+  console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
 
   return (
     <main className="mainContainer">
@@ -384,7 +388,7 @@ const ManagementContainer = () => {
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={filterRowData.length === 0 ? datasetRowData : filterRowData}
+            data={filterRowData.length === 0 ? null : filterRowData}
             setData={setDatasetRowData}
             column={column1}
             rowSelection={"multiple"}
@@ -404,6 +408,7 @@ const ManagementContainer = () => {
             datasetDetails={datasetDetails}
             setFileListToggle={setFileListToggle}
             fileListToggle={fileListToggle}
+            rowDataDetail={rowDataDetail}
           />
         ) : null}
         {/* 파일목록 */}
@@ -413,7 +418,6 @@ const ManagementContainer = () => {
             datasetDetails={datasetDetails}
             setFileListToggle={setFileListToggle}
             fileListToggle={fileListToggle}
-            rowDataDetail={rowDataDetail}
             setRowDataDetail={setRowDataDetail}
             rowDataFileList={rowDataFileList}
             setRowDAtaFileList={setRowDAtaFileList}
@@ -440,7 +444,7 @@ const ManagementContainer = () => {
               title="Delete PPT_training Dataset"
               onClickBtn={onClickBtn}
             />
-            <MyButton title="Post Processing Status" onClickBtn={onClickBtn} />
+            <MyButton title="Pre Processing Status" onClickBtn={onClickBtn} />
           </div>
         </Container>
       </div>
