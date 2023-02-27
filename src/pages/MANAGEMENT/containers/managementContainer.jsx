@@ -129,7 +129,7 @@ const ManagementContainer = () => {
   const [filterValue002, setFilterValue002] = useState([]);
   const [filterValue003, setFilterValue003] = useState([]);
   const [buildingOptionValue, setBuildingOptionValue] = useState();
-  const [floorOptionValue, setFloorOptionValue] = useState();
+  const [floorOptionValue, setFloorOptionValue] = useState("");
   const [rowDataIdx, setRowDataIdx] = useState();
   const [fileList, setFileList] = useState();
   const [rowDataDetail, setRowDataDetail] = useState();
@@ -265,6 +265,7 @@ const ManagementContainer = () => {
   };
   const onClickRow = (e, idx) => {
     const rowData = e.data;
+    console.log("가로 눌렀을때 나오는 데이터", rowData);
     const rowDataIdx = e.data.idx;
     setRowDataIdx(rowDataIdx);
     // console.log("rowData", rowData.idx);
@@ -306,9 +307,11 @@ const ManagementContainer = () => {
     let buliding_id = e.target.value;
     console.log("필터링 네임(건물)", buliding_id);
     setBuildingOptionValue(buliding_id);
+
     let buliding_filter_set =
-      filterRowData === undefined ||
-      filterRowData === null ||
+      // filterRowData === undefined ||
+      // filterRowData === null ||
+      floorOptionValue === "" ||
       floorOptionValue === undefined ||
       floorOptionValue === null
         ? datasetRowData.filter((item) => item.building_id === buliding_id)
@@ -320,14 +323,22 @@ const ManagementContainer = () => {
     console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
     setFilterRowData(buliding_filter_set);
   };
+  const BuildingFilter2 = () => {
+    let buliding_filter_set = datasetRowData.filter(
+      (item) => item.building_id === buildingOptionValue
+    );
+    console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
+    setFilterRowData(buliding_filter_set);
+  };
   const FloorFilter = (e) => {
     let floor_id = e.target.value;
     console.log("필터링 네임(층)", floor_id);
     setFloorOptionValue(floor_id);
     let floor_filter_set =
-      filterRowData === undefined ||
-      filterRowData === null ||
+      // filterRowData === undefined ||
+      // filterRowData === null ||
       buildingOptionValue === undefined ||
+      buildingOptionValue == "" ||
       buildingOptionValue === null
         ? datasetRowData.filter((item) => item.floor === floor_id)
         : datasetRowData.filter(
@@ -343,6 +354,12 @@ const ManagementContainer = () => {
 
     return;
   };
+  const floorFilter2 = () => {
+    let floor_filter_set = datasetRowData.filter(
+      (item) => item.floor === floorOptionValue
+    );
+    setFilterRowData(floor_filter_set);
+  };
   // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
   console.log("필터링되고 나온 데이터", filterRowData);
   // console.log("선택된 내용의 세부정보", rowDataDetail);
@@ -350,6 +367,8 @@ const ManagementContainer = () => {
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
   console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
   console.log("후처리가 된 데이터", preProcessingData);
+  console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
+  console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
 
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
@@ -359,6 +378,11 @@ const ManagementContainer = () => {
   useEffect(() => {
     setPreBtnHelp("preBtnHelp");
   }, [filterRowData]);
+
+  function EmptyFloorOption() {
+    setFloorOptionValue("");
+    BuildingFilter();
+  }
 
   return (
     <main className="mainContainer">
@@ -393,9 +417,10 @@ const ManagementContainer = () => {
             onChange={(e) => {
               BuildingFilter(e);
               setPreProcessingData();
+              e.target.value === "" && floorFilter2();
             }}
           >
-            <option value=""></option>
+            <option value="">비선택</option>
             {filterValue002.map((item, idx) => {
               return (
                 <option key={idx} value={item.building_id}>
@@ -412,9 +437,10 @@ const ManagementContainer = () => {
             onChange={(e) => {
               FloorFilter(e);
               setPreProcessingData();
+              e.target.value === "" && BuildingFilter2();
             }}
           >
-            <option value=""></option>
+            <option value="">비선택</option>
             {filterValue003.map((item, idx) => {
               return (
                 <option key={idx} value={item.floor}>
@@ -425,7 +451,7 @@ const ManagementContainer = () => {
           </select>
           {filterRowData.length !== 0 ? null : (
             <span className="notFoundData ">
-              ※ 조건에 해당하는 데이터가 없습니다
+              ※ 조건에 해당하는 데이터가 없어 전체 데이터를 표시합니다.
             </span>
           )}
 
@@ -434,7 +460,7 @@ const ManagementContainer = () => {
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={filterRowData.length === 0 ? null : filterRowData}
+            data={filterRowData.length === 0 ? datasetRowData : filterRowData}
             setData={setDatasetRowData}
             column={column1}
             rowSelection={"multiple"}
@@ -478,7 +504,7 @@ const ManagementContainer = () => {
 
       {/* 1차 후처리된 데이터세트 */}
       <div className="containers">
-        <Container title="후처리 데이터세트" addedCls="flex7">
+        <Container title="전처리 데이터세트" addedCls="flex7">
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
