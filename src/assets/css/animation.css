@@ -58,6 +58,26 @@
   }
 }
 
+@keyframes move-pre-btn {
+  0% {
+    left: 50px;
+    bottom: 10px;
+    opacity: 0;
+  }
+
+  50% {
+    left: 50px;
+    bottom: 10px;
+    opacity: 1;
+  }
+
+  100% {
+    left: 50px;
+    bottom: 10px;
+    opacity: 0;
+  }
+}
+
 .multi-box {
   animation: move-up 0.3s ease-in-out;
 }

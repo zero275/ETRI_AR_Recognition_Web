@@ -819,7 +819,19 @@ option {
   width: 200px;
 }
 
-/* 측위자권관리 Management_detail_info */
+/* 측위자원관리 설정 */
+.preBtnHelpNone {
+  display: none;
+}
+
+.preBtnHelp {
+  position: absolute;
+  left: 50px;
+  bottom: 10px;
+  animation: move-pre-btn 3s ease-in-out infinite;
+}
+
+/* 측위자원관리 Management_detail_info */
 
 .Detail-info {
   padding-top: 20px;
@@ -833,6 +845,9 @@ option {
 .select_title {
   margin-right: 10px;
 }
+
+
+
 
 /* 측위자원관리 Management_file_list */
 

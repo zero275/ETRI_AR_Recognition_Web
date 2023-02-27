@@ -42,9 +42,9 @@ const column1 = [
   {
     headerName: "ID",
     field: "idx",
-    headerCheckboxSelection: true, // 헤더에도 checkbox 추가
-    checkboxSelection: true,
-    showDisabledCheckboxes: true, // check box 추가
+    // headerCheckboxSelection: true, // 헤더에도 checkbox 추가
+    // checkboxSelection: true,
+    // showDisabledCheckboxes: true, // check box 추가
     // cellStyle: { fontFamily: "Pretendard" },
   },
   {
@@ -69,6 +69,11 @@ const column1 = [
   },
   {
     headerName: "날짜",
+    field: "dt_start",
+    cellStyle: { fontFamily: "Pretendard" },
+  },
+  {
+    headerName: "전처리여부",
     field: "dt_start",
     cellStyle: { fontFamily: "Pretendard" },
   },
@@ -130,6 +135,8 @@ const ManagementContainer = () => {
   const [rowDataDetail, setRowDataDetail] = useState();
   const [rowDataFileList, setRowDAtaFileList] = useState();
   const [preProcessingIdx, setPreProcessingIdx] = useState();
+  const [preProcessingData, setPreProcessingData] = useState();
+  const [preBtnHelp, setPreBtnHelp] = useState("");
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -227,7 +234,34 @@ const ManagementContainer = () => {
   ]);
 
   const onClickBtn = (e) => {
-    console.log(gridApi.getSelectedRows());
+    // console.log(gridApi.getSelectedRows());
+    axios
+      .post(
+        `${url}/api/collect/get-ppdataset-list`,
+        { idx: preProcessingIdx },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("상세정보 데이터", response);
+        setPreProcessingData(response.data.data_list);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    setPreBtnHelp("preBtnHelpNone");
+  };
+  const onDeleteRow = (e) => {
+    let delConfirm = window.confirm("데이터를 정말 삭제하시겠습니까?");
+    console.log("컨펌 결과값", delConfirm);
+    function conformTrue() {}
+    if (delConfirm === true) {
+      setFilterRowData([]);
+      setPreProcessingData([]);
+    }
   };
   const onClickRow = (e, idx) => {
     const rowData = e.data;
@@ -306,8 +340,7 @@ const ManagementContainer = () => {
     //     console.log("표시할 데이터가 없습니다");
     // }
     setFilterRowData(floor_filter_set);
-    let preFilterData = filterRowData.filter((e) => e.idx == e.idx);
-    setPreProcessingIdx(preFilterData);
+
     return;
   };
   // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
@@ -315,8 +348,17 @@ const ManagementContainer = () => {
   // console.log("선택된 내용의 세부정보", rowDataDetail);
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
-  console.log("보여줄게 완전히 달라진나~~", rowDataDetail);
   console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
+  console.log("후처리가 된 데이터", preProcessingData);
+
+  useEffect(() => {
+    let preFilterData = filterRowData.map((e) => e.idx);
+    let sortPreFileterData = preFilterData.sort();
+    setPreProcessingIdx(sortPreFileterData);
+  }, [filterRowData]);
+  useEffect(() => {
+    setPreBtnHelp("preBtnHelp");
+  }, [filterRowData]);
 
   return (
     <main className="mainContainer">
@@ -350,8 +392,10 @@ const ManagementContainer = () => {
             id="2"
             onChange={(e) => {
               BuildingFilter(e);
+              setPreProcessingData();
             }}
           >
+            <option value=""></option>
             {filterValue002.map((item, idx) => {
               return (
                 <option key={idx} value={item.building_id}>
@@ -367,8 +411,10 @@ const ManagementContainer = () => {
             id="3"
             onChange={(e) => {
               FloorFilter(e);
+              setPreProcessingData();
             }}
           >
+            <option value=""></option>
             {filterValue003.map((item, idx) => {
               return (
                 <option key={idx} value={item.floor}>
@@ -398,8 +444,13 @@ const ManagementContainer = () => {
           {/* <ManagementTable column2={column2} /> */}
           <div className="ag-btn-container">
             <MyButton title="Pre Processing" onClickBtn={onClickBtn} />
-            <MyButton title="Delete" onClickBtn={onClickBtn} />
+            <MyButton title="Delete" disable="true" onClickBtn={onDeleteRow} />
           </div>
+          {filterRowData.length !== 0 || preBtnHelp !== "" ? (
+            <span className={preBtnHelp}>
+              ▲ 조건입력이 완료 되셨으면 Pre Processing을 진행하세요
+            </span>
+          ) : null}
         </Container>
         {/* 데이터 상세정보 */}
         {infoToggle === true ? (
@@ -432,7 +483,13 @@ const ManagementContainer = () => {
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={datasetRowData}
+            data={
+              preProcessingData !== undefined ||
+              preProcessingData !== null ||
+              preProcessingData.length !== 0
+                ? preProcessingData
+                : null
+            }
             setData={setDatasetRowData}
             column={column1}
             idx="2"

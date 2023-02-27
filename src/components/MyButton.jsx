@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-export const MyButton = ({ title, onClickBtn, size, disable = false }) => {
+export const MyButton = ({ title, onClickBtn, size, disable }) => {
   return (
     <StyledButtonType1
       size={size}
