@@ -233,7 +233,7 @@ const ManagementContainer = () => {
     },
   ]);
 
-  const onClickBtn = (e) => {
+  const onPreProcessing = (e) => {
     // console.log(gridApi.getSelectedRows());
     axios
       .post(
@@ -253,6 +253,9 @@ const ManagementContainer = () => {
         console.log(error);
       });
     setPreBtnHelp("preBtnHelpNone");
+  };
+  const onClickBtn = (e) => {
+    // console.log(gridApi.getSelectedRows());
   };
   const onDeleteRow = (e) => {
     let delConfirm = window.confirm("데이터를 정말 삭제하시겠습니까?");
@@ -469,8 +472,8 @@ const ManagementContainer = () => {
           />
           {/* <ManagementTable column2={column2} /> */}
           <div className="ag-btn-container">
-            <MyButton title="Pre Processing" onClickBtn={onClickBtn} />
-            <MyButton title="Delete" disable="true" onClickBtn={onDeleteRow} />
+            <MyButton title="Pre Processing" onClickBtn={onPreProcessing} />
+            <MyButton title="Delete" disable={true} onClickBtn={onDeleteRow} />
           </div>
           {filterRowData.length !== 0 || preBtnHelp !== "" ? (
             <span className={preBtnHelp}>
