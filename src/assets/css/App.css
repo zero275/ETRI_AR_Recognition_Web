@@ -16,8 +16,9 @@
   --theme-btn-color-primary: #20bfa9;
   --theme-btn-color-blue: #1890ff;
   --theme-selet-border-color1: gray;
+  --theme-hover-row-color1:
 
-  --font-size-verylarge: 4em;
+    --font-size-verylarge: 4em;
   --font-size-large: 2em;
   --font-size-midium: 1em;
   --font-size-small: 0.5em;
@@ -831,6 +832,8 @@ option {
   animation: move-pre-btn 3s ease-in-out infinite;
 }
 
+
+
 /* 측위자원관리 Management_detail_info */
 
 .Detail-info {
@@ -902,6 +905,16 @@ option {
 .notFoundData {
   color: rgba(255, 0, 0, 0.7);
   animation: notData 0.2s 0s ease-in-out;
+}
+
+.openFile {
+  cursor: pointer;
+  transition: background-color color 0.5s ease-in-out;
+}
+
+.openFile:hover {
+  background-color: var(--theme-font-color-primary);
+  color: var(--theme-color1);
 }
 
 @keyframes notData {

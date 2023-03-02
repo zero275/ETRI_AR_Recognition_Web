@@ -42,9 +42,9 @@ const column1 = [
   {
     headerName: "ID",
     field: "idx",
-    // headerCheckboxSelection: true, // 헤더에도 checkbox 추가
-    // checkboxSelection: true,
-    // showDisabledCheckboxes: true, // check box 추가
+    headerCheckboxSelection: true, // 헤더에도 checkbox 추가
+    checkboxSelection: true,
+    showDisabledCheckboxes: true, // check box 추가
     // cellStyle: { fontFamily: "Pretendard" },
   },
   {
@@ -270,6 +270,8 @@ const ManagementContainer = () => {
     const rowData = e.data;
     console.log("가로 눌렀을때 나오는 데이터", rowData);
     const rowDataIdx = e.data.idx;
+    const user_id = e.data.site_id;
+    const buliding_id = e.data.building_id;
     setRowDataIdx(rowDataIdx);
     // console.log("rowData", rowData.idx);
     // console.log("datasetDetails", datasetDetails);
@@ -278,7 +280,7 @@ const ManagementContainer = () => {
     axios
       .post(
         `${url}/api/collect/get-dataset-details`,
-        { idx: rowDataIdx },
+        { idx: rowDataIdx, user_id: user_id, buliding_id: buliding_id },
         {
           headers: {
             "Content-Type": "application/json; charset=utf-8",
@@ -481,6 +483,7 @@ const ManagementContainer = () => {
             </span>
           ) : null}
         </Container>
+
         {/* 데이터 상세정보 */}
         {infoToggle === true ? (
           <Management_detail_info
@@ -505,7 +508,7 @@ const ManagementContainer = () => {
         ) : null}
       </div>
 
-      {/* 1차 후처리된 데이터세트 */}
+      {/* 1차 전처리된 데이터세트 */}
       <div className="containers">
         <Container title="전처리 데이터세트" addedCls="flex7">
           <AgGrid

@@ -1,5 +1,8 @@
+import React, { useEffect, useState } from "react";
 import Container from "@/components/container";
 import { DetailInfo } from "@assets/css/styledComponent";
+import ReactPlayer from "react-player/lazy";
+import play001 from "@assets/mp4/play001.mp4";
 
 export default function Management_file_list({
   setInfoToggle,
@@ -19,6 +22,7 @@ export default function Management_file_list({
   //   { idx: "4", name: "gyro.csv", size: "22.4KB" },
   // ];
   console.log("넘겨받은 파일목록", rowDataFileList);
+  const [handleMp4, setHandleMp4] = useState(false);
   return (
     <Container title="파일 목록" addedCls="flex2" cls="basicContainer2nd">
       <table className="file_list_table">
@@ -30,10 +34,32 @@ export default function Management_file_list({
           {rowDataFileList != undefined || rowDataFileList != null ? (
             rowDataFileList.map((item, idx) => {
               return (
-                <tr>
-                  <td>{rowDataFileList[idx]?.name}</td>
-                  <td>{rowDataFileList[idx]?.size}</td>
-                </tr>
+                <>
+                  <tr>
+                    <td
+                      className="openFile"
+                      onClick={() => {
+                        setHandleMp4(true);
+                      }}
+                    >
+                      <div>
+                        {handleMp4 === true ? (
+                          <ReactPlayer
+                            url={play001}
+                            playing={false}
+                            controls={true}
+                            loop={true}
+                            muted={true}
+                            playsinline={true}
+                          />
+                        ) : null}
+                      </div>
+                      {rowDataFileList[idx]?.name}
+                    </td>
+
+                    <td>{rowDataFileList[idx]?.size}</td>
+                  </tr>
+                </>
               );
             })
           ) : (
@@ -45,6 +71,7 @@ export default function Management_file_list({
         className="close_btn"
         onClick={() => {
           setFileListToggle(false);
+          setHandleMp4(false);
           return "hello";
         }}
       >

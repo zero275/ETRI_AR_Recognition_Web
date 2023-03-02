@@ -13,7 +13,7 @@ export default function Management_detail_info({
     <>
       <Container
         title="데이터 상세정보"
-        addedCls="flex2"
+        addedCls="flex3"
         cls="basicContainer2nd"
       >
         {rowDataDetail.length !== 0 ||
