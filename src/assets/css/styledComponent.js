@@ -86,3 +86,8 @@ export const TabContainer = styled.section `
 export const DetailInfo = styled.div `
   width: 100%;
 `;
+
+// export const Mp4Container = styled.div `
+// width :150px;
+// height: auto;
+// `;
