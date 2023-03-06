@@ -76,7 +76,7 @@ export const MyModalNoFooter = ({ title, children, onCancel }) => {
 };
 
 // 취소 콜백을 따로 연결 안해도 닫을 수 있는 간단한 modal
-export const MyModalInfo = ({ title, children }) => {
+export const MyModalInfo = ({ title, children, setFileListModalHandle }) => {
   return (
     <ModalContainer id="modal">
       <ModalView
@@ -103,6 +103,7 @@ export const MyModalInfo = ({ title, children }) => {
               if (modelElement) {
                 modelElement.classList.add("display-none");
               }
+              setFileListModalHandle(false);
             }}
           >
             <FontAwesomeIcon size="2x" icon={faXmark} color="#9898a0" />

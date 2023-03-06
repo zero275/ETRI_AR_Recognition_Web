@@ -91,3 +91,11 @@ export const DetailInfo = styled.div `
 // width :150px;
 // height: auto;
 // `;
+
+export const ModalContainer = styled.div `
+width : 100%;
+height : 100%;
+margin-top : -50px;
+display:flex;
+align-items: center;
+justify-content: center;`;

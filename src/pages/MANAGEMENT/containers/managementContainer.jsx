@@ -11,6 +11,9 @@ import ManagementTable from "@/components/ManagementTable";
 import Management_detail_info from "@/components/Management_detail_info";
 import Management_file_list from "@/components/Management_file_list";
 import axios from "axios";
+import { MyModal, MyModalNoFooter, MyModalInfo } from "@/components/MyModal";
+import ReactPlayer from "react-player/lazy";
+import { ModalContainer } from "@assets/css/styledComponent";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -137,6 +140,11 @@ const ManagementContainer = () => {
   const [preProcessingIdx, setPreProcessingIdx] = useState();
   const [preProcessingData, setPreProcessingData] = useState();
   const [preBtnHelp, setPreBtnHelp] = useState("");
+  const [fileListModalHandle, setFileListModalHandle] = useState(false);
+  const [fileListModalTitle, setFileListModalTitle] = useState();
+
+  let fileListUrl = "http://192.168.219.204:8095";
+  const playerUrl = `${fileListUrl}/tmp/recording.mp4`;
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -366,15 +374,14 @@ const ManagementContainer = () => {
     setFilterRowData(floor_filter_set);
   };
   // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
-  console.log("필터링되고 나온 데이터", filterRowData);
+  // console.log("필터링되고 나온 데이터", filterRowData);
   // console.log("선택된 내용의 세부정보", rowDataDetail);
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
-  console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
-  console.log("후처리가 된 데이터", preProcessingData);
-  console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
-  console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
-
+  // console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
+  // console.log("후처리가 된 데이터", preProcessingData);
+  // console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
+  // console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
     let sortPreFileterData = preFilterData.sort();
@@ -387,6 +394,14 @@ const ManagementContainer = () => {
   function EmptyFloorOption() {
     setFloorOptionValue("");
     BuildingFilter();
+  }
+
+  function DataListModal() {
+    return (
+      <di>
+        <div></div>
+      </di>
+    );
   }
 
   return (
@@ -504,6 +519,8 @@ const ManagementContainer = () => {
             setRowDataDetail={setRowDataDetail}
             rowDataFileList={rowDataFileList}
             setRowDAtaFileList={setRowDAtaFileList}
+            setFileListModalHandle={setFileListModalHandle}
+            setFileListModalTitle={setFileListModalTitle}
           />
         ) : null}
       </div>
@@ -537,6 +554,24 @@ const ManagementContainer = () => {
           </div>
         </Container>
       </div>
+      {fileListModalHandle === true ? (
+        <MyModalInfo
+          title={fileListModalTitle}
+          setFileListModalHandle={setFileListModalHandle}
+        >
+          <ModalContainer>
+            <ReactPlayer
+              url={playerUrl}
+              playing={false}
+              controls={true}
+              loop={true}
+              muted={true}
+              playsinline={true}
+              width={"200px"}
+            />
+          </ModalContainer>
+        </MyModalInfo>
+      ) : null}
     </main>
   );
 };

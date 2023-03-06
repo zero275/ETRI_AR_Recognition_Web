@@ -16,6 +16,8 @@ export default function Management_file_list({
   setRowDataDetail,
   rowDataFileList,
   setRowDAtaFileList,
+  setFileListModalHandle,
+  setFileListModalTitle,
 }) {
   // const file_ojt = [
   //   { idx: "0", name: "recording.mp4", size: "50MB" },
@@ -26,8 +28,7 @@ export default function Management_file_list({
   // ];
   console.log("넘겨받은 파일목록", rowDataFileList);
   const [handleMp4, setHandleMp4] = useState(false);
-  let url = "http://192.168.219.204:8095";
-  const originalUrl = `${url}/tmp/recording.mp4`;
+
   return (
     <Container title="파일 목록" addedCls="flex2" cls="basicContainer2nd">
       <table className="file_list_table">
@@ -43,22 +44,12 @@ export default function Management_file_list({
                   <tr>
                     <td
                       className="openFile"
-                      onClick={() => {
-                        setHandleMp4((current) => current === false && !false);
+                      onClick={(e) => {
+                        setFileListModalHandle(true);
+                        setFileListModalTitle(rowDataFileList[idx]?.name);
                       }}
                     >
                       {rowDataFileList[idx]?.name}
-                      {handleMp4 === true ? (
-                        <ReactPlayer
-                          url={originalUrl}
-                          playing={false}
-                          controls={true}
-                          loop={true}
-                          muted={true}
-                          playsinline={true}
-                          width={"200px"}
-                        />
-                      ) : null}
                     </td>
                     <td>{rowDataFileList[idx]?.size}</td>
                   </tr>
