@@ -831,7 +831,17 @@ option {
   animation: move-pre-btn 3s ease-in-out infinite;
 }
 
+.inner_Container {
+  display: flex;
+  justify-content: space-between;
+}
 
+#pre_data_checkbox {
+  margin-right: 10px;
+
+}
+
+#pre_data_checkbox:checked {}
 
 /* 측위자원관리 Management_detail_info */
 
@@ -848,20 +858,34 @@ option {
   margin-right: 10px;
 }
 
+.pre_checkBox002 {
+  transform: translateX(-20px);
+}
 
 
 
 /* 측위자원관리 Management_file_list */
 
-.file_list_on {
+.filelist_option_btn {
+  display: flex;
+  justify-items: right;
+  flex-direction: column;
   position: absolute;
   bottom: 35px;
-  right: 20px;
+  right: 15px;
+
+}
+
+.file_list_on {
+  /* position: absolute;
+  bottom: 35px;
+  right: 20px; */
   background-color: #9898a0;
   font-size: 1em;
   font-weight: 600;
   color: white;
   padding: 0.7em 1em;
+  margin-top: 10px;
   margin-right: 1em;
   border: none;
   border-radius: 10px;
@@ -877,6 +901,7 @@ option {
   width: 100%;
   text-align: center;
   transform: translateY(20px);
+  font-size: 13px;
 }
 
 .file_list_table th {

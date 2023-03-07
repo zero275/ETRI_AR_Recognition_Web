@@ -64,16 +64,23 @@ export default function Management_detail_info({
         ) : (
           <div className="noFileMsg">해당하는 데이터가 없습니다.</div>
         )}
-        {console.log("데이터가 잘 넘어왔나요요요요", rowDataDetail)}
-
-        <button
-          className="file_list_on"
-          onClick={() => {
-            setFileListToggle(true);
-          }}
-        >
-          파일 리스트
-        </button>
+        {/* {console.log("데이터가 잘 넘어왔나요요요요", rowDataDetail)} */}
+        <div className="filelist_option_btn">
+          <form action="" className="pre_checkBox002">
+            <input type="checkbox" id="pre_data_checkbox" />
+            <label htmlFor="pre_data_checkbox">
+              전처리 완료 파일리스트만 보기
+            </label>
+          </form>
+          <button
+            className="file_list_on"
+            onClick={() => {
+              setFileListToggle(true);
+            }}
+          >
+            파일 리스트 열기
+          </button>
+        </div>
         <div
           className="close_btn"
           onClick={() => {

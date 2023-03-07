@@ -13,7 +13,7 @@ import Management_file_list from "@/components/Management_file_list";
 import axios from "axios";
 import { MyModal, MyModalNoFooter, MyModalInfo } from "@/components/MyModal";
 import ReactPlayer from "react-player/lazy";
-import { ModalContainer } from "@assets/css/styledComponent";
+import { ModalContainer, BtnBetween } from "@assets/css/styledComponent";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -409,78 +409,89 @@ const ManagementContainer = () => {
       {/* 학습 데이터세트 */}
       <div className="containers">
         <Container title="수집 데이터세트 목록" addedCls="flex7">
-          <span className="learning-title01">검색조건 : </span>
-          <span className="select_title">회사명</span>
-          <select
-            className="learning-select"
-            name="회사명"
-            id="1"
-            onChange={(e) => {
-              setCompanyValue(e.target.value);
-            }}
-            disabled={true}
-          >
-            {/* <option value="업체명">업체명</option> */}
-            {filterValue001.map((item, idx) => {
-              return (
-                <option key={idx} value={item.site_id}>
-                  {filterValue001[1].site_id}
-                </option>
-              );
-            })}
-          </select>
-          <span className="select_title">건물명</span>
-          <select
-            className="learning-select"
-            name="건물명"
-            id="2"
-            onChange={(e) => {
-              BuildingFilter(e);
-              setPreProcessingData();
-              e.target.value === "" && floorFilter2();
-            }}
-          >
-            <option value="">비선택</option>
-            {filterValue002.map((item, idx) => {
-              return (
-                <option key={idx} value={item.building_id}>
-                  {filterValue002[idx].building_id}
-                </option>
-              );
-            })}
-          </select>
-          <span className="select_title">층수</span>
-          <select
-            className="learning-select"
-            name="층수"
-            id="3"
-            onChange={(e) => {
-              FloorFilter(e);
-              setPreProcessingData();
-              e.target.value === "" && BuildingFilter2();
-            }}
-          >
-            <option value="">비선택</option>
-            {filterValue003.map((item, idx) => {
-              return (
-                <option key={idx} value={item.floor}>
-                  {filterValue003[idx]?.floor}
-                </option>
-              );
-            })}
-          </select>
-          {filterRowData.length !== 0 ? null : (
+          <div className="inner_Container">
+            <div>
+              <span className="learning-title01">검색조건 : </span>
+              <span className="select_title">회사명</span>
+              <select
+                className="learning-select"
+                name="회사명"
+                id="1"
+                onChange={(e) => {
+                  setCompanyValue(e.target.value);
+                }}
+                disabled={true}
+              >
+                {/* <option value="업체명">업체명</option> */}
+                {filterValue001.map((item, idx) => {
+                  return (
+                    <option key={idx} value={item.site_id}>
+                      {filterValue001[1].site_id}
+                    </option>
+                  );
+                })}
+              </select>
+              <span className="select_title">건물명</span>
+              <select
+                className="learning-select"
+                name="건물명"
+                id="2"
+                onChange={(e) => {
+                  BuildingFilter(e);
+                  setPreProcessingData();
+                  e.target.value === "" && floorFilter2();
+                }}
+              >
+                <option value="">비선택</option>
+                {filterValue002.map((item, idx) => {
+                  return (
+                    <option key={idx} value={item.building_id}>
+                      {filterValue002[idx].building_id}
+                    </option>
+                  );
+                })}
+              </select>
+              <span className="select_title">층수</span>
+              <select
+                className="learning-select"
+                name="층수"
+                id="3"
+                onChange={(e) => {
+                  FloorFilter(e);
+                  setPreProcessingData();
+                  e.target.value === "" && BuildingFilter2();
+                }}
+              >
+                <option value="">비선택</option>
+                {filterValue003.map((item, idx) => {
+                  return (
+                    <option key={idx} value={item.floor}>
+                      {filterValue003[idx]?.floor}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <form className="pre_checkBox001" action="">
+                <input type="checkbox" id="pre_data_checkbox" />
+                <label for="pre_data_checkbox">전처리 완료 데이터만 표시</label>
+              </form>
+            </div>
+          </div>
+
+          {/* {filterRowData.length !== 0 ? null : (
             <span className="notFoundData ">
               ※ 조건에 해당하는 데이터가 없어 전체 데이터를 표시합니다.
             </span>
-          )}
+          )} */}
 
           {/* <div className="select-line" /> */}
           <AgGrid
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={filterRowData.length === 0 ? datasetRowData : filterRowData}
+            data={filterRowData.length === 0 ? null : filterRowData}
             setData={setDatasetRowData}
             column={column1}
             rowSelection={"multiple"}
@@ -491,7 +502,16 @@ const ManagementContainer = () => {
           <div className="ag-btn-container">
             <MyButton title="Pre Processing" onClickBtn={onPreProcessing} />
             <MyButton title="Delete" disable={true} onClickBtn={onDeleteRow} />
+            <BtnBetween />
+            <MyButton title="Create Training Dataset" onClickBtn={onClickBtn} />
+            <MyButton
+              title="Delete PPT_training Dataset"
+              onClickBtn={onClickBtn}
+            />
+            {/* <MyButton title="Pre Processing Status" onClickBtn={onClickBtn} /> */}
           </div>
+
+          <div className="ag-btn-container"></div>
           {filterRowData.length !== 0 || preBtnHelp !== "" ? (
             <span className={preBtnHelp}>
               ▲ 조건입력이 완료 되셨으면 Pre Processing을 진행하세요
@@ -526,7 +546,7 @@ const ManagementContainer = () => {
       </div>
 
       {/* 1차 전처리된 데이터세트 */}
-      <div className="containers">
+      {/* <div className="containers">
         <Container title="전처리 데이터세트" addedCls="flex7">
           <AgGrid
             setGridApi={setGridApi}
@@ -544,16 +564,8 @@ const ManagementContainer = () => {
             idx="2"
             type="multiple"
           />
-          <div className="ag-btn-container">
-            <MyButton title="Create Training Dataset" onClickBtn={onClickBtn} />
-            <MyButton
-              title="Delete PPT_training Dataset"
-              onClickBtn={onClickBtn}
-            />
-            <MyButton title="Pre Processing Status" onClickBtn={onClickBtn} />
-          </div>
         </Container>
-      </div>
+      </div> */}
       {fileListModalHandle === true ? (
         <MyModalInfo
           title={fileListModalTitle}
@@ -567,7 +579,8 @@ const ManagementContainer = () => {
               loop={true}
               muted={true}
               playsinline={true}
-              width={"200px"}
+              width={"400px"}
+              height={"auto"}
             />
           </ModalContainer>
         </MyModalInfo>

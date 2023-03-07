@@ -95,7 +95,15 @@ export const DetailInfo = styled.div `
 export const ModalContainer = styled.div `
 width : 100%;
 height : 100%;
-margin-top : -50px;
+margin-top : 0px;
 display:flex;
 align-items: center;
-justify-content: center;`;
+justify-content: center`;
+
+export const BtnBetween = styled.span `
+width : 2px;
+height : 40px;
+display :inline-block;
+margin:0px 35px 0px 20px;
+background-color:grey;
+`
