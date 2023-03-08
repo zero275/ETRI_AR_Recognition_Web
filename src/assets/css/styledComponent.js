@@ -107,3 +107,20 @@ display :inline-block;
 margin:0px 35px 0px 20px;
 background-color:grey;
 `
+export const ProgressBar = styled.div `
+transform:translate(0px,30px);
+width:100%;
+height:1em;
+border-radius:20px;
+background-color:grey;
+display :inline-block;
+overflow :hidden;
+`;
+export const ProgressBarInner = styled.span `
+width :${(props)=>props.width}px;
+transform:translateX(0px);
+height : 1em;
+border-radius:10px;
+background-color:white;
+display :inline-block;
+`

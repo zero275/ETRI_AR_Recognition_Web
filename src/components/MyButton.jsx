@@ -2,14 +2,21 @@ import React from "react";
 import { motion } from "framer-motion";
 import styled from "styled-components";
 
-export const MyButton = ({ title, onClickBtn, size, disable }) => {
+export const MyButton = ({
+  title,
+  onClickBtn,
+  size,
+  disable,
+  filterRowData,
+}) => {
   return (
     <StyledButtonType1
       size={size}
-      whileTap={{ scale: 1.1 }}
+      whileTap={filterRowData?.length === 0 ? {} : { scale: 1.1 }}
       onClick={onClickBtn}
       className="btn-type1"
-      disable={disable}
+      disabled={filterRowData?.length === 0 ? true : false}
+      filterRowData={filterRowData}
     >
       {title}
     </StyledButtonType1>
@@ -26,10 +33,13 @@ const StyledButtonType1 = styled(motion.button)`
   margin-right: 1em;
   border: none;
   border-radius: 10px;
-  cursor: pointer;
+  cursor: ${({ filterRowData }) =>
+    filterRowData?.length === 0 ? "" : "pointer"};
   /* & : 자기자신을 가리킴 */
   &:hover {
-    transition: all 300ms ease;
-    background-color: #20bfa9;
+    transition: ${({ filterRowData }) =>
+      filterRowData?.length === 0 ? "none" : "all 300ms ease"};
+    background-color: ${({ filterRowData }) =>
+      filterRowData?.length === 0 ? "none" : "#20bfa9"};
   }
 `;

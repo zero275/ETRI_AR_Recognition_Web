@@ -6,14 +6,18 @@ import { AgGrid } from "@/components/agGrid";
 import { MyButton } from "@/components/MyButton";
 import { MyInputType1 } from "@/components/MyInput";
 import { MyDropdown } from "@/components/MyDropdown";
-import Table from "react-bootstrap/Table";
 import ManagementTable from "@/components/ManagementTable";
 import Management_detail_info from "@/components/Management_detail_info";
 import Management_file_list from "@/components/Management_file_list";
 import axios from "axios";
 import { MyModal, MyModalNoFooter, MyModalInfo } from "@/components/MyModal";
 import ReactPlayer from "react-player/lazy";
-import { ModalContainer, BtnBetween } from "@assets/css/styledComponent";
+import {
+  ModalContainer,
+  BtnBetween,
+  ProgressBar,
+  ProgressBarInner,
+} from "@assets/css/styledComponent";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -142,9 +146,19 @@ const ManagementContainer = () => {
   const [preBtnHelp, setPreBtnHelp] = useState("");
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
+  const [fileListJson, setFileListJson] = useState();
 
   let fileListUrl = "http://192.168.219.204:8095";
   const playerUrl = `${fileListUrl}/tmp/recording.mp4`;
+  const jsonUrl = `${fileListUrl}/tmp/metadata.json`;
+  const txtUrl = `${fileListUrl}/1664.414079_ll.txt`;
+  const FileListAllUrl = `${fileListUrl}/tmp/${fileListModalTitle}`;
+  const getJsonData = () => {};
+  useEffect(() => {
+    axios.get(FileListAllUrl).then((res) => {
+      setFileListJson(res.data);
+    });
+  }, [fileListModalTitle]);
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -184,7 +198,7 @@ const ManagementContainer = () => {
       .then(
         axios.spread((res1, res2, res3) => {
           // console.log("전체데이터", res1);
-          // console.log("필터링데이터", res2);
+          console.log("필터링데이터", res2);
           // console.log("상세정보데이터", res3);
           setDatasetRowData(res1.data.data_list);
           setFilterValue001(res2.data.data_site);
@@ -254,7 +268,7 @@ const ManagementContainer = () => {
         }
       )
       .then(function (response) {
-        console.log("상세정보 데이터", response);
+        console.log("preprocessing 된 데이터", response);
         setPreProcessingData(response.data.data_list);
       })
       .catch(function (error) {
@@ -316,6 +330,7 @@ const ManagementContainer = () => {
     };
     dataInput();
   };
+  // 건물명에 대한 필터링 함수
   const BuildingFilter = (e) => {
     let buliding_id = e.target.value;
     console.log("필터링 네임(건물)", buliding_id);
@@ -343,6 +358,8 @@ const ManagementContainer = () => {
     console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
     setFilterRowData(buliding_filter_set);
   };
+
+  // 층수에 대한 필터링 함수
   const FloorFilter = (e) => {
     let floor_id = e.target.value;
     console.log("필터링 네임(층)", floor_id);
@@ -374,14 +391,15 @@ const ManagementContainer = () => {
     setFilterRowData(floor_filter_set);
   };
   // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
-  // console.log("필터링되고 나온 데이터", filterRowData);
+  console.log("필터링되고 나온 데이터ekekekekek", filterRowData);
   // console.log("선택된 내용의 세부정보", rowDataDetail);
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
   // console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
   // console.log("후처리가 된 데이터", preProcessingData);
-  // console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
-  // console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
+  console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
+  console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
+  console.log("받은 json 데이터", fileListJson);
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
     let sortPreFileterData = preFilterData.sort();
@@ -394,14 +412,6 @@ const ManagementContainer = () => {
   function EmptyFloorOption() {
     setFloorOptionValue("");
     BuildingFilter();
-  }
-
-  function DataListModal() {
-    return (
-      <di>
-        <div></div>
-      </di>
-    );
   }
 
   return (
@@ -442,7 +452,14 @@ const ManagementContainer = () => {
                   e.target.value === "" && floorFilter2();
                 }}
               >
-                <option value="">비선택</option>
+                <option
+                  value=""
+                  onClick={() => {
+                    setBuildingOptionValue("");
+                  }}
+                >
+                  비선택
+                </option>
                 {filterValue002.map((item, idx) => {
                   return (
                     <option key={idx} value={item.building_id}>
@@ -462,7 +479,14 @@ const ManagementContainer = () => {
                   e.target.value === "" && BuildingFilter2();
                 }}
               >
-                <option value="">비선택</option>
+                <option
+                  value=""
+                  onClick={() => {
+                    setFloorOptionValue("");
+                  }}
+                >
+                  비선택
+                </option>
                 {filterValue003.map((item, idx) => {
                   return (
                     <option key={idx} value={item.floor}>
@@ -500,23 +524,41 @@ const ManagementContainer = () => {
           />
           {/* <ManagementTable column2={column2} /> */}
           <div className="ag-btn-container">
-            <MyButton title="Pre Processing" onClickBtn={onPreProcessing} />
-            <MyButton title="Delete" disable={true} onClickBtn={onDeleteRow} />
+            {/* {filterRowData.length !== 0 && } */}
+            <MyButton
+              title="Pre Processing"
+              onClickBtn={onPreProcessing}
+              filterRowData={filterRowData}
+            />
+            <MyButton
+              title="Delete"
+              onClickBtn={onDeleteRow}
+              filterRowData={filterRowData}
+            />
             <BtnBetween />
-            <MyButton title="Create Training Dataset" onClickBtn={onClickBtn} />
+            <MyButton
+              title="Create Training Dataset"
+              onClickBtn={onClickBtn}
+              filterRowData={filterRowData}
+            />
             <MyButton
               title="Delete PPT_training Dataset"
               onClickBtn={onClickBtn}
+              filterRowData={filterRowData}
             />
-            {/* <MyButton title="Pre Processing Status" onClickBtn={onClickBtn} /> */}
+            {/* <MyButton title="Pre Processing Status" onClickBtn={onClickBtn} filterRowData={filterRowData} /> */}
           </div>
 
           <div className="ag-btn-container"></div>
-          {filterRowData.length !== 0 || preBtnHelp !== "" ? (
+          {preProcessingData?.length === 0 ? (
             <span className={preBtnHelp}>
               ▲ 조건입력이 완료 되셨으면 Pre Processing을 진행하세요
             </span>
-          ) : null}
+          ) : (
+            <ProgressBar>
+              <ProgressBarInner width="120" />
+            </ProgressBar>
+          )}
         </Container>
 
         {/* 데이터 상세정보 */}
@@ -572,7 +614,7 @@ const ManagementContainer = () => {
           setFileListModalHandle={setFileListModalHandle}
         >
           <ModalContainer>
-            <ReactPlayer
+            {/* <ReactPlayer
               url={playerUrl}
               playing={false}
               controls={true}
@@ -581,7 +623,9 @@ const ManagementContainer = () => {
               playsinline={true}
               width={"400px"}
               height={"auto"}
-            />
+            /> */}
+            {/* <ReactJson src={jsonUrl} /> */}
+            {}
           </ModalContainer>
         </MyModalInfo>
       ) : null}
