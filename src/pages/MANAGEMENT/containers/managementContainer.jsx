@@ -20,6 +20,13 @@ import {
 } from "@assets/css/styledComponent";
 import logoimg from "../../../assets/imgs/resetBtn.png";
 import trash_can from "../../../assets/imgs/trash_can.png";
+import {
+  useFetchData,
+  useProgress,
+  useSocket,
+  useSocketActions,
+} from "@/stores/socketStore";
+import { isEmpty } from "@/utils/common/commonUtils";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -149,13 +156,18 @@ const ManagementContainer = () => {
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListJson, setFileListJson] = useState();
+  // socket 가져오기 from zustand
+  const socket = useSocket();
+  const fetchPayload = useFetchData();
+  // progress 값 설정 from zustand
+  const { setProgress, setFetchData } = useSocketActions();
 
   let fileListUrl = "http://192.168.219.204:8095";
   const playerUrl = `${fileListUrl}/tmp/recording.mp4`;
   const jsonUrl = `${fileListUrl}/tmp/metadata.json`;
   const txtUrl = `${fileListUrl}/1664.414079_ll.txt`;
   const FileListAllUrl = `${fileListUrl}/tmp/${fileListModalTitle}`;
-  const getJsonData = () => {};
+
   useEffect(() => {
     axios.get(FileListAllUrl).then((res) => {
       setFileListJson(res.data);
@@ -230,6 +242,43 @@ const ManagementContainer = () => {
   //       console.log(error);
   //     });
   // }, []);
+
+  // progress bar 사용을 위한 퍼센테이지별 zustand 상태 정보
+  useEffect(() => {
+    if (!isEmpty(socket)) {
+      socket.on("updateStatus", (data) => {
+        setProgress(data.progress);
+
+        if (data.progress === 100) {
+          setFetchData({
+            isStop: false,
+            isDone: true,
+            isProgressing: false,
+            error: "",
+            progress: data.progress,
+          });
+        } else if (data.progress === -1) {
+          setFetchData({
+            isStop: false,
+            isDone: false,
+            isProgressing: false,
+            isError: true,
+            error: data.errmsg,
+            progress: 0,
+          });
+        } else {
+          setFetchData({
+            isStop: false,
+            isDone: false,
+            isProgressing: true,
+            isError: false,
+            error: "",
+            progress: data.progress,
+          });
+        }
+      });
+    }
+  }, [socket]);
 
   const [payload, setPayload] = useState([
     {
@@ -398,10 +447,11 @@ const ManagementContainer = () => {
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
   // console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
-  // console.log("후처리가 된 데이터", preProcessingData);
+  console.log("후처리가 된 데이터", preProcessingData);
   console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
   console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
   console.log("받은 json 데이터", fileListJson);
+
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
     let sortPreFileterData = preFilterData.sort();
@@ -503,6 +553,7 @@ const ManagementContainer = () => {
                 alt="resetBtn"
                 onClick={() => {
                   setFilterRowData([]);
+                  setPreProcessingData();
                 }}
               />
             </div>
@@ -539,6 +590,9 @@ const ManagementContainer = () => {
               title="Pre Processing"
               onClickBtn={onPreProcessing}
               filterRowData={filterRowData}
+              onClick={() => {
+                setFetchData({ isProgressing: true });
+              }}
             />
             <MyButton
               title="Delete"
@@ -560,7 +614,8 @@ const ManagementContainer = () => {
           </div>
 
           <div className="ag-btn-container"></div>
-          {preProcessingData?.length === 0 ? (
+          {preProcessingData?.length === 0 ||
+          preProcessingData === undefined ? (
             <span className={preBtnHelp}>
               ▲ 조건입력이 완료 되셨으면 Pre Processing을 진행하세요
             </span>
@@ -624,6 +679,24 @@ const ManagementContainer = () => {
           setFileListModalHandle={setFileListModalHandle}
         >
           <ModalContainer>
+            {fileListModalTitle.includes("mp4") ? (
+              <ReactPlayer
+                url={playerUrl}
+                playing={false}
+                controls={true}
+                loop={true}
+                muted={true}
+                playsinline={true}
+                width={"400px"}
+                height={"auto"}
+              />
+            ) : fileListModalTitle.includes("csv") ? (
+              <div>CSV입니다</div>
+            ) : fileListModalTitle.includes("txt") ? (
+              <div>TXT입니다</div>
+            ) : fileListModalTitle.includes("json") ? (
+              <div>TXT입니다</div>
+            ) : null}
             {/* <ReactPlayer
               url={playerUrl}
               playing={false}

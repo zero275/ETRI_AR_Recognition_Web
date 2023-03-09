@@ -13,14 +13,14 @@ import { BrowserRouter } from "react-router-dom";
 function App() {
   const client = new QueryClient();
   const { setSocket } = useSocketActions();
-  // useEffect(() => {
-  //   const webSocket = socketIOClient("http://192.168.219.204:8093/");
-  //   setSocket(webSocket);
+  useEffect(() => {
+    const webSocket = socketIOClient("http://192.168.219.204:8095");
+    setSocket(webSocket);
 
-  //   return () => {
-  //     webSocket.close();
-  //   };
-  // }, []);
+    return () => {
+      webSocket.close();
+    };
+  }, []);
 
   return (
     // <ContextSocketPriovider>
