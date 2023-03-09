@@ -18,6 +18,8 @@ import {
   ProgressBar,
   ProgressBarInner,
 } from "@assets/css/styledComponent";
+import logoimg from "../../../assets/imgs/resetBtn.png";
+import trash_can from "../../../assets/imgs/trash_can.png";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -495,6 +497,14 @@ const ManagementContainer = () => {
                   );
                 })}
               </select>
+              <img
+                className="resetBtn"
+                src={logoimg}
+                alt="resetBtn"
+                onClick={() => {
+                  setFilterRowData([]);
+                }}
+              />
             </div>
             <div>
               <form className="pre_checkBox001" action="">

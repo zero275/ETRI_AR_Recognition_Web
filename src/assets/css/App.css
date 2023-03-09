@@ -843,6 +843,41 @@ option {
 
 #pre_data_checkbox:checked {}
 
+.resetBtn {
+  position: absolute;
+  width: 20px;
+  height: auto;
+  margin-left: -10px;
+  top: 82px;
+  transition: animation 0.2s ease-in-out;
+}
+
+.resetBtn:hover {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.resetBtn:active {
+  transform: scale(0.8);
+  /* animation: resetBtn 0.7s;
+  animation-iteration-count: 1; */
+}
+
+@keyframes resetBtn {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  99.99% {
+    transform: rotate(360deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+
 /* 측위자원관리 Management_detail_info */
 
 .Detail-info {
