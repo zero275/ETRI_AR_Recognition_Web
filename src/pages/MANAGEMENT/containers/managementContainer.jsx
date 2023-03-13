@@ -155,7 +155,8 @@ const ManagementContainer = () => {
   const [preBtnHelp, setPreBtnHelp] = useState("");
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
-  const [fileListJson, setFileListJson] = useState();
+  const [fileListCsv, setFileListCsv] = useState();
+  const [rowsData, setRowsData] = useState([]);
   // socket 가져오기 from zustand
   const socket = useSocket();
   const fetchPayload = useFetchData();
@@ -167,12 +168,27 @@ const ManagementContainer = () => {
   const jsonUrl = `${fileListUrl}/tmp/metadata.json`;
   const txtUrl = `${fileListUrl}/1664.414079_ll.txt`;
   const FileListAllUrl = `${fileListUrl}/tmp/${fileListModalTitle}`;
+  const column3 = [
+    {
+      headerName: "데이터",
+      filed: rowsData,
+      cellStyle: { fontFamily: "Pretendard" },
+    },
+  ];
 
   useEffect(() => {
     axios.get(FileListAllUrl).then((res) => {
-      setFileListJson(res.data);
+      fileListModalTitle?.includes("csv") && setFileListCsv(res.data);
+      console.log("CCCCCCSSSSSVVVVV", res.data);
+      const rows = res.data?.split("\n");
+      const rowsParse = JSON.parse(rows);
+      // const firstRows = JSON.parse(fileListCsv);
+      // const rows = firstRows.split("\n\f");
+
+      setRowsData(rows);
     });
   }, [fileListModalTitle]);
+
   let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
@@ -450,7 +466,8 @@ const ManagementContainer = () => {
   console.log("후처리가 된 데이터", preProcessingData);
   console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
   console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
-  console.log("받은 json 데이터", fileListJson);
+  console.log("가공된 데이터 내용============", rowsData);
+  console.log("너 어레이 맞니?", Array.isArray(rowsData));
 
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
@@ -460,11 +477,6 @@ const ManagementContainer = () => {
   useEffect(() => {
     setPreBtnHelp("preBtnHelp");
   }, [filterRowData]);
-
-  function EmptyFloorOption() {
-    setFloorOptionValue("");
-    BuildingFilter();
-  }
 
   return (
     <main className="mainContainer">
@@ -691,7 +703,22 @@ const ManagementContainer = () => {
                 height={"auto"}
               />
             ) : fileListModalTitle.includes("csv") ? (
-              <div>CSV입니다</div>
+              // rowsData?.map((item, idx) => {
+              //   return <div>{rowsData[idx]}</div>;
+              // })
+              <div>
+                <AgGrid
+                  setGridApi={setGridApi}
+                  gridApi={gridApi}
+                  // onClickRow={onClickRow}
+                  data={rowsData}
+                  setData={setDatasetRowData}
+                  column={column3}
+                  rowSelection={"multiple"}
+                  idx="3"
+                  type="single"
+                />
+              </div>
             ) : fileListModalTitle.includes("txt") ? (
               <div>TXT입니다</div>
             ) : fileListModalTitle.includes("json") ? (
