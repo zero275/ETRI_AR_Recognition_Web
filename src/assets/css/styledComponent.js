@@ -123,4 +123,10 @@ height : 1em;
 border-radius:10px;
 background-color:white;
 display :inline-block;
-`
+`;
+
+export const CsvView = styled.div `
+width:100%;
+height:700px;
+overflow-y: scroll;
+background-color:transparent;`;

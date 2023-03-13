@@ -17,6 +17,7 @@ import {
   BtnBetween,
   ProgressBar,
   ProgressBarInner,
+  CsvView,
 } from "@assets/css/styledComponent";
 import logoimg from "../../../assets/imgs/resetBtn.png";
 import trash_can from "../../../assets/imgs/trash_can.png";
@@ -156,7 +157,11 @@ const ManagementContainer = () => {
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState();
+  const [fileListTxt, setFileListTxt] = useState([]);
+  const [fileListJson, setFileListJson] = useState([]);
+
   const [rowsData, setRowsData] = useState([]);
+  const [rowTest, setRowTest] = useState([]);
   // socket 가져오기 from zustand
   const socket = useSocket();
   const fetchPayload = useFetchData();
@@ -171,7 +176,7 @@ const ManagementContainer = () => {
   const column3 = [
     {
       headerName: "데이터",
-      filed: rowsData,
+      // filed: rowsDataIdx,
       cellStyle: { fontFamily: "Pretendard" },
     },
   ];
@@ -179,14 +184,20 @@ const ManagementContainer = () => {
   useEffect(() => {
     axios.get(FileListAllUrl).then((res) => {
       fileListModalTitle?.includes("csv") && setFileListCsv(res.data);
+      fileListModalTitle?.includes("txt") && setFileListTxt(res.data);
+      fileListModalTitle?.includes("json") && setFileListJson([res.data]);
       console.log("CCCCCCSSSSSVVVVV", res.data);
-      const rows = res.data?.split("\n");
-      const rowsParse = JSON.parse(rows);
-      // const firstRows = JSON.parse(fileListCsv);
+      const rows = fileListModalTitle?.includes("csv") && res.data?.split("\n");
+      // const rowsChange = rows.unshift("value");
       // const rows = firstRows.split("\n\f");
-
       setRowsData(rows);
     });
+    // let rowsDataParse = rowsData.map((item, idx) => {
+    //   const rowsDataIdx = rowsData[idx];
+
+    //   return { rowsDataIdx };
+    // });
+    // setRowTest(rowsDataParse);
   }, [fileListModalTitle]);
 
   let url = "http://192.168.219.204:8095";
@@ -468,6 +479,7 @@ const ManagementContainer = () => {
   console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
   console.log("가공된 데이터 내용============", rowsData);
   console.log("너 어레이 맞니?", Array.isArray(rowsData));
+  console.log("파싱되어진 파일========", fileListJson);
 
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
@@ -707,7 +719,7 @@ const ManagementContainer = () => {
               //   return <div>{rowsData[idx]}</div>;
               // })
               <div>
-                <AgGrid
+                {/* <AgGrid
                   setGridApi={setGridApi}
                   gridApi={gridApi}
                   // onClickRow={onClickRow}
@@ -717,12 +729,45 @@ const ManagementContainer = () => {
                   rowSelection={"multiple"}
                   idx="3"
                   type="single"
-                />
+                /> */}
+                <CsvView>
+                  <table className="CsvViewTable">
+                    <thead>
+                      <th>순번</th>
+                      <th>DATA</th>
+                    </thead>
+                    {rowsData.map((item, idx) => {
+                      return (
+                        <tbody>
+                          <td>{idx + 1}</td>
+                          <td>{rowsData[idx]}</td>
+                        </tbody>
+                      );
+                    })}
+                  </table>
+                </CsvView>
               </div>
             ) : fileListModalTitle.includes("txt") ? (
               <div>TXT입니다</div>
             ) : fileListModalTitle.includes("json") ? (
-              <div>TXT입니다</div>
+              <>
+                <table className="file_list_table">
+                  <thead>
+                    <th>파일명</th>
+                    <th>size</th>
+                  </thead>
+                  <tbody>
+                    {fileListJson?.map((item, idx) => {
+                      return (
+                        <tr>
+                          {/* <td>{fileListJson[idx].key}</td> */}
+                          <td>안녕</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </>
             ) : null}
             {/* <ReactPlayer
               url={playerUrl}
