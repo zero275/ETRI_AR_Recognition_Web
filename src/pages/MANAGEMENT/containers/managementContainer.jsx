@@ -28,6 +28,7 @@ import {
   useSocketActions,
 } from "@/stores/socketStore";
 import { isEmpty } from "@/utils/common/commonUtils";
+import Papa from "papaparse";
 
 const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
 
@@ -133,6 +134,7 @@ const column2 = [
 
 const ManagementContainer = () => {
   // 데이터세트 목록
+  // state 위치
   const [datasetRowData, setDatasetRowData] = useState([]);
   const [filterRowData, setFilterRowData] = useState([]);
   const [datasetDetails, setDatasetDetails] = useState({});
@@ -157,8 +159,11 @@ const ManagementContainer = () => {
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState();
-  const [fileListTxt, setFileListTxt] = useState([]);
+  const [fileListTxt, setFileListTxt] = useState();
   const [fileListJson, setFileListJson] = useState([]);
+  const [beforeTxtData, setBeforeTxtData] = useState();
+  const [dataTestAll, setDataTestAll] = useState();
+  const [csvParseData, setCsvParseData] = useState([]);
 
   const [rowsData, setRowsData] = useState([]);
   const [rowTest, setRowTest] = useState([]);
@@ -171,7 +176,7 @@ const ManagementContainer = () => {
   let fileListUrl = "http://192.168.219.204:8095";
   const playerUrl = `${fileListUrl}/tmp/recording.mp4`;
   const jsonUrl = `${fileListUrl}/tmp/metadata.json`;
-  const txtUrl = `${fileListUrl}/1664.414079_ll.txt`;
+  const txtUrl = `${fileListUrl}//tmp/1664.414079_ll.txt`;
   const FileListAllUrl = `${fileListUrl}/tmp/${fileListModalTitle}`;
   const column3 = [
     {
@@ -181,16 +186,41 @@ const ManagementContainer = () => {
     },
   ];
 
+  //  CSV,TXT,JSON 데이터 관련
   useEffect(() => {
     axios.get(FileListAllUrl).then((res) => {
       fileListModalTitle?.includes("csv") && setFileListCsv(res.data);
       fileListModalTitle?.includes("txt") && setFileListTxt(res.data);
       fileListModalTitle?.includes("json") && setFileListJson([res.data]);
       console.log("CCCCCCSSSSSVVVVV", res.data);
-      const rows = fileListModalTitle?.includes("csv") && res.data?.split("\n");
+
+      Papa.parse(res.data, {
+        header: false,
+        complete: (result) => {
+          setCsvParseData(result.data);
+          console.log("파싱 성공했다면 소리질러~~~", result.data[0]);
+        },
+      });
+      const rowsCsv = fileListModalTitle?.includes("csv")
+        ? res.data?.split("\n")
+        : [];
+      const rowsTxt = fileListModalTitle?.includes("txt")
+        ? res.data?.split("\n")
+        : [];
+      const sliceRowsTxt = rowsTxt?.slice(1, 4996);
+      setBeforeTxtData(sliceRowsTxt);
+      const rowsTxtMap = JSON.parse(beforeTxtData);
+      setDataTestAll(rowsTxtMap);
+
       // const rowsChange = rows.unshift("value");
       // const rows = firstRows.split("\n\f");
-      setRowsData(rows);
+      setRowsData(
+        fileListModalTitle?.includes("csv")
+          ? rowsCsv
+          : fileListModalTitle?.includes("txt")
+          ? rowsTxt
+          : null
+      );
     });
     // let rowsDataParse = rowsData.map((item, idx) => {
     //   const rowsDataIdx = rowsData[idx];
@@ -468,18 +498,23 @@ const ManagementContainer = () => {
     );
     setFilterRowData(floor_filter_set);
   };
+
+  // 콘솔 찍는 위치(콘찍위)
   // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
   console.log("필터링되고 나온 데이터ekekekekek", filterRowData);
   // console.log("선택된 내용의 세부정보", rowDataDetail);
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
   // console.log("프리프로세싱에 넘겨줄 IDX데이터", preProcessingIdx);
-  console.log("후처리가 된 데이터", preProcessingData);
-  console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
-  console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
+  // console.log("후처리가 된 데이터", preProcessingData);
+  // console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
+  // console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
   console.log("가공된 데이터 내용============", rowsData);
-  console.log("너 어레이 맞니?", Array.isArray(rowsData));
-  console.log("파싱되어진 파일========", fileListJson);
+  // console.log("너 어레이 맞니?", Array.isArray(rowsData));
+  // console.log("파싱되어진 파일========", fileListJson);
+  console.log("TXT========데이터", fileListTxt);
+  console.log("파싱한 데이터========", beforeTxtData);
+  console.log("데이터야 제발 떠라", csvParseData);
 
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
@@ -753,16 +788,34 @@ const ManagementContainer = () => {
               <>
                 <table className="file_list_table">
                   <thead>
-                    <th>파일명</th>
-                    <th>size</th>
+                    <th>NAME</th>
+                    <th>DATA</th>
                   </thead>
                   <tbody>
                     {fileListJson?.map((item, idx) => {
                       return (
-                        <tr>
-                          {/* <td>{fileListJson[idx].key}</td> */}
-                          <td>안녕</td>
-                        </tr>
+                        <>
+                          <tr>
+                            <td>scenarioID</td>
+                            <td>{fileListJson[0].scenarioID}</td>
+                          </tr>
+                          <tr>
+                            <td>locations</td>
+                            <td>{fileListJson[0].locations}</td>
+                          </tr>
+                          <tr>
+                            <td>phoneModel</td>
+                            <td>{fileListJson[0].phoneModel}</td>
+                          </tr>
+                          <tr>
+                            <td>timestampStr</td>
+                            <td>{fileListJson[0].timestampStr}</td>
+                          </tr>
+                          <tr>
+                            <td>timestampStrEnd</td>
+                            <td>{fileListJson[0].timestampStrEnd}</td>
+                          </tr>
+                        </>
                       );
                     })}
                   </tbody>
