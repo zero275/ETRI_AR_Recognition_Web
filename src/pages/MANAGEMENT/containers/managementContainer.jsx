@@ -18,6 +18,7 @@ import {
   ProgressBar,
   ProgressBarInner,
   CsvView,
+  TxtView,
 } from "@assets/css/styledComponent";
 import logoimg from "../../../assets/imgs/resetBtn.png";
 import trash_can from "../../../assets/imgs/trash_can.png";
@@ -189,18 +190,18 @@ const ManagementContainer = () => {
   //  CSV,TXT,JSON 데이터 관련
   useEffect(() => {
     axios.get(FileListAllUrl).then((res) => {
-      fileListModalTitle?.includes("csv") && setFileListCsv(res.data);
-      fileListModalTitle?.includes("txt") && setFileListTxt(res.data);
       fileListModalTitle?.includes("json") && setFileListJson([res.data]);
       console.log("CCCCCCSSSSSVVVVV", res.data);
 
       Papa.parse(res.data, {
         header: false,
         complete: (result) => {
+          fileListModalTitle?.includes("csv") && setFileListCsv(result.data);
+          fileListModalTitle?.includes("txt") && setFileListTxt(result.data);
           setCsvParseData(result.data);
-          console.log("파싱 성공했다면 소리질러~~~", result.data[0]);
         },
       });
+
       const rowsCsv = fileListModalTitle?.includes("csv")
         ? res.data?.split("\n")
         : [];
@@ -512,9 +513,9 @@ const ManagementContainer = () => {
   console.log("가공된 데이터 내용============", rowsData);
   // console.log("너 어레이 맞니?", Array.isArray(rowsData));
   // console.log("파싱되어진 파일========", fileListJson);
-  console.log("TXT========데이터", fileListTxt);
+  console.log("TXT========데이터");
   console.log("파싱한 데이터========", beforeTxtData);
-  console.log("데이터야 제발 떠라", csvParseData);
+  console.log("데이터야 제발 떠라", fileListCsv);
 
   useEffect(() => {
     let preFilterData = filterRowData.map((e) => e.idx);
@@ -771,11 +772,11 @@ const ManagementContainer = () => {
                       <th>순번</th>
                       <th>DATA</th>
                     </thead>
-                    {rowsData.map((item, idx) => {
+                    {fileListCsv.map((item, idx) => {
                       return (
                         <tbody>
                           <td>{idx + 1}</td>
-                          <td>{rowsData[idx]}</td>
+                          <td>{fileListCsv[idx]}</td>
                         </tbody>
                       );
                     })}
@@ -783,7 +784,7 @@ const ManagementContainer = () => {
                 </CsvView>
               </div>
             ) : fileListModalTitle.includes("txt") ? (
-              <div>TXT입니다</div>
+              <div>{fileListTxt[0]}</div>
             ) : fileListModalTitle.includes("json") ? (
               <>
                 <table className="file_list_table">
