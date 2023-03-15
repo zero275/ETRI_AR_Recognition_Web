@@ -159,15 +159,18 @@ const ManagementContainer = () => {
   const [preBtnHelp, setPreBtnHelp] = useState("");
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
-  const [fileListCsv, setFileListCsv] = useState();
+  const [fileListCsv, setFileListCsv] = useState([]);
   const [fileListTxt, setFileListTxt] = useState();
   const [fileListJson, setFileListJson] = useState([]);
   const [beforeTxtData, setBeforeTxtData] = useState();
   const [dataTestAll, setDataTestAll] = useState();
-  const [csvParseData, setCsvParseData] = useState([]);
-
+  const [csvParseData, setCsvParseData] = useState();
   const [rowsData, setRowsData] = useState([]);
   const [rowTest, setRowTest] = useState([]);
+  const [rowsCsvSplit, setRowsCsvSplit] = useState([]);
+  const [originCsvData, setOriginCsvData] = useState();
+  const [changeCsvData, setChangeCsvData] = useState([]);
+
   // socket 가져오기 from zustand
   const socket = useSocket();
   const fetchPayload = useFetchData();
@@ -191,20 +194,43 @@ const ManagementContainer = () => {
   useEffect(() => {
     axios.get(FileListAllUrl).then((res) => {
       fileListModalTitle?.includes("json") && setFileListJson([res.data]);
-      console.log("CCCCCCSSSSSVVVVV", res.data);
+      // 오리지날 데이터 state 저장
+      setOriginCsvData(res.data);
 
-      Papa.parse(res.data, {
-        header: false,
-        complete: (result) => {
-          fileListModalTitle?.includes("csv") && setFileListCsv(result.data);
-          fileListModalTitle?.includes("txt") && setFileListTxt(result.data);
-          setCsvParseData(result.data);
-        },
-      });
-
+      // 타이틀에 csv가 들어가 있을때 비가공데이터를 엔터마다 나누어준다
       const rowsCsv = fileListModalTitle?.includes("csv")
         ? res.data?.split("\n")
         : [];
+      console.log("엔터로 나눈 데이터", rowsCsv);
+      // 여기까지 문제없음
+      let rowsCsvSplit = rowsCsv[0].split(",");
+      console.log("반점으로 0번째 나누기");
+      setRowsCsvSplit(rowsCsvSplit);
+      console.log("반점으로 0번째 나눈 스테이트", rowsCsvSplit);
+      let splitMap = rowsCsvSplit.map((item, idx) => {
+        return `data${idx}`;
+      });
+      console.log("맵돌려서 키값으로변환한값");
+      let splitMapJoin = splitMap.join();
+      console.log("첫줄에 넣을 내용들", splitMapJoin);
+      let stringAllData = splitMapJoin + ",\n" + res.data;
+      console.log("데이터 종합 정리@@@@@@@@@@@@@@", stringAllData);
+      let unshiftCsv = rowsCsvSplit.includes("timestamp")
+        ? res.data
+        : stringAllData;
+      console.log("정상적으로 원래 데이터에 들어갔는가", unshiftCsv);
+      Papa.parse(unshiftCsv, {
+        header: true,
+        complete: (result) => {
+          fileListModalTitle?.includes("csv")
+            ? setFileListCsv(result.data)
+            : setFileListCsv();
+        },
+      });
+
+      let rowsCsvParse = JSON.parse(rowsCsv);
+      console.log("22222222222222", rowsCsvParse);
+
       const rowsTxt = fileListModalTitle?.includes("txt")
         ? res.data?.split("\n")
         : [];
@@ -216,7 +242,7 @@ const ManagementContainer = () => {
       // const rowsChange = rows.unshift("value");
       // const rows = firstRows.split("\n\f");
       setRowsData(
-        fileListModalTitle?.includes("csv")
+        fileListModalTitle?.includes("CSV")
           ? rowsCsv
           : fileListModalTitle?.includes("txt")
           ? rowsTxt
@@ -515,10 +541,12 @@ const ManagementContainer = () => {
   // console.log("파싱되어진 파일========", fileListJson);
   console.log("TXT========데이터");
   console.log("파싱한 데이터========", beforeTxtData);
-  console.log("데이터야 제발 떠라", fileListCsv);
+  console.log("타이틀이름", fileListModalTitle);
+  console.log("비 가공 데이터===", originCsvData);
+  console.log("끝났고만---------------", fileListCsv[0]);
 
   useEffect(() => {
-    let preFilterData = filterRowData.map((e) => e.idx);
+    let preFilterData = filterRowData?.map((e) => e.idx);
     let sortPreFileterData = preFilterData.sort();
     setPreProcessingIdx(sortPreFileterData);
   }, [filterRowData]);
@@ -776,7 +804,10 @@ const ManagementContainer = () => {
                       return (
                         <tbody>
                           <td>{idx + 1}</td>
-                          <td>{fileListCsv[idx]}</td>
+                          <td>
+                            {fileListCsv[idx].data0},{fileListCsv[idx].data1},
+                            {fileListCsv[idx].data2},{fileListCsv[idx].data3}
+                          </td>
                         </tbody>
                       );
                     })}
@@ -784,7 +815,7 @@ const ManagementContainer = () => {
                 </CsvView>
               </div>
             ) : fileListModalTitle.includes("txt") ? (
-              <div>{fileListTxt[0]}</div>
+              <div></div>
             ) : fileListModalTitle.includes("json") ? (
               <>
                 <table className="file_list_table">
