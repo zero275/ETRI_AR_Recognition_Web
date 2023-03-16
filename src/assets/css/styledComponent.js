@@ -136,4 +136,5 @@ export const TxtView = styled.div `
 width:100%;
 height:700px;
 overflow-y: scroll;
+overflow-x:hidden;
 background-color:transparent;`

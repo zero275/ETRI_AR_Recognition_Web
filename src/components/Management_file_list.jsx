@@ -18,6 +18,7 @@ export default function Management_file_list({
   setRowDAtaFileList,
   setFileListModalHandle,
   setFileListModalTitle,
+  setHandleMp4,
 }) {
   // const file_ojt = [
   //   { idx: "0", name: "recording.mp4", size: "50MB" },
@@ -27,7 +28,6 @@ export default function Management_file_list({
   //   { idx: "4", name: "gyro.csv", size: "22.4KB" },
   // ];
   console.log("넘겨받은 파일목록", rowDataFileList);
-  const [handleMp4, setHandleMp4] = useState(false);
 
   return (
     <Container title="파일 목록" addedCls="flex2" cls="basicContainer2nd">
@@ -36,7 +36,7 @@ export default function Management_file_list({
           <th>파일명</th>
           <th>size</th>
         </thead>
-        <tbody>
+        <tbody className="file_list_table_tbody">
           {rowDataFileList != undefined || rowDataFileList != null ? (
             rowDataFileList.map((item, idx) => {
               return (

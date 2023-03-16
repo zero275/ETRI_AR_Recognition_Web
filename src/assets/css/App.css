@@ -844,6 +844,16 @@ option {
 #pre_data_checkbox:checked {}
 
 .resetBtn {
+  /* position: absolute; */
+  width: 20px;
+  height: auto;
+  margin-left: -10px;
+  top: 82px;
+  transition: animation 0.2s ease-in-out;
+  transform: translateY(5px);
+}
+
+.resetBtnTrans {
   position: absolute;
   width: 20px;
   height: auto;
@@ -961,6 +971,16 @@ option {
 
 .file_list_table th:nth-child(1) {}
 
+.file_list_table_tbody {}
+
+.file_list_table_tbody tr td:nth-child(1) {
+  text-align: center;
+}
+
+.file_list_table_tbody tr td:nth-child(2) {
+  text-align: right;
+}
+
 .notFoundData {
   color: rgba(255, 0, 0, 0.7);
   animation: notData 0.2s 0s ease-in-out;
@@ -996,13 +1016,13 @@ option {
 
 }
 
-.CsvViewTable {
+.CsvTxtViewTable {
   width: 100%;
   height: 100%;
   margin-right: 30px;
 }
 
-.CsvViewTable>thead {
+.CsvTxtViewTable>thead {
   width: auto;
   margin-bottom: 200px;
   background-color: #646464;
@@ -1010,23 +1030,23 @@ option {
   padding: 2px 0px 2px 0px;
 }
 
-.CsvViewTable thead th:nth-child(1),
-.CsvViewTable tbody td:nth-child(1) {
+.CsvTxtViewTable thead th:nth-child(1),
+.CsvTxtViewTable tbody td:nth-child(1) {
   width: 100px;
   height: auto;
   text-align: center;
 }
 
-.CsvViewTable thead th:nth-child(2) {
+.CsvTxtViewTable thead th:nth-child(2) {
   width: auto;
   text-align: center;
 }
 
-.CsvViewTable tbody {
+.CsvTxtViewTable tbody {
   margin-top: 20px;
 }
 
-.CsvViewTable tbody:hover {
+.CsvTxtViewTable tbody:hover {
   background-color: var(--theme-font-color-primary);
   user-select: none;
 }

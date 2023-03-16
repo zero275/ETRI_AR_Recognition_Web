@@ -160,13 +160,13 @@ const ManagementContainer = () => {
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState([]);
+  const [fileListTxt, setFileListTxt] = useState([]);
   const [fileListJson, setFileListJson] = useState([]);
   const [beforeTxtData, setBeforeTxtData] = useState();
-  const [dataTestAll, setDataTestAll] = useState();
-  const [csvParseData, setCsvParseData] = useState();
   const [rowsData, setRowsData] = useState([]);
-  const [rowsCsvSplit, setRowsCsvSplit] = useState([]);
-  const [originCsvData, setOriginCsvData] = useState();
+  const [txtSplitData, setTxtSplitData] = useState([]);
+  const [originCsvTxtData, setOriginCsvTxtData] = useState();
+  const [handleMp4, setHandleMp4] = useState(false);
 
   // socket 가져오기 from zustand
   const socket = useSocket();
@@ -177,7 +177,7 @@ const ManagementContainer = () => {
   let fileListUrl = "http://192.168.219.204:8095";
   const playerUrl = `${fileListUrl}/tmp/recording.mp4`;
   const jsonUrl = `${fileListUrl}/tmp/metadata.json`;
-  const txtUrl = `${fileListUrl}//tmp/1664.414079_ll.txt`;
+  const txtUrl = `${fileListUrl}/tmp/1664.414079_ll.txt`;
   const FileListAllUrl = `${fileListUrl}/tmp/${fileListModalTitle}`;
   const column3 = [
     {
@@ -192,59 +192,63 @@ const ManagementContainer = () => {
     axios.get(FileListAllUrl).then((res) => {
       fileListModalTitle?.includes("json") && setFileListJson([res.data]);
       // 오리지날 데이터 state 저장
-      setOriginCsvData(res.data);
-
-      // 타이틀에 csv가 들어가 있을때 비가공데이터를 엔터마다 나누어준다
-      const rowsCsv = fileListModalTitle?.includes("csv")
+      setOriginCsvTxtData(res.data);
+      const rowsTxt = fileListModalTitle.includes("txt")
         ? res.data?.split("\n")
         : [];
-      console.log("엔터로 나눈 데이터", rowsCsv);
-      // 여기까지 문제없음
-      let rowsCsvSplit = rowsCsv[0].split(",");
-      console.log("반점으로 0번째 나누기");
-      setRowsCsvSplit(rowsCsvSplit);
-      console.log("반점으로 0번째 나눈 스테이트", rowsCsvSplit);
-      let splitMap = rowsCsvSplit.map((item, idx) => {
+      const rowsTxtSlice = rowsTxt.slice(1);
+
+      setTxtSplitData(rowsTxtSlice);
+
+      // 타이틀에 csv가 들어가 있을때 비가공데이터를 엔터마다 나누어준다
+      const rowsCsvTxt = fileListModalTitle?.includes("csv")
+        ? res.data?.split("\n")
+        : [];
+      // console.log("엔터로 나눈 데이터", rowsCsvTxt);
+      let rowsCsvTxtSplit = rowsCsvTxt[0].split(",");
+      // console.log("반점으로 0번째 나누기");
+      // console.log("반점으로 0번째 나눈 스테이트", rowsCsvSplit);
+      let splitMap = rowsCsvTxtSplit.map((item, idx) => {
         return `data${idx}`;
       });
-      console.log("맵돌려서 키값으로변환한값");
+      // console.log("맵돌려서 키값으로변환한값");
       let splitMapJoin = splitMap.join();
-      console.log("첫줄에 넣을 내용들", splitMapJoin);
+      // console.log("첫줄에 넣을 내용들", splitMapJoin);
       let stringAllData = splitMapJoin + ",\n" + res.data;
-      console.log("데이터 종합 정리@@@@@@@@@@@@@@", stringAllData);
-      let unshiftCsv = rowsCsvSplit.includes("timestamp")
-        ? res.data
-        : stringAllData;
-      console.log("정상적으로 원래 데이터에 들어갔는가", unshiftCsv);
-      Papa.parse(unshiftCsv, {
+      // console.log("데이터 종합 정리@@@@@@@@@@@@@@", stringAllData);
+      // let unshiftCsv = rowsCsvTxtSplit.includes("timestamp", " RSSI")
+      //   ? res.data
+      //   : stringAllData;
+      // console.log("정상적으로 원래 데이터에 들어갔는가", unshiftCsv);
+
+      Papa.parse(stringAllData, {
         header: true,
         complete: (result) => {
+          const resultSliceEnd = result.data.slice(0, -1);
           fileListModalTitle?.includes("csv")
-            ? setFileListCsv(result.data)
+            ? setFileListCsv(resultSliceEnd)
             : setFileListCsv();
         },
       });
 
-      let rowsCsvParse = JSON.parse(rowsCsv);
-      console.log("22222222222222", rowsCsvParse);
+      // let rowsCsvParse = JSON.parse(rowsCsv);
+      // console.log("22222222222222", rowsCsvParse);
 
-      const rowsTxt = fileListModalTitle?.includes("txt")
-        ? res.data?.split("\n")
-        : [];
-      const sliceRowsTxt = rowsTxt?.slice(1, 4996);
-      setBeforeTxtData(sliceRowsTxt);
-      const rowsTxtMap = JSON.parse(beforeTxtData);
-      setDataTestAll(rowsTxtMap);
+      // const rowsTxt = fileListModalTitle?.includes("txt")
+      //   ? res.data?.split("\n")
+      //   : [];
 
-      // const rowsChange = rows.unshift("value");
-      // const rows = firstRows.split("\n\f");
-      setRowsData(
-        fileListModalTitle?.includes("CSV")
-          ? rowsCsv
-          : fileListModalTitle?.includes("txt")
-          ? rowsTxt
-          : null
-      );
+      // console.log("한줄씩 띄워놓은 데이터------", rowsTxt);
+
+      // // const rowsChange = rows.unshift("value");
+      // // const rows = firstRows.split("\n\f");
+      // setRowsData(
+      //   fileListModalTitle?.includes("CSV")
+      //     ? rowsCsv
+      //     : fileListModalTitle?.includes("txt")
+      //     ? rowsTxt
+      //     : null
+      // );
     });
     // let rowsDataParse = rowsData.map((item, idx) => {
     //   const rowsDataIdx = rowsData[idx];
@@ -418,6 +422,10 @@ const ManagementContainer = () => {
     if (delConfirm === true) {
       setFilterRowData([]);
       setPreProcessingData([]);
+      setFileListToggle(false);
+      setHandleMp4(false);
+      setInfoToggle(false);
+      setFileListToggle(false);
     }
   };
   const onClickRow = (e, idx) => {
@@ -539,8 +547,8 @@ const ManagementContainer = () => {
   console.log("TXT========데이터");
   console.log("파싱한 데이터========", beforeTxtData);
   console.log("타이틀이름", fileListModalTitle);
-  console.log("비 가공 데이터===", originCsvData);
-  console.log("끝났고만---------------", fileListCsv[0]);
+  console.log("비 가공 데이터===", originCsvTxtData);
+  console.log("끝났고만---------------", fileListCsv);
 
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
@@ -564,6 +572,7 @@ const ManagementContainer = () => {
                 className="learning-select"
                 name="회사명"
                 id="1"
+                width={"100px"}
                 onChange={(e) => {
                   setCompanyValue(e.target.value);
                 }}
@@ -639,6 +648,10 @@ const ManagementContainer = () => {
                 onClick={() => {
                   setFilterRowData([]);
                   setPreProcessingData();
+                  setFileListToggle(false);
+                  setHandleMp4(false);
+                  setInfoToggle(false);
+                  setFileListToggle(false);
                 }}
               />
             </div>
@@ -733,6 +746,7 @@ const ManagementContainer = () => {
             setRowDAtaFileList={setRowDAtaFileList}
             setFileListModalHandle={setFileListModalHandle}
             setFileListModalTitle={setFileListModalTitle}
+            setHandleMp4={setHandleMp4}
           />
         ) : null}
       </div>
@@ -792,7 +806,7 @@ const ManagementContainer = () => {
                   type="single"
                 /> */}
                 <CsvView>
-                  <table className="CsvViewTable">
+                  <table className="CsvTxtViewTable">
                     <thead>
                       <th>순번</th>
                       <th>DATA</th>
@@ -812,7 +826,22 @@ const ManagementContainer = () => {
                 </CsvView>
               </div>
             ) : fileListModalTitle.includes("txt") ? (
-              <div></div>
+              <TxtView>
+                <table className="CsvTxtViewTable">
+                  <thead>
+                    <th>순번</th>
+                    <th>DATA</th>
+                  </thead>
+                  {txtSplitData.map((item, idx) => {
+                    return (
+                      <tbody>
+                        <td>{idx + 1}</td>
+                        <td>{txtSplitData[idx]}</td>
+                      </tbody>
+                    );
+                  })}
+                </table>
+              </TxtView>
             ) : fileListModalTitle.includes("json") ? (
               <>
                 <table className="file_list_table">
