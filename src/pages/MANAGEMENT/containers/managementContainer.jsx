@@ -160,16 +160,13 @@ const ManagementContainer = () => {
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState([]);
-  const [fileListTxt, setFileListTxt] = useState();
   const [fileListJson, setFileListJson] = useState([]);
   const [beforeTxtData, setBeforeTxtData] = useState();
   const [dataTestAll, setDataTestAll] = useState();
   const [csvParseData, setCsvParseData] = useState();
   const [rowsData, setRowsData] = useState([]);
-  const [rowTest, setRowTest] = useState([]);
   const [rowsCsvSplit, setRowsCsvSplit] = useState([]);
   const [originCsvData, setOriginCsvData] = useState();
-  const [changeCsvData, setChangeCsvData] = useState([]);
 
   // socket 가져오기 from zustand
   const socket = useSocket();
