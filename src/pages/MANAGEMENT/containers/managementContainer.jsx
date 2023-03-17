@@ -795,7 +795,7 @@ const ManagementContainer = () => {
             {fileListModalTitle.includes("mp4") ? (
               <ReactPlayer
                 url={playerUrl}
-                playing={false}
+                playing={true}
                 controls={true}
                 loop={true}
                 muted={true}
@@ -804,7 +804,10 @@ const ManagementContainer = () => {
                 width={"400px"}
                 height={"auto"}
               />
-            ) : fileListModalTitle.includes("csv") ? (
+            ) : // <video controls width="700">
+            //   <source src="https://youtu.be/NefSYpuIRoY" type="video/mp4" />
+            // </video>
+            fileListModalTitle.includes("csv") ? (
               // rowsData?.map((item, idx) => {
               //   return <div>{rowsData[idx]}</div>;
               // })
