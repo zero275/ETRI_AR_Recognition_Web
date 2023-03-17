@@ -14,7 +14,8 @@ function App() {
   const client = new QueryClient();
   const { setSocket } = useSocketActions();
   useEffect(() => {
-    const webSocket = socketIOClient("http://192.168.219.204:8095");
+    const webSocket = socketIOClient("");
+    // const webSocket = socketIOClient("http://192.168.219.204:8095");
     setSocket(webSocket);
 
     return () => {

@@ -109,7 +109,7 @@ background-color:grey;
 `
 export const ProgressBar = styled.div `
 transform:translate(0px,30px);
-width:100%;
+width:90%;
 height:1em;
 border-radius:20px;
 background-color:grey;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import ManagementCardView from "@/pages/MANAGEMENT/views/managementCardView";
 import ManagementBoxView from "@/pages/MANAGEMENT/views/managementBoxView";
 import Container from "@/components/container";
@@ -168,6 +168,9 @@ const ManagementContainer = () => {
   const [originCsvTxtData, setOriginCsvTxtData] = useState();
   const [handleMp4, setHandleMp4] = useState(false);
 
+  // ref속성
+  const selectBuildRef = useRef();
+  const selectFloorRef = useRef();
   // socket 가져오기 from zustand
   const socket = useSocket();
   const fetchPayload = useFetchData();
@@ -205,14 +208,14 @@ const ManagementContainer = () => {
         ? res.data?.split("\n")
         : [];
       // console.log("엔터로 나눈 데이터", rowsCsvTxt);
-      let rowsCsvTxtSplit = rowsCsvTxt[0].split(",");
+      let rowsCsvTxtSplit = rowsCsvTxt[0]?.split(",");
       // console.log("반점으로 0번째 나누기");
       // console.log("반점으로 0번째 나눈 스테이트", rowsCsvSplit);
-      let splitMap = rowsCsvTxtSplit.map((item, idx) => {
+      let splitMap = rowsCsvTxtSplit?.map((item, idx) => {
         return `data${idx}`;
       });
       // console.log("맵돌려서 키값으로변환한값");
-      let splitMapJoin = splitMap.join();
+      let splitMapJoin = splitMap?.join();
       // console.log("첫줄에 넣을 내용들", splitMapJoin);
       let stringAllData = splitMapJoin + ",\n" + res.data;
       // console.log("데이터 종합 정리@@@@@@@@@@@@@@", stringAllData);
@@ -426,6 +429,8 @@ const ManagementContainer = () => {
       setHandleMp4(false);
       setInfoToggle(false);
       setFileListToggle(false);
+      selectBuildRef.current.selectedIndex = 0;
+      selectFloorRef.current.selectedIndex = 0;
     }
   };
   const onClickRow = (e, idx) => {
@@ -565,14 +570,13 @@ const ManagementContainer = () => {
       <div className="containers">
         <Container title="수집 데이터세트 목록" addedCls="flex7">
           <div className="inner_Container">
-            <div>
+            <div className="">
               <span className="learning-title01">검색조건 : </span>
               <span className="select_title">회사명</span>
               <select
                 className="learning-select"
                 name="회사명"
                 id="1"
-                width={"100px"}
                 onChange={(e) => {
                   setCompanyValue(e.target.value);
                 }}
@@ -589,6 +593,7 @@ const ManagementContainer = () => {
               </select>
               <span className="select_title">건물명</span>
               <select
+                ref={selectBuildRef}
                 className="learning-select"
                 name="건물명"
                 id="2"
@@ -616,6 +621,7 @@ const ManagementContainer = () => {
               </select>
               <span className="select_title">층수</span>
               <select
+                ref={selectFloorRef}
                 className="learning-select"
                 name="층수"
                 id="3"
@@ -652,13 +658,17 @@ const ManagementContainer = () => {
                   setHandleMp4(false);
                   setInfoToggle(false);
                   setFileListToggle(false);
+                  selectBuildRef.current.selectedIndex = 0;
+                  selectFloorRef.current.selectedIndex = 0;
                 }}
               />
             </div>
             <div>
               <form className="pre_checkBox001" action="">
                 <input type="checkbox" id="pre_data_checkbox" />
-                <label for="pre_data_checkbox">전처리 완료 데이터만 표시</label>
+                <label htmlFor="pre_data_checkbox">
+                  전처리 완료 데이터만 표시
+                </label>
               </form>
             </div>
           </div>
@@ -718,9 +728,13 @@ const ManagementContainer = () => {
               ▲ 조건입력이 완료 되셨으면 Pre Processing을 진행하세요
             </span>
           ) : (
-            <ProgressBar>
-              <ProgressBarInner width="120" />
-            </ProgressBar>
+            <>
+              <ProgressBar>
+                <ProgressBarInner width="120" />
+              </ProgressBar>
+              <span>일시정지</span>
+              <span>취소</span>
+            </>
           )}
         </Container>
 
@@ -785,6 +799,7 @@ const ManagementContainer = () => {
                 controls={true}
                 loop={true}
                 muted={true}
+                light={true}
                 playsinline={true}
                 width={"400px"}
                 height={"auto"}
@@ -811,7 +826,7 @@ const ManagementContainer = () => {
                       <th>순번</th>
                       <th>DATA</th>
                     </thead>
-                    {fileListCsv.map((item, idx) => {
+                    {fileListCsv?.map((item, idx) => {
                       return (
                         <tbody>
                           <td>{idx + 1}</td>
