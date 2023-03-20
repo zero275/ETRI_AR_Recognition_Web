@@ -29,6 +29,8 @@ export default function Management_file_list({
   //   { idx: "4", name: "gyro.csv", size: "22.4KB" },
   // ];
   console.log("넘겨받은 파일목록", rowDataFileList);
+  const [fileTitleName, setFileTitleName] = useState();
+  console.log("이 파일명 기재", fileTitleName);
 
   return (
     <Container title="파일 목록" addedCls="flex2" cls="basicContainer2nd">
@@ -46,8 +48,8 @@ export default function Management_file_list({
                     <td
                       className="openFile"
                       onClick={(e) => {
-                        setFileListModalHandle(true);
                         setFileListModalTitle(rowDataFileList[idx]?.name);
+                        setFileTitleName(rowDataFileList[idx]?.name);
                       }}
                     >
                       {rowDataFileList[idx]?.name}

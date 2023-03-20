@@ -168,7 +168,7 @@ const ManagementContainer = () => {
   const [txtSplitData, setTxtSplitData] = useState([]);
   const [originCsvTxtData, setOriginCsvTxtData] = useState();
   const [handleMp4, setHandleMp4] = useState(false);
-
+  const [testHandle, setTestHandle] = useState(false);
   // ref속성
   const selectBuildRef = useRef();
   const selectFloorRef = useRef();
@@ -766,7 +766,6 @@ const ManagementContainer = () => {
           />
         ) : null}
       </div>
-
       {/* 1차 전처리된 데이터세트 */}
       {/* <div className="containers">
         <Container title="전처리 데이터세트" addedCls="flex7">
@@ -885,20 +884,28 @@ const ManagementContainer = () => {
                 </table>
               </>
             ) : null}
-            {/* <ReactPlayer
-              url={playerUrl}
-              playing={false}
-              controls={true}
-              loop={true}
-              muted={true}
-              playsinline={true}
-              width={"400px"}
-              height={"auto"}
-            /> */}
-            {/* <ReactJson src={jsonUrl} /> */}
-            {}
           </ModalContainer>
         </MyModalInfo>
+      ) : null}
+      <button
+        onClick={() => {
+          setTestHandle("RE", "PLAY");
+        }}
+      >
+        동영상 보여주셈
+      </button>
+      {testHandle.includes("RE") === true ? (
+        <ReactPlayer
+          url={playerUrl}
+          playing={true}
+          controls={true}
+          loop={false}
+          muted={true}
+          // light={true}
+          playsinline={true}
+          width={"400px"}
+          height={"auto"}
+        />
       ) : null}
     </main>
   );
