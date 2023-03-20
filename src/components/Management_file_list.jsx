@@ -17,6 +17,7 @@ export default function Management_file_list({
   rowDataFileList,
   setRowDAtaFileList,
   setFileListModalHandle,
+  setFileListModalHandle02,
   setFileListModalTitle,
   setHandleMp4,
 }) {

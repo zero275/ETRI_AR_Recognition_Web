@@ -11,7 +11,7 @@ import Management_detail_info from "@/components/Management_detail_info";
 import Management_file_list from "@/components/Management_file_list";
 import axios from "axios";
 import { MyModal, MyModalNoFooter, MyModalInfo } from "@/components/MyModal";
-import ReactPlayer from "react-player/lazy";
+import ReactPlayer from "react-player";
 import {
   ModalContainer,
   BtnBetween,
@@ -158,6 +158,7 @@ const ManagementContainer = () => {
   const [preProcessingData, setPreProcessingData] = useState();
   const [preBtnHelp, setPreBtnHelp] = useState("");
   const [fileListModalHandle, setFileListModalHandle] = useState(false);
+  const [fileListModalHandle02, setFileListModalHandle02] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState([]);
   const [fileListTxt, setFileListTxt] = useState([]);
@@ -759,6 +760,7 @@ const ManagementContainer = () => {
             rowDataFileList={rowDataFileList}
             setRowDAtaFileList={setRowDAtaFileList}
             setFileListModalHandle={setFileListModalHandle}
+            setFileListModalHandle02={setFileListModalHandle02}
             setFileListModalTitle={setFileListModalTitle}
             setHandleMp4={setHandleMp4}
           />
@@ -792,22 +794,7 @@ const ManagementContainer = () => {
           setFileListModalHandle={setFileListModalHandle}
         >
           <ModalContainer>
-            {fileListModalTitle.includes("mp4") ? (
-              <ReactPlayer
-                url={playerUrl}
-                playing={true}
-                controls={true}
-                loop={true}
-                muted={true}
-                light={true}
-                playsinline={true}
-                width={"400px"}
-                height={"auto"}
-              />
-            ) : // <video controls width="700">
-            //   <source src="https://youtu.be/NefSYpuIRoY" type="video/mp4" />
-            // </video>
-            fileListModalTitle.includes("csv") ? (
+            {fileListModalTitle?.includes("csv") ? (
               // rowsData?.map((item, idx) => {
               //   return <div>{rowsData[idx]}</div>;
               // })
@@ -843,14 +830,14 @@ const ManagementContainer = () => {
                   </table>
                 </CsvView>
               </div>
-            ) : fileListModalTitle.includes("txt") ? (
+            ) : fileListModalTitle?.includes("txt") ? (
               <TxtView>
                 <table className="CsvTxtViewTable">
                   <thead>
                     <th>순번</th>
                     <th>DATA</th>
                   </thead>
-                  {txtSplitData.map((item, idx) => {
+                  {txtSplitData?.map((item, idx) => {
                     return (
                       <tbody>
                         <td>{idx + 1}</td>
@@ -860,7 +847,7 @@ const ManagementContainer = () => {
                   })}
                 </table>
               </TxtView>
-            ) : fileListModalTitle.includes("json") ? (
+            ) : fileListModalTitle?.includes("json") ? (
               <>
                 <table className="file_list_table">
                   <thead>

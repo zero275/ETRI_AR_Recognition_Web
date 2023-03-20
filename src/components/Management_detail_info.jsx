@@ -1,6 +1,7 @@
 import Container from "@/components/container";
 import { DetailInfo } from "@assets/css/styledComponent";
 import { MyButton } from "@/components/MyButton";
+import ReactPlayer from "react-player";
 
 export default function Management_detail_info({
   setInfoToggle,
@@ -65,6 +66,7 @@ export default function Management_detail_info({
           <div className="noFileMsg">해당하는 데이터가 없습니다.</div>
         )}
         {/* {console.log("데이터가 잘 넘어왔나요요요요", rowDataDetail)} */}
+
         <div className="filelist_option_btn">
           <form action="" className="pre_checkBox002">
             <input type="checkbox" id="pre_data_checkbox" />
