@@ -93,7 +93,7 @@ function GoogleMapApi() {
               south: 36.3798125202,
               west: 127.3672123939,
             }}
-            border={0}
+            border={40}
           />
           {/* <Polyline
             path={[

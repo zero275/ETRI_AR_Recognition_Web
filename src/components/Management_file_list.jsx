@@ -16,10 +16,13 @@ export default function Management_file_list({
   setRowDataDetail,
   rowDataFileList,
   setRowDAtaFileList,
+  fileListModalHandle,
   setFileListModalHandle,
   setFileListModalHandle02,
+  fileListModalTitle,
   setFileListModalTitle,
   setHandleMp4,
+  setComponentPropTest,
 }) {
   // const file_ojt = [
   //   { idx: "0", name: "recording.mp4", size: "50MB" },
@@ -28,10 +31,8 @@ export default function Management_file_list({
   //   { idx: "3", name: "mark.csv", size: "22.6KB" },
   //   { idx: "4", name: "gyro.csv", size: "22.4KB" },
   // ];
-  console.log("넘겨받은 파일목록", rowDataFileList);
   const [fileTitleName, setFileTitleName] = useState();
-  console.log("이 파일명 기재", fileTitleName);
-
+  console.log(fileTitleName, "타이틀 파워네임");
   return (
     <Container title="파일 목록" addedCls="flex2" cls="basicContainer2nd">
       <table className="file_list_table">
@@ -48,8 +49,16 @@ export default function Management_file_list({
                     <td
                       className="openFile"
                       onClick={(e) => {
+                        const titleName = rowDataFileList[idx]?.name;
+                        setFileTitleName(titleName);
+                        titleName.includes("json") ||
+                        titleName.includes("csv") ||
+                        titleName.includes("txt")
+                          ? setFileListModalHandle(true)
+                          : titleName.includes("mp4")
+                          ? setFileListModalHandle02(true)
+                          : setFileListModalHandle02(false);
                         setFileListModalTitle(rowDataFileList[idx]?.name);
-                        setFileTitleName(rowDataFileList[idx]?.name);
                       }}
                     >
                       {rowDataFileList[idx]?.name}
@@ -64,6 +73,7 @@ export default function Management_file_list({
           )}
         </tbody>
       </table>
+
       <div
         className="close_btn"
         onClick={() => {

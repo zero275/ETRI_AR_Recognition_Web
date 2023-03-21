@@ -42,7 +42,12 @@ export const MyModal = () => {
 };
 
 // footer 가 없는 modal
-export const MyModalNoFooter = ({ title, children, onCancel }) => {
+export const MyModalNoFooter = ({
+  title,
+  children,
+  onCancel,
+  setFileListModalTitle,
+}) => {
   return (
     <ModalContainer>
       <ModalView
@@ -77,7 +82,7 @@ export const MyModalNoFooter = ({ title, children, onCancel }) => {
 // 동영상 전용 모달창
 
 export const Mp4Modal = ({ title, children, setFileListModalHandle }) => {
-  return <ModalContainer id="modal"></ModalContainer>;
+  return;
 };
 
 // 취소 콜백을 따로 연결 안해도 닫을 수 있는 간단한 modal

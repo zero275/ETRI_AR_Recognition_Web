@@ -19,6 +19,7 @@ import {
   ProgressBarInner,
   CsvView,
   TxtView,
+  VideoModalContainer,
 } from "@assets/css/styledComponent";
 import logoimg from "../../../assets/imgs/resetBtn.png";
 import trash_can from "../../../assets/imgs/trash_can.png";
@@ -161,14 +162,11 @@ const ManagementContainer = () => {
   const [fileListModalHandle02, setFileListModalHandle02] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState([]);
-  const [fileListTxt, setFileListTxt] = useState([]);
   const [fileListJson, setFileListJson] = useState([]);
-  const [beforeTxtData, setBeforeTxtData] = useState();
-  const [rowsData, setRowsData] = useState([]);
   const [txtSplitData, setTxtSplitData] = useState([]);
   const [originCsvTxtData, setOriginCsvTxtData] = useState();
   const [handleMp4, setHandleMp4] = useState(false);
-  const [testHandle, setTestHandle] = useState(false);
+  const [componentPropTest, setComponentPropTest] = useState();
   // ref속성
   const selectBuildRef = useRef();
   const selectFloorRef = useRef();
@@ -539,7 +537,7 @@ const ManagementContainer = () => {
 
   // 콘솔 찍는 위치(콘찍위)
   // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
-  console.log("필터링되고 나온 데이터ekekekekek", filterRowData);
+  // console.log("필터링되고 나온 데이터ekekekekek", filterRowData);
   // console.log("선택된 내용의 세부정보", rowDataDetail);
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
@@ -547,14 +545,16 @@ const ManagementContainer = () => {
   // console.log("후처리가 된 데이터", preProcessingData);
   // console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
   // console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
-  console.log("가공된 데이터 내용============", rowsData);
+  // console.log("가공된 데이터 내용============", rowsData);
   // console.log("너 어레이 맞니?", Array.isArray(rowsData));
   // console.log("파싱되어진 파일========", fileListJson);
-  console.log("TXT========데이터");
-  console.log("파싱한 데이터========", beforeTxtData);
+  // console.log("TXT========데이터");
+  // console.log("파싱한 데이터========", beforeTxtData);
   console.log("타이틀이름", fileListModalTitle);
   console.log("비 가공 데이터===", originCsvTxtData);
   console.log("끝났고만---------------", fileListCsv);
+  console.log("폭발 네이밍", fileListModalTitle?.includes("csv"));
+  console.log("성공????????????", fileListModalHandle02);
 
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
@@ -759,10 +759,13 @@ const ManagementContainer = () => {
             setRowDataDetail={setRowDataDetail}
             rowDataFileList={rowDataFileList}
             setRowDAtaFileList={setRowDAtaFileList}
+            fileListModalHandle={fileListModalHandle}
             setFileListModalHandle={setFileListModalHandle}
             setFileListModalHandle02={setFileListModalHandle02}
+            fileListModalTitle={fileListModalTitle}
             setFileListModalTitle={setFileListModalTitle}
             setHandleMp4={setHandleMp4}
+            setComponentPropTest={setComponentPropTest}
           />
         ) : null}
       </div>
@@ -787,28 +790,16 @@ const ManagementContainer = () => {
           />
         </Container>
       </div> */}
+
       {fileListModalHandle === true ? (
         <MyModalInfo
           title={fileListModalTitle}
           setFileListModalHandle={setFileListModalHandle}
+          setFileListModalTitle={setFileListModalTitle}
         >
           <ModalContainer>
             {fileListModalTitle?.includes("csv") ? (
-              // rowsData?.map((item, idx) => {
-              //   return <div>{rowsData[idx]}</div>;
-              // })
               <div>
-                {/* <AgGrid
-                  setGridApi={setGridApi}
-                  gridApi={gridApi}
-                  // onClickRow={onClickRow}
-                  data={rowsData}
-                  setData={setDatasetRowData}
-                  column={column3}
-                  rowSelection={"multiple"}
-                  idx="3"
-                  type="single"
-                /> */}
                 <CsvView>
                   <table className="CsvTxtViewTable">
                     <thead>
@@ -887,14 +878,8 @@ const ManagementContainer = () => {
           </ModalContainer>
         </MyModalInfo>
       ) : null}
-      <button
-        onClick={() => {
-          setTestHandle("RE", "PLAY");
-        }}
-      >
-        동영상 보여주셈
-      </button>
-      {testHandle.includes("RE") === true ? (
+
+      {/* {componentPropTest?.includes("DO") ? (
         <ReactPlayer
           url={playerUrl}
           playing={true}
@@ -906,7 +891,7 @@ const ManagementContainer = () => {
           width={"400px"}
           height={"auto"}
         />
-      ) : null}
+      ) : null} */}
     </main>
   );
 };
