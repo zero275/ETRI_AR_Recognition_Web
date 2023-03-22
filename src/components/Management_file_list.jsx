@@ -21,8 +21,6 @@ export default function Management_file_list({
   setFileListModalHandle02,
   fileListModalTitle,
   setFileListModalTitle,
-  setHandleMp4,
-  setComponentPropTest,
 }) {
   // const file_ojt = [
   //   { idx: "0", name: "recording.mp4", size: "50MB" },
@@ -51,13 +49,7 @@ export default function Management_file_list({
                       onClick={(e) => {
                         const titleName = rowDataFileList[idx]?.name;
                         setFileTitleName(titleName);
-                        titleName.includes("json") ||
-                        titleName.includes("csv") ||
-                        titleName.includes("txt")
-                          ? setFileListModalHandle(true)
-                          : titleName.includes("mp4")
-                          ? setFileListModalHandle02(true)
-                          : setFileListModalHandle02(false);
+                        setFileListModalHandle("1");
                         setFileListModalTitle(rowDataFileList[idx]?.name);
                       }}
                     >
@@ -78,7 +70,6 @@ export default function Management_file_list({
         className="close_btn"
         onClick={() => {
           setFileListToggle(false);
-          setHandleMp4(false);
           return "hello";
         }}
       >

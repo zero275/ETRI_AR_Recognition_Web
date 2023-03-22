@@ -10,7 +10,12 @@ import ManagementTable from "@/components/ManagementTable";
 import Management_detail_info from "@/components/Management_detail_info";
 import Management_file_list from "@/components/Management_file_list";
 import axios from "axios";
-import { MyModal, MyModalNoFooter, MyModalInfo } from "@/components/MyModal";
+import {
+  MyModal,
+  MyModalNoFooter,
+  MyModalInfo,
+  Mp4Modal,
+} from "@/components/MyModal";
 import ReactPlayer from "react-player";
 import {
   ModalContainer,
@@ -158,7 +163,7 @@ const ManagementContainer = () => {
   const [preProcessingIdx, setPreProcessingIdx] = useState();
   const [preProcessingData, setPreProcessingData] = useState();
   const [preBtnHelp, setPreBtnHelp] = useState("");
-  const [fileListModalHandle, setFileListModalHandle] = useState(false);
+  const [fileListModalHandle, setFileListModalHandle] = useState("");
   const [fileListModalHandle02, setFileListModalHandle02] = useState(false);
   const [fileListModalTitle, setFileListModalTitle] = useState();
   const [fileListCsv, setFileListCsv] = useState([]);
@@ -166,7 +171,6 @@ const ManagementContainer = () => {
   const [txtSplitData, setTxtSplitData] = useState([]);
   const [originCsvTxtData, setOriginCsvTxtData] = useState();
   const [handleMp4, setHandleMp4] = useState(false);
-  const [componentPropTest, setComponentPropTest] = useState();
   // ref속성
   const selectBuildRef = useRef();
   const selectFloorRef = useRef();
@@ -191,67 +195,72 @@ const ManagementContainer = () => {
 
   //  CSV,TXT,JSON 데이터 관련
   useEffect(() => {
-    axios.get(FileListAllUrl).then((res) => {
-      fileListModalTitle?.includes("json") && setFileListJson([res.data]);
-      // 오리지날 데이터 state 저장
-      setOriginCsvTxtData(res.data);
-      const rowsTxt = fileListModalTitle.includes("txt")
-        ? res.data?.split("\n")
-        : [];
-      const rowsTxtSlice = rowsTxt.slice(1);
+    if (fileListModalTitle?.includes("mp4")) {
+      console.log("dd3");
+    } else {
+      axios.get(FileListAllUrl).then((res) => {
+        fileListModalTitle?.includes("json") && setFileListJson([res.data]);
+        // 오리지날 데이터 state 저장
+        setOriginCsvTxtData(res.data);
+        const rowsTxt = fileListModalTitle.includes("txt")
+          ? res.data?.split("\n")
+          : [];
+        const rowsTxtSlice = rowsTxt.slice(1);
 
-      setTxtSplitData(rowsTxtSlice);
+        setTxtSplitData(rowsTxtSlice);
 
-      // 타이틀에 csv가 들어가 있을때 비가공데이터를 엔터마다 나누어준다
-      const rowsCsvTxt = fileListModalTitle?.includes("csv")
-        ? res.data?.split("\n")
-        : [];
-      // console.log("엔터로 나눈 데이터", rowsCsvTxt);
-      let rowsCsvTxtSplit = rowsCsvTxt[0]?.split(",");
-      // console.log("반점으로 0번째 나누기");
-      // console.log("반점으로 0번째 나눈 스테이트", rowsCsvSplit);
-      let splitMap = rowsCsvTxtSplit?.map((item, idx) => {
-        return `data${idx}`;
+        // 타이틀에 csv가 들어가 있을때 비가공데이터를 엔터마다 나누어준다
+        const rowsCsvTxt = fileListModalTitle?.includes("csv")
+          ? res.data?.split("\n")
+          : [];
+        // console.log("엔터로 나눈 데이터", rowsCsvTxt);
+        let rowsCsvTxtSplit = rowsCsvTxt[0]?.split(",");
+        // console.log("반점으로 0번째 나누기");
+        // console.log("반점으로 0번째 나눈 스테이트", rowsCsvSplit);
+        let splitMap = rowsCsvTxtSplit?.map((item, idx) => {
+          return `data${idx}`;
+        });
+        // console.log("맵돌려서 키값으로변환한값");
+        let splitMapJoin = splitMap?.join();
+        // console.log("첫줄에 넣을 내용들", splitMapJoin);
+        let stringAllData = splitMapJoin + ",\n" + res.data;
+        // console.log("데이터 종합 정리@@@@@@@@@@@@@@", stringAllData);
+        // let unshiftCsv = rowsCsvTxtSplit.includes("timestamp", " RSSI")
+        //   ? res.data
+        //   : stringAllData;
+        // console.log("정상적으로 원래 데이터에 들어갔는가", unshiftCsv);
+
+        Papa.parse(stringAllData, {
+          header: true,
+          complete: (result) => {
+            const resultSliceEnd = result.data.slice(0, -1);
+            fileListModalTitle?.includes("csv")
+              ? setFileListCsv(resultSliceEnd)
+              : setFileListCsv();
+          },
+        });
+
+        // let rowsCsvParse = JSON.parse(rowsCsv);
+        // console.log("22222222222222", rowsCsvParse);
+
+        // const rowsTxt = fileListModalTitle?.includes("txt")
+        //   ? res.data?.split("\n")
+        //   : [];
+
+        // console.log("한줄씩 띄워놓은 데이터------", rowsTxt);
+
+        // // const rowsChange = rows.unshift("value");
+        // // const rows = firstRows.split("\n\f");
+        // setRowsData(
+        //   fileListModalTitle?.includes("CSV")
+        //     ? rowsCsv
+        //     : fileListModalTitle?.includes("txt")
+        //     ? rowsTxt
+        //     : null
+        // );
       });
-      // console.log("맵돌려서 키값으로변환한값");
-      let splitMapJoin = splitMap?.join();
-      // console.log("첫줄에 넣을 내용들", splitMapJoin);
-      let stringAllData = splitMapJoin + ",\n" + res.data;
-      // console.log("데이터 종합 정리@@@@@@@@@@@@@@", stringAllData);
-      // let unshiftCsv = rowsCsvTxtSplit.includes("timestamp", " RSSI")
-      //   ? res.data
-      //   : stringAllData;
-      // console.log("정상적으로 원래 데이터에 들어갔는가", unshiftCsv);
+    }
 
-      Papa.parse(stringAllData, {
-        header: true,
-        complete: (result) => {
-          const resultSliceEnd = result.data.slice(0, -1);
-          fileListModalTitle?.includes("csv")
-            ? setFileListCsv(resultSliceEnd)
-            : setFileListCsv();
-        },
-      });
-
-      // let rowsCsvParse = JSON.parse(rowsCsv);
-      // console.log("22222222222222", rowsCsvParse);
-
-      // const rowsTxt = fileListModalTitle?.includes("txt")
-      //   ? res.data?.split("\n")
-      //   : [];
-
-      // console.log("한줄씩 띄워놓은 데이터------", rowsTxt);
-
-      // // const rowsChange = rows.unshift("value");
-      // // const rows = firstRows.split("\n\f");
-      // setRowsData(
-      //   fileListModalTitle?.includes("CSV")
-      //     ? rowsCsv
-      //     : fileListModalTitle?.includes("txt")
-      //     ? rowsTxt
-      //     : null
-      // );
-    });
     // let rowsDataParse = rowsData.map((item, idx) => {
     //   const rowsDataIdx = rowsData[idx];
 
@@ -425,7 +434,6 @@ const ManagementContainer = () => {
       setFilterRowData([]);
       setPreProcessingData([]);
       setFileListToggle(false);
-      setHandleMp4(false);
       setInfoToggle(false);
       setFileListToggle(false);
       selectBuildRef.current.selectedIndex = 0;
@@ -554,7 +562,7 @@ const ManagementContainer = () => {
   console.log("비 가공 데이터===", originCsvTxtData);
   console.log("끝났고만---------------", fileListCsv);
   console.log("폭발 네이밍", fileListModalTitle?.includes("csv"));
-  console.log("성공????????????", fileListModalHandle02);
+  console.log("몇번????????????", fileListModalHandle);
 
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
@@ -656,7 +664,6 @@ const ManagementContainer = () => {
                   setFilterRowData([]);
                   setPreProcessingData();
                   setFileListToggle(false);
-                  setHandleMp4(false);
                   setInfoToggle(false);
                   setFileListToggle(false);
                   selectBuildRef.current.selectedIndex = 0;
@@ -764,8 +771,6 @@ const ManagementContainer = () => {
             setFileListModalHandle02={setFileListModalHandle02}
             fileListModalTitle={fileListModalTitle}
             setFileListModalTitle={setFileListModalTitle}
-            setHandleMp4={setHandleMp4}
-            setComponentPropTest={setComponentPropTest}
           />
         ) : null}
       </div>
@@ -791,14 +796,26 @@ const ManagementContainer = () => {
         </Container>
       </div> */}
 
-      {fileListModalHandle === true ? (
+      {fileListModalHandle === "1" ? (
         <MyModalInfo
           title={fileListModalTitle}
           setFileListModalHandle={setFileListModalHandle}
           setFileListModalTitle={setFileListModalTitle}
         >
           <ModalContainer>
-            {fileListModalTitle?.includes("csv") ? (
+            {fileListModalTitle?.includes("mp4") ? (
+              <ReactPlayer
+                url={playerUrl}
+                playing={true}
+                controls={true}
+                loop={false}
+                muted={true}
+                // light={true}
+                playsinline={true}
+                width={"400px"}
+                height={"auto"}
+              />
+            ) : fileListModalTitle?.includes("csv") ? (
               <div>
                 <CsvView>
                   <table className="CsvTxtViewTable">

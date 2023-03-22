@@ -4,6 +4,7 @@ import {
   GroundOverlay,
   Polyline,
   useJsApiLoader,
+  Rectangle,
 } from "@react-google-maps/api";
 
 const config = process.env.REACT_APP_API_KEY;
@@ -15,14 +16,21 @@ const containerStyle = {
   width: "100%",
   height: "100%",
 };
-
 const OPTIONS = {
-  minZoom: 17,
-  maxZomm: 20,
+  minZoom: 0,
+  maxZomm: 50,
 };
 const center = {
   lat: 36.38013731,
   lng: 127.3677711,
+};
+
+const rectangle = {
+  strokeColor: "#000000",
+  strokeOpacity: 0.7,
+  strokeWeight: 1,
+  fillColor: "#ff0000",
+  fillOpacity: 0.5,
 };
 
 const optionsRoute = {
@@ -80,7 +88,7 @@ function GoogleMapApi() {
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
-          zoom={19.3}
+          zoom={16}
           // onLoad={onLoad}
           // onUnmount={onUnmount}
           options={OPTIONS}
@@ -95,6 +103,25 @@ function GoogleMapApi() {
             }}
             border={40}
           />
+          <Rectangle
+            options={rectangle}
+            bounds={{
+              east: 127.3682090067,
+              north: 36.3803205649,
+              south: 36.3798125202,
+              west: 127.3672123939,
+            }}
+          />
+          <Rectangle
+            options={rectangle}
+            bounds={{
+              east: 127.3681090063,
+              north: 36.380220564,
+              south: 36.3794125205,
+              west: 127.3674123934,
+            }}
+          ></Rectangle>
+
           {/* <Polyline
             path={[
               { lat: 36.3800722718335, lng: 127.36793118691 },

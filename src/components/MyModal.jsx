@@ -82,7 +82,11 @@ export const MyModalNoFooter = ({
 // 동영상 전용 모달창
 
 export const Mp4Modal = ({ title, children, setFileListModalHandle }) => {
-  return;
+  return (
+    <ModalContainer id="modal">
+      <main>{children}</main>
+    </ModalContainer>
+  );
 };
 
 // 취소 콜백을 따로 연결 안해도 닫을 수 있는 간단한 modal
