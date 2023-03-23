@@ -36,6 +36,7 @@ export const AgGrid = ({
   const onSelectionChanged = () => {
     // gridApi.getSelectedRows() => 부모에서 불러온 gridApi 안에 선택한 데이터 저장함
     const selectedData = gridApi.getSelectedRows();
+    console.log(selectedData, "바나나");
   };
 
   return (

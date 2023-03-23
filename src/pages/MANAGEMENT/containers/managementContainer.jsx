@@ -99,7 +99,7 @@ const column1 = [
   },
   {
     headerName: "전처리여부",
-    field: "dt_start",
+    field: "ppdirectory",
     cellStyle: { fontFamily: "Pretendard" },
   },
 ];
@@ -171,6 +171,7 @@ const ManagementContainer = () => {
   const [txtSplitData, setTxtSplitData] = useState([]);
   const [originCsvTxtData, setOriginCsvTxtData] = useState();
   const [handleMp4, setHandleMp4] = useState(false);
+  const [deleteIdx, setDeleteIdx] = useState();
   // ref속성
   const selectBuildRef = useRef();
   const selectFloorRef = useRef();
@@ -192,6 +193,26 @@ const ManagementContainer = () => {
       cellStyle: { fontFamily: "Pretendard" },
     },
   ];
+
+  // 전처리 완료데이터만 표시 체크박스 함수
+  const PreCompleteData = () => {
+    axios
+      .post(
+        `${url}/api/collect/get-pre-data`,
+        { CollectPreCheck: "" },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        }
+      )
+      .then(function (response) {
+        console.log("전처리 데이터만 나오라!!!!!!!!", response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   //  CSV,TXT,JSON 데이터 관련
   useEffect(() => {
@@ -428,16 +449,30 @@ const ManagementContainer = () => {
   };
   const onDeleteRow = (e) => {
     let delConfirm = window.confirm("데이터를 정말 삭제하시겠습니까?");
-    console.log("컨펌 결과값", delConfirm);
     function conformTrue() {}
     if (delConfirm === true) {
-      setFilterRowData([]);
-      setPreProcessingData([]);
+      // setFilterRowData([]);
+      // setPreProcessingData([]);
       setFileListToggle(false);
       setInfoToggle(false);
-      setFileListToggle(false);
-      selectBuildRef.current.selectedIndex = 0;
-      selectFloorRef.current.selectedIndex = 0;
+      // selectBuildRef.current.selectedIndex = 0;
+      // selectFloorRef.current.selectedIndex = 0;
+      axios
+        .post(
+          `${url}/api/collect/delete-dataset`,
+          { CollectDeleteDataset: deleteIdx, idx: ["10"] },
+          {
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+            },
+          }
+        )
+        .then(function (response) {
+          console.log("삭제!!!!!!!!!!!!!", response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   };
   const onClickRow = (e, idx) => {
@@ -544,8 +579,8 @@ const ManagementContainer = () => {
   };
 
   // 콘솔 찍는 위치(콘찍위)
-  // console.log("필터링 스테이트네임(건물)", buildingOptionValue);
-  // console.log("필터링되고 나온 데이터ekekekekek", filterRowData);
+  console.log("원본데이터", datasetRowData);
+  console.log("필터링되고 나온 데이터", filterRowData);
   // console.log("선택된 내용의 세부정보", rowDataDetail);
   // console.log("선택된 내용의 파일목록", rowDataFileList);
   // console.log("상세정보 목록의 타입은 뭘까요~~", typeof rowDataDetail);
@@ -559,15 +594,12 @@ const ManagementContainer = () => {
   // console.log("TXT========데이터");
   // console.log("파싱한 데이터========", beforeTxtData);
   console.log("타이틀이름", fileListModalTitle);
-  console.log("비 가공 데이터===", originCsvTxtData);
-  console.log("끝났고만---------------", fileListCsv);
-  console.log("폭발 네이밍", fileListModalTitle?.includes("csv"));
-  console.log("몇번????????????", fileListModalHandle);
-
+  console.log("CSV 최종데이터", fileListCsv);
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
     let sortPreFileterData = preFilterData.sort();
     setPreProcessingIdx(sortPreFileterData);
+    setDeleteIdx(sortPreFileterData);
   }, [filterRowData]);
   useEffect(() => {
     setPreBtnHelp("preBtnHelp");
@@ -673,7 +705,13 @@ const ManagementContainer = () => {
             </div>
             <div>
               <form className="pre_checkBox001" action="">
-                <input type="checkbox" id="pre_data_checkbox" />
+                <input
+                  type="checkbox"
+                  id="pre_data_checkbox"
+                  onClick={() => {
+                    PreCompleteData();
+                  }}
+                />
                 <label htmlFor="pre_data_checkbox">
                   전처리 완료 데이터만 표시
                 </label>
@@ -697,7 +735,7 @@ const ManagementContainer = () => {
             column={column1}
             rowSelection={"multiple"}
             idx="1"
-            type="single"
+            type="multiple"
           />
           {/* <ManagementTable column2={column2} /> */}
           <div className="ag-btn-container">
