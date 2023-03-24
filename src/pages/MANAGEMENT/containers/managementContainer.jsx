@@ -144,6 +144,7 @@ const ManagementContainer = () => {
   // state 위치
   const [datasetRowData, setDatasetRowData] = useState([]);
   const [filterRowData, setFilterRowData] = useState([]);
+  const [deletedRowData, setDeletedRowData] = useState([]);
   const [datasetDetails, setDatasetDetails] = useState({});
   const [processedRowData, setProcessedRowData] = useState([]);
   const [processedDetails, setProcessedDetails] = useState({});
@@ -170,8 +171,10 @@ const ManagementContainer = () => {
   const [fileListJson, setFileListJson] = useState([]);
   const [txtSplitData, setTxtSplitData] = useState([]);
   const [originCsvTxtData, setOriginCsvTxtData] = useState();
-  const [handleMp4, setHandleMp4] = useState(false);
-  const [deleteIdx, setDeleteIdx] = useState();
+  const [deleteIdx, setDeleteIdx] = useState([]);
+  const [checkedInput, setCheckedInput] = useState();
+  const [preCheckData, setPreCheckData] = useState([]);
+
   // ref속성
   const selectBuildRef = useRef();
   const selectFloorRef = useRef();
@@ -212,6 +215,7 @@ const ManagementContainer = () => {
       .catch(function (error) {
         console.log(error);
       });
+    preCheckFn();
   };
 
   //  CSV,TXT,JSON 데이터 관련
@@ -449,18 +453,18 @@ const ManagementContainer = () => {
   };
   const onDeleteRow = (e) => {
     let delConfirm = window.confirm("데이터를 정말 삭제하시겠습니까?");
-    function conformTrue() {}
+
     if (delConfirm === true) {
       // setFilterRowData([]);
       // setPreProcessingData([]);
       setFileListToggle(false);
       setInfoToggle(false);
-      // selectBuildRef.current.selectedIndex = 0;
-      // selectFloorRef.current.selectedIndex = 0;
+      selectBuildRef.current.selectedIndex = 0;
+      selectFloorRef.current.selectedIndex = 0;
       axios
         .post(
           `${url}/api/collect/delete-dataset`,
-          { CollectDeleteDataset: deleteIdx, idx: ["10"] },
+          { CollectDeleteDataset: [], idx: deleteIdx },
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -468,7 +472,7 @@ const ManagementContainer = () => {
           }
         )
         .then(function (response) {
-          console.log("삭제!!!!!!!!!!!!!", response);
+          // setFilterRowData(response?.data.data);
         })
         .catch(function (error) {
           console.log(error);
@@ -536,6 +540,7 @@ const ManagementContainer = () => {
               item.floor === floorOptionValue
           );
     console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
+
     setFilterRowData(buliding_filter_set);
   };
   const BuildingFilter2 = () => {
@@ -543,6 +548,8 @@ const ManagementContainer = () => {
       (item) => item.building_id === buildingOptionValue
     );
     console.log("필터링되고 나온데이터(건물)", buliding_filter_set);
+
+    // checkedInput === true set
     setFilterRowData(buliding_filter_set);
   };
 
@@ -578,6 +585,20 @@ const ManagementContainer = () => {
     setFilterRowData(floor_filter_set);
   };
 
+  const preCheckFn = () => {
+    const preCheck = filterRowData.filter((item) => item.ppdirectory !== null);
+    console.log(preCheck, "복숭아");
+    setPreCheckData(preCheck);
+
+    if (checkedInput === true) {
+    } else {
+    }
+  };
+
+  const checkHandler = ({ target }) => {
+    setCheckedInput(!checkedInput);
+  };
+
   // 콘솔 찍는 위치(콘찍위)
   console.log("원본데이터", datasetRowData);
   console.log("필터링되고 나온 데이터", filterRowData);
@@ -595,12 +616,15 @@ const ManagementContainer = () => {
   // console.log("파싱한 데이터========", beforeTxtData);
   console.log("타이틀이름", fileListModalTitle);
   console.log("CSV 최종데이터", fileListCsv);
+  console.log(checkedInput, "개구리");
+  console.log(preCheckData, "도깨비");
+
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
     let sortPreFileterData = preFilterData.sort();
     setPreProcessingIdx(sortPreFileterData);
-    setDeleteIdx(sortPreFileterData);
   }, [filterRowData]);
+
   useEffect(() => {
     setPreBtnHelp("preBtnHelp");
   }, [filterRowData]);
@@ -626,8 +650,8 @@ const ManagementContainer = () => {
                 {/* <option value="업체명">업체명</option> */}
                 {filterValue001.map((item, idx) => {
                   return (
-                    <option key={idx} value={item.site_id}>
-                      {filterValue001[1].site_id}
+                    <option key={idx} value={item?.site_id}>
+                      {filterValue001[1]?.site_id}
                     </option>
                   );
                 })}
@@ -654,8 +678,8 @@ const ManagementContainer = () => {
                 </option>
                 {filterValue002.map((item, idx) => {
                   return (
-                    <option key={idx} value={item.building_id}>
-                      {filterValue002[idx].building_id}
+                    <option key={idx} value={item?.building_id}>
+                      {filterValue002[idx]?.building_id}
                     </option>
                   );
                 })}
@@ -682,7 +706,7 @@ const ManagementContainer = () => {
                 </option>
                 {filterValue003.map((item, idx) => {
                   return (
-                    <option key={idx} value={item.floor}>
+                    <option key={idx} value={item?.floor}>
                       {filterValue003[idx]?.floor}
                     </option>
                   );
@@ -703,20 +727,24 @@ const ManagementContainer = () => {
                 }}
               />
             </div>
-            <div>
-              <form className="pre_checkBox001" action="">
-                <input
-                  type="checkbox"
-                  id="pre_data_checkbox"
-                  onClick={() => {
-                    PreCompleteData();
-                  }}
-                />
-                <label htmlFor="pre_data_checkbox">
-                  전처리 완료 데이터만 표시
-                </label>
-              </form>
-            </div>
+            {filterRowData.length !== 0 ? (
+              <div>
+                <form className="pre_checkBox001" action="">
+                  <input
+                    type="checkbox"
+                    id="pre_data_checkbox"
+                    checked={checkedInput}
+                    onClick={() => {
+                      PreCompleteData();
+                    }}
+                    onChange={(e) => checkHandler(e)}
+                  />
+                  <label htmlFor="pre_data_checkbox">
+                    전처리 완료 데이터만 표시
+                  </label>
+                </form>
+              </div>
+            ) : null}
           </div>
 
           {/* {filterRowData.length !== 0 ? null : (
@@ -730,10 +758,17 @@ const ManagementContainer = () => {
             setGridApi={setGridApi}
             gridApi={gridApi}
             onClickRow={onClickRow}
-            data={filterRowData.length === 0 ? null : filterRowData}
+            data={
+              filterRowData.length === 0
+                ? null
+                : checkedInput == true
+                ? preCheckData
+                : filterRowData
+            }
             setData={setDatasetRowData}
             column={column1}
             rowSelection={"multiple"}
+            setDeleteIdx={setDeleteIdx}
             idx="1"
             type="multiple"
           />

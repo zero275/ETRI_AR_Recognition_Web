@@ -13,6 +13,7 @@ export const AgGrid = ({
   column,
   idx = "0", // default = '0"
   type, //default = "single"
+  setDeleteIdx,
 }) => {
   const gridRef = useRef();
 
@@ -37,6 +38,9 @@ export const AgGrid = ({
     // gridApi.getSelectedRows() => 부모에서 불러온 gridApi 안에 선택한 데이터 저장함
     const selectedData = gridApi.getSelectedRows();
     console.log(selectedData, "바나나");
+    const selectedDataIdx = selectedData?.map((e) => e.idx);
+    const selectedDataIdxSort = selectedDataIdx.sort();
+    setDeleteIdx(selectedDataIdxSort);
   };
 
   return (
