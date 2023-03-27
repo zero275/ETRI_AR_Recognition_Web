@@ -107,8 +107,14 @@ display :inline-block;
 margin:0px 35px 0px 20px;
 background-color:grey;
 `
+export const ProfressBarWrap = styled.div `
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  transform: translate(0px, 30px);
+`;
+
 export const ProgressBar = styled.div `
-transform:translate(0px,30px);
 width:90%;
 height:1em;
 border-radius:20px;
@@ -124,6 +130,28 @@ border-radius:10px;
 background-color:white;
 display :inline-block;
 `;
+
+export const ProgressBarCancel = styled.span `
+width:auto;
+height :1.2em;
+text-align :center;
+// margin-bottom :10px;
+background-color : grey; 
+padding : 2px 10px 10px 10px;
+margin-left :20px;
+border-radius:10px;
+display:inline-block;
+// transform:translate(25px,25px);
+cursor:pointer;
+&:hover{
+  color : red;
+  transition : color 0.4s ease-in-out;
+  
+}
+&:active{
+  transform : scale(0.9);
+  transition : transform 0.2s ease-in-out;
+}`;
 
 export const CsvView = styled.div `
 width:100%;

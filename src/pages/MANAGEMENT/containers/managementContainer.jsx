@@ -25,6 +25,8 @@ import {
   CsvView,
   TxtView,
   VideoModalContainer,
+  ProgressBarCancel,
+  ProfressBarWrap,
 } from "@assets/css/styledComponent";
 import logoimg from "../../../assets/imgs/resetBtn.png";
 import trash_can from "../../../assets/imgs/trash_can.png";
@@ -447,6 +449,8 @@ const ManagementContainer = () => {
         console.log(error);
       });
     setPreBtnHelp("preBtnHelpNone");
+    setInfoToggle(false);
+    setFileListToggle(false);
   };
   const onClickBtn = (e) => {
     // console.log(gridApi.getSelectedRows());
@@ -616,8 +620,6 @@ const ManagementContainer = () => {
   // console.log("파싱한 데이터========", beforeTxtData);
   console.log("타이틀이름", fileListModalTitle);
   console.log("CSV 최종데이터", fileListCsv);
-  console.log(checkedInput, "개구리");
-  console.log(preCheckData, "도깨비");
 
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
@@ -809,13 +811,24 @@ const ManagementContainer = () => {
               ▲ 조건입력이 완료 되셨으면 Pre Processing을 진행하세요
             </span>
           ) : (
-            <>
-              <ProgressBar>
+            <ProfressBarWrap fileListToggle={fileListToggle}>
+              <ProgressBar fileListToggle={fileListToggle}>
                 <ProgressBarInner width="120" />
               </ProgressBar>
-              <span>일시정지</span>
-              <span>취소</span>
-            </>
+              <ProgressBarCancel
+                onClick={() => {
+                  const proConfirm = window.confirm("정말 취소하시겠습니까?");
+                  if (proConfirm === true) {
+                    console.log("올빼미");
+                  } else {
+                    console.log("생쥐");
+                  }
+                }}
+              >
+                {" "}
+                X
+              </ProgressBarCancel>
+            </ProfressBarWrap>
           )}
         </Container>
 
