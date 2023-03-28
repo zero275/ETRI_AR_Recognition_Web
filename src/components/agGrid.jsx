@@ -40,7 +40,7 @@ export const AgGrid = ({
     console.log(selectedData, "바나나");
     const selectedDataIdx = selectedData?.map((e) => e.idx);
     const selectedDataIdxSort = selectedDataIdx.sort();
-    setDeleteIdx(selectedDataIdxSort);
+    setDeleteIdx([selectedDataIdxSort]);
   };
 
   return (

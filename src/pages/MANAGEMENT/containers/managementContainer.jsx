@@ -29,7 +29,7 @@ import {
   ProfressBarWrap,
 } from "@assets/css/styledComponent";
 import logoimg from "../../../assets/imgs/resetBtn.png";
-import trash_can from "../../../assets/imgs/trash_can.png";
+import { search3, column1 } from "./management_object";
 import {
   useFetchData,
   useProgress,
@@ -39,110 +39,10 @@ import {
 import { isEmpty } from "@/utils/common/commonUtils";
 import Papa from "papaparse";
 
-const FAKE_JSON_DATA = require("@/assets/json/fake2.json");
-
-const search1 = [{ name: "ETRI" }];
-const search2 = [
-  { building: "대덕비즈센터 A동" },
-  { building: "대덕비즈센터 B동" },
-  { building: "대덕비즈센터 C동" },
-];
-
-const search3 = [
-  {
-    floor: "1F",
-  },
-  {
-    floor: "2F",
-  },
-  {
-    floor: "3F",
-  },
-  {
-    floor: "4F",
-  },
-  {
-    floor: "5F",
-  },
-];
-const column1 = [
-  {
-    headerName: "ID",
-    field: "idx",
-    headerCheckboxSelection: true, // 헤더에도 checkbox 추가
-    checkboxSelection: true,
-    showDisabledCheckboxes: true, // check box 추가
-    // cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "시나리오 이름",
-    field: "scenario_name",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "사이트 ID",
-    field: "site_id",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "건물 ID",
-    field: "building_id",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "층(floor)",
-    field: "floor",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "날짜",
-    field: "dt_start",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "전처리여부",
-    field: "ppdirectory",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-];
-
-const column2 = [
-  {
-    headerName: "ID",
-    field: "id",
-    headerCheckboxSelection: true, // 헤더에도 checkbox 추가
-    checkboxSelection: true, // check box 추가
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "시나리오 이름",
-    field: "scenarioName",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "사이트 ID",
-    field: "siteId",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "건물 ID",
-    field: "buildingId",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "층(floor)",
-    field: "floor",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-  {
-    headerName: "날짜",
-    field: "date",
-    cellStyle: { fontFamily: "Pretendard" },
-  },
-];
-
+// 컴퍼넌트 시작
 const ManagementContainer = () => {
   // 데이터세트 목록
+
   // state 위치
   const [datasetRowData, setDatasetRowData] = useState([]);
   const [filterRowData, setFilterRowData] = useState([]);
@@ -176,10 +76,36 @@ const ManagementContainer = () => {
   const [deleteIdx, setDeleteIdx] = useState([]);
   const [checkedInput, setCheckedInput] = useState();
   const [preCheckData, setPreCheckData] = useState([]);
+  const [payload, setPayload] = useState([
+    {
+      name: "location",
+      label: "장소",
+      value: "",
+      placeholder: "입력해주세요",
+      isFocus: false,
+    },
+    {
+      name: "sizeoflocation",
+      label: "장소크기",
+      value: "",
+      placeholder: "입력해주세요",
+      isFocus: false,
+    },
+  ]);
+  const [dropDown, setDropDown] = useState([
+    {
+      name: "location",
+      label: "장소",
+      value: "",
+      placeholder: "입력해주세요",
+      isFocus: false,
+    },
+  ]);
 
   // ref속성
-  const selectBuildRef = useRef();
-  const selectFloorRef = useRef();
+  const selectBuildRef = useRef(); //건물명 select 초기화에 사용
+  const selectFloorRef = useRef(); //층수 select 초기화에 사용
+
   // socket 가져오기 from zustand
   const socket = useSocket();
   const fetchPayload = useFetchData();
@@ -191,13 +117,39 @@ const ManagementContainer = () => {
   const jsonUrl = `${fileListUrl}/tmp/metadata.json`;
   const txtUrl = `${fileListUrl}/tmp/1664.414079_ll.txt`;
   const FileListAllUrl = `${fileListUrl}/tmp/${fileListModalTitle}`;
-  const column3 = [
-    {
-      headerName: "데이터",
-      // filed: rowsDataIdx,
-      cellStyle: { fontFamily: "Pretendard" },
-    },
-  ];
+  const url = "http://192.168.219.204:8095";
+
+  // 모든 데이터,필터 옵션 받는 API
+  useEffect(() => {
+    axios
+      .all([
+        axios.post(`${url}/api/collect/get-data-all`),
+        axios.post(`${url}/api/collect/get-dataset-filter`),
+        // axios.post(`${url}/api/collect/get-dataset-details`, rowDataIdx),
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+          },
+        },
+        // { site_id: "", building_id: "", floor: "" },
+      ])
+      .then(
+        axios.spread((res1, res2, res3) => {
+          // console.log("전체데이터", res1);
+          console.log("필터링데이터", res2);
+          // console.log("상세정보데이터", res3);
+          setDatasetRowData(res1.data.data_list);
+          setFilterValue001(res2.data.data_site);
+          setFilterValue002(res2.data.data_building);
+          setFilterValue003(res2.data.data_floor);
+          // console.log("전체데이터", datasetRowData);
+          // console.log("필터내용데이터", res2.data);
+        })
+      )
+      .catch((e) => {
+        console.log("실패", e);
+      });
+  }, []);
 
   // 전처리 완료데이터만 표시 체크박스 함수
   const PreCompleteData = () => {
@@ -296,7 +248,6 @@ const ManagementContainer = () => {
     // setRowTest(rowsDataParse);
   }, [fileListModalTitle]);
 
-  let url = "http://192.168.219.204:8095";
   // useEffect(() => {
   //   axios({
   //     method: "post",
@@ -318,37 +269,6 @@ const ManagementContainer = () => {
   // }, []);
 
   // -----------------------------================
-
-  useEffect(() => {
-    axios
-      .all([
-        axios.post(`${url}/api/collect/get-data-all`),
-        axios.post(`${url}/api/collect/get-dataset-filter`),
-        // axios.post(`${url}/api/collect/get-dataset-details`, rowDataIdx),
-        {
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-          },
-        },
-        // { site_id: "", building_id: "", floor: "" },
-      ])
-      .then(
-        axios.spread((res1, res2, res3) => {
-          // console.log("전체데이터", res1);
-          console.log("필터링데이터", res2);
-          // console.log("상세정보데이터", res3);
-          setDatasetRowData(res1.data.data_list);
-          setFilterValue001(res2.data.data_site);
-          setFilterValue002(res2.data.data_building);
-          setFilterValue003(res2.data.data_floor);
-          // console.log("전체데이터", datasetRowData);
-          // console.log("필터내용데이터", res2.data);
-        })
-      )
-      .catch((e) => {
-        console.log("실패", e);
-      });
-  }, []);
 
   // =======================================
 
@@ -403,32 +323,7 @@ const ManagementContainer = () => {
     }
   }, [socket]);
 
-  const [payload, setPayload] = useState([
-    {
-      name: "location",
-      label: "장소",
-      value: "",
-      placeholder: "입력해주세요",
-      isFocus: false,
-    },
-    {
-      name: "sizeoflocation",
-      label: "장소크기",
-      value: "",
-      placeholder: "입력해주세요",
-      isFocus: false,
-    },
-  ]);
-  const [dropDown, setDropDown] = useState([
-    {
-      name: "location",
-      label: "장소",
-      value: "",
-      placeholder: "입력해주세요",
-      isFocus: false,
-    },
-  ]);
-
+  // 필터링된 데이터 idx 보내서 프리프로세싱된 데이터만 받기
   const onPreProcessing = (e) => {
     // console.log(gridApi.getSelectedRows());
     axios
@@ -452,9 +347,12 @@ const ManagementContainer = () => {
     setInfoToggle(false);
     setFileListToggle(false);
   };
+
   const onClickBtn = (e) => {
     // console.log(gridApi.getSelectedRows());
   };
+
+  // 삭제버튼 클릭시 실행 함수
   const onDeleteRow = (e) => {
     let delConfirm = window.confirm("데이터를 정말 삭제하시겠습니까?");
 
@@ -468,7 +366,10 @@ const ManagementContainer = () => {
       axios
         .post(
           `${url}/api/collect/delete-dataset`,
-          { CollectDeleteDataset: [], idx: deleteIdx },
+          {
+            CollectDeleteDataset: [],
+            idx: deleteIdx !== 0 ? deleteIdx : rowDataIdx,
+          },
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -477,6 +378,7 @@ const ManagementContainer = () => {
         )
         .then(function (response) {
           // setFilterRowData(response?.data.data);
+          console.log(response, "피망");
         })
         .catch(function (error) {
           console.log(error);
@@ -614,12 +516,14 @@ const ManagementContainer = () => {
   // console.log("그래서 건물 네이밍이 뭔데", buildingOptionValue);
   // console.log("그래서 층 네이밍이 뭔데", floorOptionValue);
   // console.log("가공된 데이터 내용============", rowsData);
-  // console.log("너 어레이 맞니?", Array.isArray(rowsData));
+  // console.log("가지?", Array.isArray(deleteIdx));
   // console.log("파싱되어진 파일========", fileListJson);
   // console.log("TXT========데이터");
   // console.log("파싱한 데이터========", beforeTxtData);
   console.log("타이틀이름", fileListModalTitle);
   console.log("CSV 최종데이터", fileListCsv);
+  console.log(deleteIdx, "옥수수");
+  console.log(search3, "치커리");
 
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
