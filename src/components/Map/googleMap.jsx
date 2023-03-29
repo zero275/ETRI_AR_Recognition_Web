@@ -101,9 +101,9 @@ function GoogleMapApi() {
               south: 36.3798125202,
               west: 127.3672123939,
             }}
-            border={40}
+            border={1}
           />
-          <Rectangle
+          {/* <Rectangle
             options={rectangle}
             bounds={{
               east: 127.3682090067,
@@ -129,7 +129,7 @@ function GoogleMapApi() {
               south: 36.3794125205,
               west: 127.3670123934,
             }}
-          ></Rectangle>
+          ></Rectangle> */}
 
           {/* <Polyline
             path={[

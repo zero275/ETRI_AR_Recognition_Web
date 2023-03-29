@@ -181,6 +181,7 @@ const ManagementContainer = () => {
         fileListModalTitle?.includes("json") && setFileListJson([res.data]);
         // 오리지날 데이터 state 저장
         setOriginCsvTxtData(res.data);
+        console.log(res.data, "치즈등갈비");
         const rowsTxt = fileListModalTitle.includes("txt")
           ? res.data?.split("\n")
           : [];
@@ -523,7 +524,7 @@ const ManagementContainer = () => {
   console.log("타이틀이름", fileListModalTitle);
   console.log("CSV 최종데이터", fileListCsv);
   console.log(deleteIdx, "옥수수");
-  console.log(search3, "치커리");
+  console.log(fileListJson, "치커리");
 
   useEffect(() => {
     let preFilterData = filterRowData?.map((e) => e.idx);
